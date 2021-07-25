@@ -1,0 +1,4 @@
+helm repo add elastic https://helm.elastic.co
+helm repo update
+helm install --name elasticsearch elastic/elasticsearch --set replicas=2 --namespace elasticsearch 
+helm install --name kibana elastic/kibana --namespace elasticsearch 

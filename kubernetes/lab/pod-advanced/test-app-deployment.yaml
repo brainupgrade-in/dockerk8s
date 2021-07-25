@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: test-app
+  template:
+    metadata:
+      labels:
+        component: test-app
+    spec:
+        containers:
+          - name: test-app
+            image: brainupgrade/test-app:all-tiers-in-one
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 8080
+            resources:
+              requests:
+                cpu: "100m"
+                memory: "250Mi"  
+

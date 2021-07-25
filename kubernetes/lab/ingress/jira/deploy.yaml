@@ -1,0 +1,32 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: jira
+  labels:
+    app: jira
+spec:
+  selector:
+    matchLabels:
+      app: jira
+  template:
+    metadata:
+      labels:
+        app: jira
+    spec:
+      containers:
+      - image: atlassian/jira-software:8.6
+        name: jira
+        volumeMounts:
+        - mountPath: /var/atlassian/application-data/jira
+          name: hostpath-volume
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: jira
+      volumes:
+      - name: hostpath-volume
+        hostPath:
+          # directory location on host
+          path: /data
+          # this field is optional
+          type: DirectoryOrCreate

@@ -1,0 +1,22 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cron-job
+spec:
+  schedule: "*/10 * * * *"
+  startingDeadlineSeconds: 60
+  concurrencyPolicy: "Allow"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name:  regcred
+          containers:
+          - name: cron-job
+            image: busybox
+            args:
+            - /bin/sh
+            - -c
+            - date; echo Migrating data to reporting server...;sleep 60;
+          restartPolicy: OnFailure

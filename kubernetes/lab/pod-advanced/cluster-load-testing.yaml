@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-load-testing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: load-test
+  template:
+    metadata:
+      labels:
+        component: load-test
+    spec:
+        containers:
+          - name: nginx
+            image: nginx
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 80
+            resources:
+              requests:
+                cpu: "100m"
+                memory: "250Mi"  
+# k scale deploy/cluster-load-testing --replicas=100

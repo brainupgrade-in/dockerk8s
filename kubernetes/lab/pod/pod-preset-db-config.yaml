@@ -1,0 +1,26 @@
+apiVersion: settings.k8s.io/v1alpha1
+kind: PodPreset
+metadata:
+  name: pod-preset-db-config
+spec:
+  selector:
+    matchLabels:
+      role: frontend
+      app: website
+  env:
+    - name: DB_PORT
+      value: "6379"
+    - name: duplicate_key
+      value: FROM_ENV
+    - name: expansion
+      value: $(REPLACE_ME)
+  envFrom:
+    - configMapRef:
+        name: pod-preset-config
+  volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
+  volumes:
+    - name: cache-volume
+      emptyDir: {}
+

@@ -1,0 +1,44 @@
+# 2 - weather services
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-services
+  namespace: weather
+spec:
+  type: ClusterIP
+  ports:
+    - name: services
+      port: 80
+      targetPort: 8080
+  selector:
+    app: weather-services
+---
+# microservices components 2 - api services
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: weather-services
+  name: weather-services
+  namespace: weather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-services
+  template:
+    metadata:
+      labels:
+        app: weather-services
+    spec:
+      containers:
+        - image: brainupgrade/weather-services:2.0.0
+          imagePullPolicy: Always
+          name: weather-services
+          env:
+            - name: spring.application.name
+              value: weather-services
+            - name: server.port
+              value: "8080"
+          ports:
+            - containerPort: 8080

@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+kind: Ingress
+metadata:
+  name: weather.brainupgrade.in
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-kong
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    kong.ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.class: "kong"
+spec:
+  tls:
+  - hosts:
+    - weather.brainupgrade.in
+    secretName: weather.brainupgrade.in
+  rules:
+    - host: weather.brainupgrade.in
+      http:
+        paths:
+          # - path: /?(.*)
+          - path: /
+            backend:
+              serviceName: weather-service
+              servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-service
+spec:
+  type: ClusterIP
+  ports:
+    - name: app
+      port: 80
+      targetPort: 8080
+  selector:
+    app: weather

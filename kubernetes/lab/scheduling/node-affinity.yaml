@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-affinity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: middle-tier
+  template:
+    metadata:
+      labels:
+        tier: middle-tier
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In  #In, NotIn, Exists, DoesNotExist, Gt, Lt  
+                values:
+                - us-east-1b
+                - us-east-1c
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: kops.k8s.io/instancegroup
+                operator: In  #NotIn,  DoesNotExist for AntiAffinity
+                values:
+                - spotnodes
+      containers:
+        - name: nginx
+          image: nginx
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80

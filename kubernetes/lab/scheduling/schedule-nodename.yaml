@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schedule-node
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: schedule-node
+  template:
+    metadata:
+      labels:
+        component: schedule-node
+    spec:
+        nodeName: ip-172-31-102-18.ec2.internal
+        containers:
+          - name: test-app
+            image: brainupgrade/test-app:all-tiers-in-one
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 8080
+            resources:
+              requests:
+                cpu: "100m"
+                memory: "250Mi"  

@@ -1,0 +1,12 @@
+# Monolith containing all app components including database
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: monolith
+  name: monolith
+spec:
+  containers:
+  - image: brainupgrade/weather:monolith
+    name: monolith
+  restartPolicy: Never

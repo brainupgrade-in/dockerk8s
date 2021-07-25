@@ -1,0 +1,100 @@
+# microservices components 1 - front
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: weather
+  name: weather-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-front
+  template:
+    metadata:
+      labels:
+        app: weather-front
+    spec:
+      volumes: 
+      - name: elastic-apm-agent 
+        emptyDir: {}    
+      initContainers: 
+      - name: elastic-java-agent 
+        image: docker.elastic.co/observability/apm-agent-java:1.12.0 
+        volumeMounts: 
+        - mountPath: /elastic/apm/agent 
+          name: elastic-apm-agent 
+        command: ['cp', '-v', '/usr/agent/elastic-apm-agent.jar', '/elastic/apm/agent']    
+      containers:
+        - image: brainupgrade/weather:microservices-front
+          imagePullPolicy: Always
+          name: weather-front
+          volumeMounts: 
+          - mountPath: /elastic/apm/agent 
+            name: elastic-apm-agent          
+          env:
+            - name: spring.application.name
+              value: weather-front
+            - name: spring.datasource.url
+              value: jdbc:mariadb://weather-db:3306/weather
+            - name: spring.datasource.username
+              value: weather
+            - name: spring.datasource.password
+              value: weather
+            - name: weatherServiceURL
+              value: http://weather-services.weather.svc.cluster.local
+            - name: ELASTIC_APM_SERVER_URL 
+              value: "http://apm-server.elasticsearch.svc.cluster.local:8200" 
+            - name: ELASTIC_APM_SERVICE_NAME 
+              value: "weather-front" 
+            - name: ELASTIC_APM_APPLICATION_PACKAGES 
+              value: "in.brainupgrade" 
+            - name: ELASTIC_APM_ENVIRONMENT 
+              value: prod
+            - name: ELASTIC_APM_LOG_LEVEL 
+              value: DEBUG 
+            - name: JAVA_TOOL_OPTIONS 
+              value: -javaagent:/elastic/apm/agent/elastic-apm-agent.jar              
+          ports:
+            - containerPort: 8080
+---
+apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+kind: Ingress
+metadata:
+  name: weather.brainupgrade.in
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-kong
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    kong.ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.class: "kong"
+spec:
+  tls:
+  - hosts:
+    - weather.brainupgrade.in
+    secretName: weather.brainupgrade.in
+  rules:
+    - host: weather.brainupgrade.in
+      http:
+        paths:
+          # - path: /?(.*)
+          - path: /
+            backend:
+              serviceName: weather-front
+              servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-front
+spec:
+  type: ClusterIP
+  ports:
+    - name: app
+      port: 80
+      targetPort: 8080
+  selector:
+    app: weather-front

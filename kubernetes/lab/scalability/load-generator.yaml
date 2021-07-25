@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: load-generator
+spec:
+  imagePullSecrets:
+  - name:  regcred
+  containers:
+  - name: main-container
+    image: busybox 
+    command: ["/bin/sh"]
+    args: ["-c", "while sleep 0.01; do wget -q -O- http://cluster-load-test; done"]

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schedule-nodeselector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: schedule-nodeselector
+  template:
+    metadata:
+      labels:
+        component: schedule-nodeselector
+    spec:
+        nodeSelector:
+          node-role.kubernetes.io/spot-worker: "true"
+        containers:
+          - name: test-app
+            image: nginx
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 80

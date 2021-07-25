@@ -1,0 +1,18 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: www
+  labels:
+    app: www
+    volume-type: gp2
+    aws-availability-zone: ap-east-1
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: gp2
+  accessModes:
+    - ReadWriteMany
+  awsElasticBlockStore:
+    volumeID: vol-0738bd0fe8189  # insert volume id
+    fsType: ext4
+  persistentVolumeReclaimPolicy: Retain  

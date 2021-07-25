@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar
+spec:
+  volumes:
+  - name: shared-logs 
+    emptyDir: {}
+  containers:
+  - name: main-container
+    image: alpine 
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do date >> /var/log/index.html; sleep 10;done"]
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /var/log
+  - name: sidecar-container
+    image: nginx
+    ports:
+      - containerPort: 80
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /usr/share/nginx/html 

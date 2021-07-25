@@ -1,0 +1,10 @@
+# Pre-requisites
+minikube addons enable ingress
+
+# Run all app config files 
+kubectl apply -k .
+
+# Get ingress IP using 
+kubectl get ingress api-unigps
+
+# set the ingress IP in /etc/hosts against the domain api-unigps.in

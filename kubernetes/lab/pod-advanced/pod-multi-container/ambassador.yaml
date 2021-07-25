@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ambassador-nginx-config
+data:
+  nginx.conf: |
+    worker_processes 4;
+    events { worker_connections 1024; }
+    http {
+        server {
+            listen 80;
+            location / {
+                proxy_pass https://www.brainupgrade.in;
+            }
+        }
+    }
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-pod-ambassador
+spec:
+  imagePullSecrets:
+    - name:  regcred
+  containers:
+  - name: main-app
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    command: ["/bin/sh"]
+    args: ["-c","while true;do wget -O /tmp/app.txt localhost ;sleep 30;done"]
+  - name: ambassador
+    image: nginx
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 80        
+    volumeMounts:
+      - name: nginx-config
+        mountPath: /etc/nginx
+  volumes:
+    - name: nginx-config
+      configMap:
+        name: ambassador-nginx-config

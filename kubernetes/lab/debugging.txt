@@ -1,0 +1,33 @@
+kubectl get pods
+kubectl get pod <pod-name> -o yaml
+kubectl describe <pod-name>
+kubectl describe <pod-name> -o yaml
+kubectl get events
+kubectl get events --namespace=my-namespace   (--all-namespaces)
+kubectl get nodes
+kubectl get node <node-name>
+kubectl get node <node-name> -o yaml
+kubectl describe node <node-name>
+kubectl describe node <node-name> -o yaml
+
+kubectl get nodes -o yaml | egrep '\sname:|cpu:|memory:'
+kubectl get nodes -o json | jq '.items[] | {name: .metadata.name, cap: .status.capacity}'
+
+kubectl logs <pod-name> <container-name>
+kubectl logs --previous <pod-name> <container-name>
+kubectl exec <pod-name> -c <container-name> -- <commands> <arguments>
+
+kubectl run -it --rm --restart=Never alpine --image=alpine  sh
+
+# debug service
+minikube ssh   ->  wget -O- <service name>
+
+kubectl get pods -l app=hostnames
+
+kubectl get endpoints <service-name>
+
+minikube ssh -> wget -qO- <pod-ip>:<pod-port>
+
+Using telepresence
+
+telepresence --swap-deployment hostnames --namespace default --run mvn spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"

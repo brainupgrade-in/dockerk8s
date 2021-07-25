@@ -1,0 +1,1 @@
+helm install stable/metrics-server --name metrics-server --namespace kube-system

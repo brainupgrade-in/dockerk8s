@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-affinity-middle-tier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: pod-affinity
+  template:
+    metadata:
+      labels:
+        component: pod-affinity
+    spec:
+        affinity:
+          podAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: tier
+                  operator: In  # NotIn, Exists, NotExists
+                  values:
+                  - cache
+              topologyKey: topology.kubernetes.io/zone
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                    - messaging
+                topologyKey: kubernetes.io/hostname
+        containers:
+          - name: pod-affinity-middle-tier
+            image: nginx
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 80

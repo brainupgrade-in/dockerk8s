@@ -1,0 +1,34 @@
+# microservices components 1 - front
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: weather
+  name: weather-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-front
+  template:
+    metadata:
+      labels:
+        app: weather-front
+    spec:
+      containers:
+        - image: brainupgrade/weather:microservices-front
+          imagePullPolicy: Always
+          name: weather-front
+          env:
+            - name: spring.application.name
+              value: weather-front
+            - name: spring.datasource.url
+              value: jdbc:mariadb://weather-db:3306/weather
+            - name: spring.datasource.username
+              value: weather
+            - name: spring.datasource.password
+              value: weather
+            - name: weatherServiceURL
+              value: http://weather-services.weather.svc.cluster.local
+          ports:
+            - containerPort: 8080

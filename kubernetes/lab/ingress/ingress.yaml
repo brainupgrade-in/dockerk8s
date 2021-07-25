@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: rajeshg.brainupgrade.in
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  tls:
+  - hosts:
+    - rajeshg.brainupgrade.in
+    secretName: rajeshg.brainupgrade.in
+  rules:
+    - host: rajeshg.brainupgrade.in
+      http:
+        paths:
+          - path: /api/?(.*)
+            backend:
+              serviceName: api-v2
+              servicePort: 8080
+          - path: /api/v2/?(.*)
+            backend:
+              serviceName: api-v2
+              servicePort: 8080             
+          - path: /logger/?(.*)
+            backend:
+              serviceName: logger
+              servicePort: 80                           
+          - path: /hello/?(.*)
+            backend:
+              serviceName: hello
+              servicePort: 80                                         

@@ -1,0 +1,24 @@
+{
+  "name": "node-app-jenkins-docker",
+  "version": "1.0.0",
+  "description": "Test HTTP server",
+  "main": "main.js",
+  "scripts": {
+    "test": "node test.js",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rajeshgheware/node-app-jenkins-docker/"
+  },
+  "keywords": [
+    "node",
+    "docker",
+    "jenkinsfile"
+  ],
+  "author": "rajesh@unigps.in",
+  "license": "MIT",
+  "devDependencies": {
+    "test": ">=0.6.0"
+  }
+}

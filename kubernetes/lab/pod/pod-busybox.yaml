@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: pod-busybox
+  name: pod-busybox
+spec:
+  containers:
+  - command:
+    - sh
+    - -c
+    - echo App is running! && sleep 30
+    image: busybox
+    name: pod-busybox
+  restartPolicy: Never

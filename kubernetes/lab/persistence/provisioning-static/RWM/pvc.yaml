@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: www-pvc
+  labels:
+    app: www
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      app: www
+      volume-type: gp2
+      aws-availability-zone: ap-east-1

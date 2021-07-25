@@ -1,0 +1,83 @@
+# 2 - weather services
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-services
+  namespace: weather
+spec:
+  type: ClusterIP
+  ports:
+    - name: services
+      port: 80
+      targetPort: 8080
+  selector:
+    app: weather-services
+---
+# microservices components 2 - api services
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: weather-services
+  name: weather-services
+  namespace: weather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-services
+  template:
+    metadata:
+      labels:
+        app: weather-services
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8888"
+        prometheus.io/path: /actuator/prometheus        
+    spec:
+      volumes: 
+      - name: elastic-apm-agent 
+        emptyDir: {}    
+      initContainers: 
+      - name: elastic-java-agent 
+        image: docker.elastic.co/observability/apm-agent-java:1.12.0 
+        volumeMounts: 
+        - mountPath: /elastic/apm/agent 
+          name: elastic-apm-agent 
+        command: ['cp', '-v', '/usr/agent/elastic-apm-agent.jar', '/elastic/apm/agent']     
+      containers:
+        - image: brainupgrade/weather-services:metrics
+          imagePullPolicy: Always
+          name: weather-services
+          volumeMounts: 
+          - mountPath: /elastic/apm/agent 
+            name: elastic-apm-agent          
+          env:
+            - name: spring.application.name
+              value: weather-services
+            - name: server.port
+              value: "8080"
+            - name: ELASTIC_APM_SERVER_URL 
+              value: "http://apm-server.elasticsearch.svc.cluster.local:8200" 
+            - name: ELASTIC_APM_SERVICE_NAME 
+              value: "weather-services" 
+            - name: ELASTIC_APM_APPLICATION_PACKAGES 
+              value: "in.brainupgrade" 
+            - name: ELASTIC_APM_ENVIRONMENT 
+              value: prod
+            - name: ELASTIC_APM_LOG_LEVEL 
+              value: DEBUG 
+            - name: JAVA_TOOL_OPTIONS 
+              value: -javaagent:/elastic/apm/agent/elastic-apm-agent.jar               
+            - name: management.endpoints.web.exposure.include
+              value: "*"
+            - name: spring.application.name
+              value: weather-services
+            - name: management.server.port
+              value: "8888"
+            - name: management.metrics.web.server.request.autotime.enabled
+              value: "true"
+            - name: management.metrics.tags.application
+              value: weather-services         
+          ports:
+            - containerPort: 8080

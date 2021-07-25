@@ -1,0 +1,44 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: logger
+  labels:
+    app: logger
+spec:
+  selector:
+    matchLabels:
+      app: logger
+      tier: frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: logger
+        tier: frontend
+    spec:
+      containers:
+      - image: brainupgrade/request-logger:microservice
+        name: logger
+        imagePullPolicy: Always
+        env:
+        - name: spring.datasource.url
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: url
+        - name: spring.datasource.username
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: user
+        - name: spring.datasource.password
+          valueFrom:
+            secretKeyRef:
+              name: secret-config
+              key: password
+        - name: server.port
+          value: "80"  
+        ports:
+        - containerPort: 80
+          name: logger
