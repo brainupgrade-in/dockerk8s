@@ -8,3 +8,10 @@
 - Scale down replicas to 5 and paste the output
 - Update image to nginx:1.18 and immediately try another rollout with nginx:1.17  Write your observations here
 - Autoscale pod to max 5 min 1 and show the output of hpa resource (k get hpa ...)
+
+
+- Docker image pull secret
+kubectl create secret docker-registry regcred \
+  --docker-username=tiger \
+  --docker-password=pass113 \
+  --docker-email=tiger@acme.com

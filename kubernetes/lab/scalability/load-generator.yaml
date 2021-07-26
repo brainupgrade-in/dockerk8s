@@ -9,4 +9,5 @@ spec:
   - name: main-container
     image: busybox 
     command: ["/bin/sh"]
-    args: ["-c", "while sleep 0.01; do wget -q -O- http://cluster-load-test; done"]
+    args: ["-c", "while sleep 0.01; do wget -q -O- http://nginx-loadtest; done"]
+  restartPolicy: Never

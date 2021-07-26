@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-loadtest
+  labels:
+    app: nginx-loadtest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-loadtest
+  template:
+    metadata:
+      labels:
+        app: nginx-loadtest
+    spec:
+      containers:
+      - image: nginx:1.15
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        resources:
+          limits:
+            cpu: "10m"
+            memory: "50Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-loadtest
+spec:
+  selector:
+    app: nginx-loadtest
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80            
+# kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://nginx-loadtest; done"
