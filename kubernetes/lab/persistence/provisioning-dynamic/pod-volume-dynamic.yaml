@@ -11,6 +11,10 @@ spec:
       volumeMounts:
       - mountPath: "/usr/share/nginx/html"
         name: external
+      resources:
+        limits:
+          cpu: "20m"
+          memory: "50Mi"         
   volumes:
     - name: external 
       persistentVolumeClaim:

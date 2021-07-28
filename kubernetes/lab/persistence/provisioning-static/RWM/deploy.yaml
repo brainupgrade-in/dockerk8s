@@ -16,21 +16,25 @@ spec:
       - name: www-pv
         persistentVolumeClaim:
           claimName: www-pvc
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: failure-domain.beta.kubernetes.io/zone
-                operator: In
-                values:
-                - ap-east-1c
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: failure-domain.beta.kubernetes.io/zone
+      #           operator: In
+      #           values:
+      #           - ap-east-1a
       containers:
       - image: nginx
         name: nginx
         ports:
         - containerPort: 80
           name: nginx
+        resources:
+          limits:
+            cpu: "20m"
+            memory: "50Mi"          
         volumeMounts:
         - name: www-pv
           mountPath: /usr/share/nginx/html

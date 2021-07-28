@@ -5,14 +5,14 @@ metadata:
   labels:
     app: www
     volume-type: gp2
-    aws-availability-zone: ap-east-1
+    aws-availability-zone: us-east-1
 spec:
   capacity:
     storage: 1Gi
-  storageClassName: gp2
+  storageClassName: manual
   accessModes:
     - ReadWriteMany
   awsElasticBlockStore:
-    volumeID: vol-0738bd0fe8189  # insert volume id
+    volumeID: vol-081b401a592b794a2  # insert volume id
     fsType: ext4
   persistentVolumeReclaimPolicy: Retain  

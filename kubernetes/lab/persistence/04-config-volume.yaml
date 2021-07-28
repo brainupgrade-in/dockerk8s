@@ -1,30 +1,30 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: configmap-pod
+  name: config-volume
 spec:
   containers:
     - name: test
-      image: busybox
-      command:
-      - sh
-      - -c
-      - sleep 300
+      image: nginx
       volumeMounts:
         - name: config-vol
           mountPath: /etc/config
+      resources:
+        limits:
+          cpu: "20m"
+          memory: "50Mi"          
   volumes:
     - name: config-vol
       configMap:
-        name: log-config
+        name: config-volume
         items:
           - key: log_level
-            path: log_level
+            path: log.properties
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: log-config
+  name: config-volume
 data:
   log_level: |
     debug=true

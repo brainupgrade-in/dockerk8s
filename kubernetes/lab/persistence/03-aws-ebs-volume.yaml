@@ -3,15 +3,20 @@ kind: Pod
 metadata:
   name: volume-ebs
 spec:
+  nodeName: ip-172-31-58-74.ec2.internal
   containers:
-  - image: k8s.gcr.io/test-webserver
+  - image: nginx
     name: test-container
     volumeMounts:
     - mountPath: /test-ebs
       name: ebs-volume
+    resources:
+      limits:
+        cpu: "20m"
+        memory: "50Mi"  
   volumes:
   - name: ebs-volume
     # This AWS EBS volume must already exist.
     awsElasticBlockStore:
-      volumeID: <volume-id>
+      volumeID: vol-081b401a592b794a2
       fsType: ext4

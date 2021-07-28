@@ -5,8 +5,14 @@ metadata:
     run: nginx
   name: nginx
 spec:
+  imagePullSecrets:
+    - name: regcred
   containers:
   - image: nginx
     name: nginx
+    resources:
+      limits:
+        cpu: "20m"
+        memory: "50Mi"
   dnsPolicy: ClusterFirst
   restartPolicy: Always

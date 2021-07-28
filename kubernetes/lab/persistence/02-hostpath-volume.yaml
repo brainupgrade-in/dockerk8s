@@ -7,8 +7,12 @@ spec:
   - image: nginx
     name: test-container
     volumeMounts:
-    - mountPath: /data-mounted-as
+    - mountPath: /data-path-inside-container
       name: hostpath-volume
+    resources:
+      limits:
+        cpu: "20m"
+        memory: "50Mi"  
   volumes:
   - name: hostpath-volume
     hostPath:

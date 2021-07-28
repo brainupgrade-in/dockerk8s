@@ -5,6 +5,7 @@ metadata:
   labels:
     app: www
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteMany
   resources:
@@ -14,4 +15,4 @@ spec:
     matchLabels: 
       app: www
       volume-type: gp2
-      aws-availability-zone: ap-east-1
+      aws-availability-zone: us-east-1

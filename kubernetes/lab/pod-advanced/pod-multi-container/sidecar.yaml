@@ -3,21 +3,31 @@ kind: Pod
 metadata:
   name: sidecar
 spec:
+  imagePullSecrets:
+    - name: regcred
   volumes:
   - name: shared-logs 
     emptyDir: {}
-  containers:
+  containers:  
   - name: main-container
-    image: alpine 
+    image: busybox 
     command: ["/bin/sh"]
-    args: ["-c", "while true; do date >> /var/log/index.html; sleep 10;done"]
+    args: ["-c", "while true; do ping -c4 google.com >> /tmp/index-input.html; sleep 10;done"]
+    resources:
+      limits:
+        cpu: "10m"
+        memory: "10Mi"
     volumeMounts:
     - name: shared-logs
       mountPath: /var/log
   - name: sidecar-container
-    image: nginx
-    ports:
-      - containerPort: 80
+    image: busybox
+    resources:
+      limits:
+        cpu: "10m"
+        memory: "10Mi"
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do cat /tmp/index-input.html; sleep 60;done"]
     volumeMounts:
     - name: shared-logs
-      mountPath: /usr/share/nginx/html 
+      mountPath: /var/log
