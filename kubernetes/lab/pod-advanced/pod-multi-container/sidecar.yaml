@@ -27,7 +27,7 @@ spec:
         cpu: "10m"
         memory: "10Mi"
     command: ["/bin/sh"]
-    args: ["-c", "while true; do cat /tmp/index-input.html; sleep 60;done"]
+    args: ["-c", "while true; do cat /tmp/index-input.html > /tmp/index-output.html; sleep 60;done"]
     volumeMounts:
     - name: shared-logs
       mountPath: /var/log

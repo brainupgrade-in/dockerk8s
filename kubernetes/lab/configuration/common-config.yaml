@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: common-log-config
-data:
-  datasource_properties: |
-    dbusername=k8s

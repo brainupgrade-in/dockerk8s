@@ -28,3 +28,4 @@ metadata:
 data:
   log_level: |
     debug=true
+    sql=true
