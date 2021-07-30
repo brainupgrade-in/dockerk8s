@@ -13,6 +13,10 @@ spec:
   containers:
   - name: sec-ctx-demo
     image: busybox
+    resources:
+      limits:
+        cpu: "10m"
+        memory: "10Mi"
     command: [ "sh", "-c", "sleep 1h" ]
     volumeMounts:
     - name: sec-ctx-vol

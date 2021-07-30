@@ -29,6 +29,6 @@ spec:
             - name: spring.datasource.password
               value: weather
             - name: weatherServiceURL
-              value: http://weather-services.weather.svc.cluster.local
+              value: http://weather-services
           ports:
             - containerPort: 8080

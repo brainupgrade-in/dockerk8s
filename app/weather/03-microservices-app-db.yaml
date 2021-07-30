@@ -45,7 +45,7 @@ spec:
     app: weather-db
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: Deployment #StatefulSet
 metadata:
   name: weather-db
 spec:
@@ -64,7 +64,7 @@ spec:
           type: ""
         name: data
       containers:
-      - image: mariadb:10.3
+      - image: mariadb:10.3 #oracle/repliacation-rack-db:1.0.0
         name: mariadb
         ports:
         - containerPort: 3306

@@ -20,11 +20,11 @@ spec:
         - containerPort: 80
           name: web
         volumeMounts:
-        - name: www
+        - name: www2
           mountPath: /usr/share/nginx/html
   volumeClaimTemplates:
   - metadata:
-      name: www
+      name: www2
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
