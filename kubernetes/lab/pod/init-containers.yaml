@@ -7,6 +7,12 @@ spec:
   - name: main-container
     image: busybox:1.28
     command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+   initContainers:
+    - args:
+      - /bin/sh
+      - -c
+      - wget -O index.html https://google.com/index.html
+  image: busybox
 #  initContainers:
 #  - name: init-service
 #    image: busybox:1.28
@@ -14,14 +20,9 @@ spec:
 #    - sh
 #    - -c
 #    - until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done
-#  - name: init-mydb
-#    image: busybox:1.28
-#    command: ['sh', '-c', "until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+  - name: init-mydb
+    image: busybox:1.28
+    command: ['sh', '-c', "until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
 
 
-  initContainers:
-  - args:
-    - /bin/sh
-    - -c
-    - wget -O index.html https://google.com/index.html
-  image: busybox
+
