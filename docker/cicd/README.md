@@ -12,9 +12,9 @@ Github repo hook  https://rajesh.brainupgrade.in/ghprbhook/ so that pull request
 ## Settings 
 ### Global credentials  
 docker-hub-credentials  (docker hub credentials)
+(Github bu token)
 ### Plugins
 Embeddable Build Status Plugin
-Github plugin
 Github Pull request builder
 github integration plugin
 ## Job

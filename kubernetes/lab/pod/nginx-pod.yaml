@@ -3,6 +3,9 @@ kind: Pod
 metadata:
   labels:
     run: nginx
+    environment: production
+    tier: frontend
+    app: rajesh
   name: nginx
 spec:
   imagePullSecrets:
