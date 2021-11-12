@@ -1,0 +1,31 @@
+# microservices components 1 - main app 2 - external db
+# 1 - main app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: weather
+  name: weather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather
+  template:
+    metadata:
+      labels:
+        app: weather
+    spec:
+      containers:
+      - image: brainupgrade/weather:microservices-app-db
+        imagePullPolicy: Always
+        name: weather
+        env:
+          - name: spring.datasource.url
+            value: jdbc:mariadb://weather-db:3306/weather
+          - name: spring.datasource.username
+            value: weather
+          - name: spring.datasource.password
+            value: weather
+        ports:
+        - containerPort: 8080

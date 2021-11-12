@@ -10,9 +10,9 @@ spec:
   accessModes:
   - ReadWriteMany
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: local-storage
+  storageClassName: manual
   local:
-    path: /mnt/disks/ssd1
+    path: /tmp
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -20,4 +20,4 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - ip-172-31-87-231.ec2.internal
+          - ip-172-31-110-184.ec2.internal
