@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: facebook
+  name: facebook-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: facebook
+      release: canary
+  template:
+    metadata:
+      labels:
+        app: facebook
+        release: canary
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - image: nginx
+        name: nginx

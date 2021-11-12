@@ -15,4 +15,4 @@ spec:
     matchLabels: 
       app: www
       volume-type: gp2
-      aws-availability-zone: us-east-1
+      aws-availability-zone: us-east-1a

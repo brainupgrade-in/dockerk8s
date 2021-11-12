@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: www
+  name: www-1
 spec:
   replicas: 1
   selector:
@@ -21,10 +21,19 @@ spec:
       #     requiredDuringSchedulingIgnoredDuringExecution:
       #       nodeSelectorTerms:
       #       - matchExpressions:
-      #         - key: failure-domain.beta.kubernetes.io/zone
+      #         - key: topology.kubernetes.io/zone
       #           operator: In
       #           values:
-      #           - ap-east-1a
+      #           - us-east-1a
+        # podAntiAffinity:
+        #   requiredDuringSchedulingIgnoredDuringExecution:
+        #   - labelSelector:
+        #       matchExpressions:
+        #       - key: app
+        #         operator: In
+        #         values:
+        #         - www
+        #     topologyKey: "kubernetes.io/hostname"
       containers:
       - image: nginx
         name: nginx
@@ -37,4 +46,4 @@ spec:
             memory: "50Mi"          
         volumeMounts:
         - name: www-pv
-          mountPath: /usr/share/nginx/html
+          mountPath: /tmp

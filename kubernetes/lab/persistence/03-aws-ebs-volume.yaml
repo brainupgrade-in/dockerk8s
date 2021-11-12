@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: volume-ebs-1b
+  name: volume-ebs
 spec:
   imagePullSecrets:
     - name: regcred
-  nodeName: ip-172-31-68-253.ec2.internal
+  nodeName: ip-172-31-38-89.ec2.internal
   containers:
   - image: nginx
     name: test-container
@@ -20,5 +20,5 @@ spec:
   - name: ebs-volume
     # This AWS EBS volume must already exist.
     awsElasticBlockStore:
-      volumeID: vol-07a0cf4881dcaec7c
+      volumeID: vol-0f75c0e5052f65cc6
       fsType: ext4
