@@ -8,11 +8,11 @@ spec:
   replicas: 4
   selector:
     matchLabels:
-      app: facebook
+      app: facebook2
   template:
     metadata:
       labels:
-        app: facebook
+        app: facebook2
     spec:
       imagePullSecrets:
         - name: regcred

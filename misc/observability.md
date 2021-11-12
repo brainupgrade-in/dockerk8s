@@ -9,7 +9,7 @@ helm install  kibana elastic/kibana --create-namespace=true --namespace elastics
 Access dashboard using: 
 kubectl port-forward -n elasticsearch svc/kibana-kibana 5601:5601
 ## Fluentd
-05b+c+d
+05b+c+d  (kubectly apply -f <file name>)
 ## APM Server
 07a
 ## Prometheus - Grafana
