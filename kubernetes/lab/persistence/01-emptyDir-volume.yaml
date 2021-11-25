@@ -9,10 +9,11 @@ spec:
     volumeMounts:
     - mountPath: /cache
       name: cache-volume
-    resources:
-      limits:
-        cpu: "20m"
-        memory: "50Mi"  
+  - image: nginx
+    name: test-container
+    volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
   volumes:
   - name: cache-volume
     emptyDir: {}

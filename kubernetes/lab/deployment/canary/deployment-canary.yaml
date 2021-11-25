@@ -1,23 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: facebook
   name: facebook-canary
 spec:
-  replicas: 10
+  replicas: 1
   selector:
     matchLabels:
       app: facebook
-      release: canary
+      release: feature-ai
   template:
     metadata:
       labels:
         app: facebook
-        release: canary
+        release: feature-ai
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-      - image: nginx
-        name: nginx
+      - image: gcr.io/google-samples/hello-app:2.0
+        name: hello
+        ports:
+        - containerPort: 8080
+          protocol: TCP

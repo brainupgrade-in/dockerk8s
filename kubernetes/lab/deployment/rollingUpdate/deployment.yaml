@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facebook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: facebook
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: facebook
+    spec:
+      containers:
+      - image: gcr.io/google-samples/hello-app:1.0
+        imagePullPolicy: IfNotPresent
+        name: facebook-app
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: 
+          limits:
+            cpu: 4m
+            memory: 4Mi
+          requests:
+            cpu: 4m
+            memory: 4Mi  
+# for i in {1..1000};do echo https://rajesh.brainupgrade.in; done | xargs -P 10 -n 1 curl
+# while true;do echo https://rajesh.brainupgrade.in; done | xargs -P 10 -n 1 curl
+# while true;do curl https://rajesh.brainupgrade.in;echo $(date);sleep 0.1;done

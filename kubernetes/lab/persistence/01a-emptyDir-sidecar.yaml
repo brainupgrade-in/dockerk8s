@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar
+spec:
+  imagePullSecrets:
+    - name: regcred
+  volumes:
+  - name: shared-storage
+    emptyDir: {}
+  containers:  
+  - name: sidecar-container
+    image: busybox 
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo -e '\n'$(date) >> /var/log/index.html; sleep 10;done"]
+    volumeMounts:
+    - name: shared-storage
+      mountPath: /var/log
+  - name: main-container
+    image: nginx
+    volumeMounts:
+    - name: shared-storage
+      mountPath: /usr/share/nginx/html

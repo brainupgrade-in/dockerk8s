@@ -4,4 +4,5 @@ metadata:
   name: external-name
 spec:
   type: ExternalName
-  externalName: google.com
+  # externalName: google.com
+  externalName: facebook.rajesh.svc.cluster.local

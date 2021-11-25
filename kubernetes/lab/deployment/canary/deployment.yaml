@@ -5,17 +5,20 @@ metadata:
     app: facebook
   name: facebook
 spec:
-  replicas: 4
+  replicas: 2
   selector:
     matchLabels:
-      app: facebook2
+      app: facebook
   template:
     metadata:
       labels:
-        app: facebook2
+        app: facebook
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-      - image: nginx
-        name: nginx
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: hello
+        ports:
+        - containerPort: 8080
+          protocol: TCP

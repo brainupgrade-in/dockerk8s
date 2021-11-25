@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: facebook
 spec:
-  type: ClusterIP
   ports:
-    - name: port
-      port: 80
-      targetPort: 8080
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
   selector:
     app: facebook

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facebook-v2
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: facebook
+      release: v2
+  template:
+    metadata:
+      labels:
+        app: facebook
+        release: v2
+    spec:
+      containers:
+      - image: gcr.io/google-samples/hello-app:2.0
+        imagePullPolicy: IfNotPresent
+        name: facebook-app
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: 
+          limits:
+            cpu: 4m
+            memory: 4Mi
+          requests:
+            cpu: 4m
+            memory: 4Mi  

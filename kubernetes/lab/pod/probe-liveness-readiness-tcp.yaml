@@ -13,8 +13,12 @@ spec:
         port: 8080
       initialDelaySeconds: 5
       periodSeconds: 10
+      successThresholds: 1
+      failureThresholds: 1
     livenessProbe:
       tcpSocket:
         port: 8080
       initialDelaySeconds: 15
       periodSeconds: 20
+      failureThresholds: 3
+      successThresholds: 1
