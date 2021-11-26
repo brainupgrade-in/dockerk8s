@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-resources
+  namespace: ${user}
+spec:
+  hard:
+    services.loadbalancers: "0"

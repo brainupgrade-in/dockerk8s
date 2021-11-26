@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  ELASTIC_APM_SERVER_URL: "http://apm-server.elasticsearch.svc.cluster.local:8200"
+  ELASTIC_APM_APPLICATION_PACKAGES: "in.brainupgrade" 
+  spring.datasource.url: "jdbc:mariadb://weather-db:3306/weather"
+  weatherServiceURL: "http://weather-services"
+

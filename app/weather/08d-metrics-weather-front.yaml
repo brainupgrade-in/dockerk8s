@@ -40,19 +40,37 @@ spec:
             - name: spring.application.name
               value: weather-front
             - name: spring.datasource.url
-              value: jdbc:mariadb://weather-db:3306/weather
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: spring.datasource.url
             - name: spring.datasource.username
-              value: weather
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: spring.datasource.username
             - name: spring.datasource.password
-              value: weather
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: spring.datasource.password
             - name: weatherServiceURL
-              value: http://weather-services
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: weatherServiceURL
             - name: ELASTIC_APM_SERVER_URL 
-              value: "http://apm-server.elasticsearch.svc.cluster.local:8200" 
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: ELASTIC_APM_SERVER_URL
+            - name: ELASTIC_APM_APPLICATION_PACKAGES 
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: ELASTIC_APM_APPLICATION_PACKAGES
             - name: ELASTIC_APM_SERVICE_NAME 
               value: "weather-front" 
-            - name: ELASTIC_APM_APPLICATION_PACKAGES 
-              value: "in.brainupgrade" 
             - name: ELASTIC_APM_ENVIRONMENT 
               value: prod
             - name: ELASTIC_APM_LOG_LEVEL 

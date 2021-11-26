@@ -1,0 +1,8 @@
+resources:
+  - config.yaml
+  - secret.yaml
+  - pvc.yaml
+  - db-deploy.yaml
+  - db-service.yaml
+  - deployment.yaml
+  - service.yaml

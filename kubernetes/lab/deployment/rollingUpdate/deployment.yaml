@@ -33,4 +33,4 @@ spec:
             memory: 4Mi  
 # for i in {1..1000};do echo https://rajesh.brainupgrade.in; done | xargs -P 10 -n 1 curl
 # while true;do echo https://rajesh.brainupgrade.in; done | xargs -P 10 -n 1 curl
-# while true;do curl https://rajesh.brainupgrade.in;echo $(date);sleep 0.1;done
+# while true;do curl https://rajesh.brainupgrade.in;echo $(date);sleep 1;done

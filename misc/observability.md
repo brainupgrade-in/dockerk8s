@@ -24,13 +24,15 @@ Get Password using: kubectl get secret --namespace monitoring grafana -o jsonpat
 Access dashboard using: 
 kubectl port-forward -n monitoring svc/grafana 3000:80
 
+# Secrets & Configuration
+08b & 08c
 # User Scope - App Deployment (weather app )
 ## Database / Backend Service
 06c
 ## Middle layer service
-08c
+08e
 ## Frontend / User Interface Service 
-08b
+08d
 
 # Publish App to the internet - Ingress 
 Update ingress by routing URL requests to weather-front service & verify the app is working

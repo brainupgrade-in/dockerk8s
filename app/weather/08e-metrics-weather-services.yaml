@@ -58,11 +58,17 @@ spec:
             - name: server.port
               value: "8080"
             - name: ELASTIC_APM_SERVER_URL 
-              value: "http://apm-server.elasticsearch.svc.cluster.local:8200" 
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: ELASTIC_APM_SERVER_URL
+            - name: ELASTIC_APM_APPLICATION_PACKAGES 
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: ELASTIC_APM_APPLICATION_PACKAGES
             - name: ELASTIC_APM_SERVICE_NAME 
               value: "weather-services" 
-            - name: ELASTIC_APM_APPLICATION_PACKAGES 
-              value: "in.brainupgrade" 
             - name: ELASTIC_APM_ENVIRONMENT 
               value: prod
             - name: ELASTIC_APM_LOG_LEVEL 

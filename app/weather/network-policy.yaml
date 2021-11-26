@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-db-layer
+spec:
+  podSelector:
+    matchLabels:
+      app: weather-db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: weather
+      podSelector:
+        matchLabels:
+          app: weather-service    
+    - podSelector:
+        matchLabels:
+          app: weather-service
+    ports:
+    - protocol: TCP
+      port: 3306

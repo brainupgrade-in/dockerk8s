@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather
+spec:
+  type: ExternalName
+  externalName: weather-front.weather.svc.cluster.local

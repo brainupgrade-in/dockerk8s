@@ -38,13 +38,22 @@ spec:
           name: mariadb
         env:
           - name: MYSQL_ROOT_PASSWORD
-            value: weather
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: spring.datasource.password
           - name: MYSQL_DATABASE
             value: weather
           - name: MYSQL_USER
-            value: weather
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: spring.datasource.username
           - name: MYSQL_PASSWORD
-            value: weather
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: spring.datasource.password
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: data

@@ -9,4 +9,4 @@ spec:
     targetPort: 8080
   selector:
     app: facebook
-    release: v2
+    release: v1
