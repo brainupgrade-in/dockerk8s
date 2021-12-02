@@ -20,7 +20,7 @@ helm install prometheus prometheus-community/prometheus --create-namespace=true 
 helm install grafana grafana/grafana  --create-namespace=true --namespace monitoring
 ### Grafana access
 Get Password using: kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-// 8zUNCJ53l3NxUrC5UbyxnYhkbHiBcQjSHBUyJaf5
+// FIz7srx2rIZsAGKICqTxiaukcY2LMeAhRldJ4QMb
 Access dashboard using: 
 kubectl port-forward -n monitoring svc/grafana 3000:80
 

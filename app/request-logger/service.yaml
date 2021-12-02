@@ -9,4 +9,4 @@ spec:
     - port: 80
   selector:
     app: logger
-    tier: frontend
+    tier: db

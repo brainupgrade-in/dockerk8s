@@ -1,0 +1,12 @@
+FROM adoptopenjdk/maven-openjdk11  AS BUILD
+WORKDIR /app
+RUN apt-get update && apt-get install -y git 
+RUN git clone https://github.com/brainupgrade-in/request-logger.git 
+RUN cd /app/request-logger && mvn clean package
+
+
+FROM openjdk/11-jre
+WORKDIR /app
+COPY --from=BUILD /app/request-logger/target/app.jar app.jar
+ENTRYPOINT ["java" ]
+CMD ["-jar","/app/app.jar"]

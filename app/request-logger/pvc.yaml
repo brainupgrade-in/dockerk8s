@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: logger-pvc
+  name: logger-pvc-db
   labels:
     app: logger
 spec:

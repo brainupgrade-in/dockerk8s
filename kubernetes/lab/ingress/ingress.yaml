@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: rajeshg.brainupgrade.in
+  name: rajesh.brainupgrade.in
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: nginx
@@ -14,19 +14,23 @@ metadata:
 spec:
   tls:
   - hosts:
-    - rajeshg.brainupgrade.in
-    secretName: rajeshg.brainupgrade.in
+    - rajesh.brainupgrade.in
+    secretName: rajesh.brainupgrade.in
   rules:
-    - host: rajeshg.brainupgrade.in
+    - host: rajesh.brainupgrade.in
       http:
         paths:
-          - path: /api/?(.*)
+          - path: /?(.*)
             backend:
-              serviceName: api-v2
+              serviceName: weather-front
               servicePort: 8080
-          - path: /api/v2/?(.*)
+          - path: /site?(.*)
             backend:
-              serviceName: api-v2
+              serviceName: wordpress
+              servicePort: 8080
+          - path: /api/v3/?(.*)
+            backend:
+              serviceName: api-v3
               servicePort: 8080             
           - path: /logger/?(.*)
             backend:
@@ -35,4 +39,12 @@ spec:
           - path: /hello/?(.*)
             backend:
               serviceName: hello
-              servicePort: 80                                         
+              servicePort: 80 
+          - path: /video/?(.*)
+            backend:
+              serviceName: video
+              servicePort: 8080
+          - path: /messaging/?(.*)
+            backend:
+              serviceName: messaging
+              servicePort: 8080
