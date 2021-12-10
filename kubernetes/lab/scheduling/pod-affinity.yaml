@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      component: pod-affinity
+      tier: service
   template:
     metadata:
       labels:
-        component: pod-affinity
+        tier: service
     spec:
         affinity:
           podAffinity:

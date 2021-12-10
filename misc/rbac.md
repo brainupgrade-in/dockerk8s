@@ -26,7 +26,7 @@ KUBECONFIG=/home/ubuntu/kube-conf-${user} kubectl config set-context ${user}-${c
 KUBECONFIG=/home/ubuntu/kube-conf-${user} kubectl config use-context ${user}-${cluster_name#cluster-}
 
 # Create Rolebinding
-kubectl create rolebinding ${name} --user ${user} --clusterrole ${simpleuser} --namespace ${user}
+kubectl create rolebinding ${name} --user ${user} --clusterrole ${power-user} --namespace ${user}
 kubectl create clusterrolebinding ${name} --user ${user} --clusterrole ${power-user} 
 
 

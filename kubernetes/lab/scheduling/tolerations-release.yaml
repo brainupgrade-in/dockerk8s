@@ -8,8 +8,6 @@ spec:
   containers:
   - image: nginx
     name: nginx
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always
   tolerations:
     - key: "release"
       operator: "Exists"

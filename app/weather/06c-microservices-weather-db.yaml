@@ -25,6 +25,8 @@ spec:
       labels:
         app: weather-db
     spec:
+      nodeSelector:
+        kops.k8s.io/instancegroup: "nodes"
       volumes:
       - hostPath:
           path: /weather_data

@@ -12,6 +12,9 @@ spec:
       requests:
         cpu: "6000m"
         memory: "100Gi"
+      limits:
+        cpu: "10000m"
+        memory: "150Gi"  
   dnsPolicy: ClusterFirst
   restartPolicy: Never
   

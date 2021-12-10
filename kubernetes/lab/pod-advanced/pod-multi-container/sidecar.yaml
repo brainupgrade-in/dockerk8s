@@ -12,7 +12,7 @@ spec:
   - name: main-container
     image: busybox 
     command: ["/bin/sh"]
-    args: ["-c", "while true; do ping -c4 google.com >> /tmp/index-input.html; sleep 10;done"]
+    args: ["-c", "while true; do ping -c4 google.com >> /var/log/index-input.html; sleep 10;done"]
     resources:
       limits:
         cpu: "10m"
@@ -21,13 +21,13 @@ spec:
     - name: shared-logs
       mountPath: /var/log
   - name: sidecar-container
-    image: busybox
+    image: busybox # splunk adapter
     resources:
       limits:
         cpu: "10m"
         memory: "10Mi"
     command: ["/bin/sh"]
-    args: ["-c", "while true; do cat /tmp/index-input.html > /tmp/index-output.html; sleep 60;done"]
+    args: ["-c", "while true; do cat /var/log/index-input.html > /tmp/index-output.html; sleep 60;done"]
     volumeMounts:
     - name: shared-logs
       mountPath: /var/log

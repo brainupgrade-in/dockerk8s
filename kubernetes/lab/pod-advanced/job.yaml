@@ -1,13 +1,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job
+  name: migration-task
 spec:
+  backoffLimit: 5
+  activeDeadlineSeconds: 100
+  parallelism: 10
   template:
     spec:
       containers:
-      - name: perl
-        image: perl
-        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      - name: cron-job
+        image: busybox
+        args:
+        - /bin/sh
+        - -c
+        - date; echo Migrating data to reporting server...;sleep 1;
       restartPolicy: Never
-  backoffLimit: 4

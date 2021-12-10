@@ -34,7 +34,7 @@ spec:
             name: elastic-apm-agent          
           env:
             - name: spring.application.name
-              value: weather-front
+              value: weather-front-rajesh
             - name: spring.datasource.url
               value: jdbc:mariadb://weather-db:3306/weather
             - name: spring.datasource.username
@@ -46,7 +46,7 @@ spec:
             - name: ELASTIC_APM_SERVER_URL 
               value: "http://apm-server.elasticsearch.svc.cluster.local:8200" 
             - name: ELASTIC_APM_SERVICE_NAME 
-              value: "weather-front" 
+              value: "weather-front-rajesh" 
             - name: ELASTIC_APM_APPLICATION_PACKAGES 
               value: "in.brainupgrade" 
             - name: ELASTIC_APM_ENVIRONMENT 

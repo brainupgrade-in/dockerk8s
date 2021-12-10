@@ -1,0 +1,16 @@
+FROM ubuntu:20.04
+
+LABEL MAINTAINER info@brainupgrade.in
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN export DEBIAN_FRONTEND=noninteractive
+# Set timezone
+RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+
+RUN apt-get update && apt-get install openjdk-11-jdk -y
+RUN update-alternatives --config java
+
+COPY target/app.jar app.jar
+
+ENTRYPOINT ["java]
+CMD ["-jar","app.jar"]

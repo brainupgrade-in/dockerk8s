@@ -5,7 +5,7 @@ metadata:
 spec:
   imagePullSecrets:
     - name: regcred
-  nodeName: ip-172-31-101-245.ec2.internal
+  nodeName: ip-172-31-32-21.ec2.internal
   containers:
   - image: nginx
     name: test-container
@@ -20,5 +20,6 @@ spec:
   - name: ebs-volume
     # This AWS EBS volume must already exist.
     awsElasticBlockStore:
-      volumeID: vol-0b4e04c91db8e0ce0
+      volumeID: vol-097ddaf72a66ed062
       fsType: ext4
+      
