@@ -9,11 +9,6 @@ spec:
     volumeMounts:
     - mountPath: /cache
       name: cache-volume
-  - image: nginx
-    name: test-container
-    volumeMounts:
-    - mountPath: /cache
-      name: cache-volume
   volumes:
   - name: cache-volume
     emptyDir: {}

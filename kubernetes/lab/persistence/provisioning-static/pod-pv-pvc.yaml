@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-pv-pvc-3
+  name: pod-pv-pvc-1
 spec:
   volumes:
     - name: pv-storage
@@ -16,7 +16,3 @@ spec:
       volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: pv-storage
-      resources:
-        limits:
-          cpu: "20m"
-          memory: "50Mi"          
