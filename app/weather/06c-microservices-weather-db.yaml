@@ -26,15 +26,17 @@ spec:
         app: weather-db
     spec:
       nodeSelector:
-        kops.k8s.io/instancegroup: "nodes"
-      volumes:
-      - hostPath:
-          path: /weather_data
-          type: ""
-        name: data
+        kops.k8s.io/instancegroup: "spotnodes"
       containers:
       - image: mariadb:10.3
         name: mariadb
+        resources: 
+          limits:
+            cpu: 50m
+            memory: 128Mi
+          requests:
+            cpu: 50m
+            memory: 128Mi         
         ports:
         - containerPort: 3306
           name: mariadb
@@ -56,6 +58,3 @@ spec:
               secretKeyRef:
                 name: app-secret
                 key: spring.datasource.password
-        volumeMounts:
-        - mountPath: /var/lib/mysql
-          name: data

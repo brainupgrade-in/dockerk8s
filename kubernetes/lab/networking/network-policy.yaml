@@ -5,7 +5,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: weather-front
+      app: weather-db
   policyTypes:
   - Egress
   egress:
@@ -55,10 +55,11 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          app: rajesh
-      podSelector:
-        matchLabels:
-          app: weather-service    
+          # kubernetes.io/metadata.name: klaas2112u1
+          department: payment
+      # podSelector:
+      #   matchLabels:
+      #     app: weather-service    
     - podSelector:
         matchLabels:
           app: weather-service

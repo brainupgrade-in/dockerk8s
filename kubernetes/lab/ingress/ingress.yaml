@@ -23,7 +23,11 @@ spec:
           - path: /?(.*)
             backend:
               serviceName: weather-front
-              servicePort: 8080
+              servicePort: 80
+          - path: /kibana/?(.*)
+            backend:
+              serviceName: kibana-kibana
+              servicePort: 5601
           - path: /site?(.*)
             backend:
               serviceName: wordpress

@@ -47,7 +47,7 @@ spec:
             name: elastic-apm-agent          
           env:
             - name: spring.application.name
-              value: weather-front
+              value: weather-front-jon
             - name: spring.datasource.url
               valueFrom:
                 configMapKeyRef:
@@ -79,7 +79,7 @@ spec:
                   name: app-config
                   key: ELASTIC_APM_APPLICATION_PACKAGES
             - name: ELASTIC_APM_SERVICE_NAME 
-              value: "weather-front" 
+              value: "weather-front-jon" 
             - name: ELASTIC_APM_ENVIRONMENT 
               value: prod
             - name: ELASTIC_APM_LOG_LEVEL 

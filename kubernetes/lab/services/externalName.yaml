@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: external-name
+  name: kibana-in-other-ns
 spec:
   type: ExternalName
   # externalName: google.com
-  externalName: facebook.rajesh.svc.cluster.local
+  externalName: kibana-kibana.elasticsearch.svc.cluster.local
