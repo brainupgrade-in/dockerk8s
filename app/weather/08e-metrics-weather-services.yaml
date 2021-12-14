@@ -80,8 +80,6 @@ spec:
               value: -javaagent:/elastic/apm/agent/elastic-apm-agent.jar               
             - name: management.endpoints.web.exposure.include
               value: "*"
-            - name: spring.application.name
-              value: weather-services
             - name: management.server.port
               value: "8888"
             - name: management.metrics.web.server.request.autotime.enabled

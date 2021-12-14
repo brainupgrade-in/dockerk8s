@@ -5,7 +5,9 @@ metadata:
 spec:
   imagePullSecrets:
     - name: regcred
-  nodeName: ip-172-31-32-21.ec2.internal
+  nodeName: ip-172-31-42-166.ec2.internal
+  # nodeSelector:
+  #  topology.kubernetes.io/zone: us-east-1a
   containers:
   - image: nginx
     name: test-container
@@ -20,6 +22,6 @@ spec:
   - name: ebs-volume
     # This AWS EBS volume must already exist.
     awsElasticBlockStore:
-      volumeID: vol-097ddaf72a66ed062
+      volumeID: vol-00e5e6e384559421a
       fsType: ext4
       

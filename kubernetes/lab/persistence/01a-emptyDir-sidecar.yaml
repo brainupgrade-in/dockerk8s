@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: sidecar
   labels:
-    pattern: sidecar
+    app: sidecar
 spec:
   imagePullSecrets:
     - name: regcred

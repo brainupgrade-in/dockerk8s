@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pod-pv-pvc-1
+  name: pod-pv-pvc
 spec:
   volumes:
     - name: pv-storage
