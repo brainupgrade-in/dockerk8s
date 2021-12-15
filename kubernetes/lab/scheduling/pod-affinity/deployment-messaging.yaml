@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messaging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: messaging
+  template:
+    metadata:
+      labels:
+        tier: messaging
+    spec:
+        affinity:
+          podAffinity:
+            # requiredDuringSchedulingIgnoredDuringExecution:
+            # - labelSelector:
+            #       matchExpressions:
+            #       - key: tier
+            #         operator: In
+            #         values:
+            #         - messaging
+            #   topologyKey: kubernetes.io/zone
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:            
+                labelSelector:
+                  matchExpressions:
+                  - key: tier
+                    operator: In  # NotIn, Exists, NotExists
+                    values:
+                    - middle
+                topologyKey: topology.kubernetes.io/hostname
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                  matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                    - front
+              topologyKey: kubernetes.io/hostname
+        containers:
+          - name: nginx
+            image: nginx
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 80
