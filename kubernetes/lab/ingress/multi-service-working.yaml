@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  creationTimestamp: "2021-12-05T15:09:50Z"
+  generation: 18
+  name: klaas2112u2.brainupgrade.in
+  namespace: klaas2112u2
+  resourceVersion: "10684809"
+  uid: 8641d249-0b3f-42ba-afc8-13c70ef020f7
+spec:
+  rules:
+  - host: klaas2112u2.brainupgrade.in
+    http:
+      paths:
+      - backend:
+          service:
+            name: api-v1
+            port:
+              number: 80
+        path: /?(.*)
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: api-v2
+            port:
+              number: 80
+        path: /v2/?(.*)
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: hello-world
+            port:
+              number: 80
+        path: /hello/?(.*)
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: weather-front
+            port:
+              number: 80
+        path: /weather/?(.*)
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - klaas2112u2.brainupgrade.in
+    secretName: klaas2112u2.brainupgrade.in
