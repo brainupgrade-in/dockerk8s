@@ -13,10 +13,12 @@ spec:
         component: schedule-nodeselector
     spec:
         nodeSelector:
-          node-role.kubernetes.io/spot-worker: "true"
+          # node-role.kubernetes.io/spot-worker: "true"
+          jci.nodes.group: "gpu"
         containers:
           - name: test-app
             image: nginx
             imagePullPolicy: IfNotPresent
             ports:
               - containerPort: 80
+# k label <node name> jci.nodes.group=gpu

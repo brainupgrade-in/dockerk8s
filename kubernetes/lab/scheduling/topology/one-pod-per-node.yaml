@@ -1,32 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: topology-constraint
+  name: one-pod-per-node
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: topology-constraint
+      app: one-pod-per-node
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: topology-constraint
+        app: one-pod-per-node
     spec:
+      nodeSelector:
+        kubernetes.io/role: node
       topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: topology.kubernetes.io/zone
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app: topology-constraint
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: topology-constraint
+            app: one-pod-per-node
       containers:
       - image: gcr.io/google-samples/hello-app:1.0
         name: hello-app
