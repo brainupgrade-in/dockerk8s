@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jenkins
+spec:
+  serviceName: "jenkins"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      volumes:
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+      - name: docker
+        hostPath:
+          path: /usr/bin/docker       
+      initContainers:
+      - name: init-chown
+        image: alpine
+        volumeMounts:
+          - name: jenkins-home
+            mountPath: /var/jenkins_home
+        env:
+        - name: JENKINS_HOME
+          value: /var/jenkins_home
+        - name: UID
+          value: '1000'
+        command:
+        - sh
+        - -c
+        - if [ ! -f $JENKINS_HOME ]; then chown $UID:$UID -R $JENKINS_HOME; touch $JENKINS_HOME; chown $UID:$UID $JENKINS_HOME; fi    
+      containers:
+      - name: jenkins
+        image: brainupgrade/jenkins:2.274jdk11x
+        # env:
+        #   - name: JAVA_OPTS
+        #     value: -Djenkins.install.runSetupWizard=false -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85        
+        ports:
+        - containerPort: 8080
+          name: web
+        - containerPort: 50000
+          name: agent-port
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+        - name: docker
+          mountPath: /usr/bin/docker  
+        securityContext:
+          allowPrivilegeEscalation: true
+          runAsUser: 0
+  volumeClaimTemplates:
+  - metadata:
+      name: jenkins-home
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

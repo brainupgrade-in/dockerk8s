@@ -17,7 +17,7 @@ spec:
       nodeSelector:
         kubernetes.io/role: node
       topologySpreadConstraints:
-      - maxSkew: 1
+      - maxSkew: 5
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
