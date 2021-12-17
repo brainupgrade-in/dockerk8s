@@ -4,5 +4,5 @@ metadata:
   name: db-config
 data:
   name: docker
-  url: jdbc:mariadb://logger-mysql:3306/docker
+  url: jdbc:mariadb://logger-mysql:3316/docker
   user: docker
