@@ -20,6 +20,8 @@ spec:
       - name: docker
         hostPath:
           path: /usr/bin/docker       
+      - name: dind-storage
+        emptyDir: {}
       initContainers:
       - name: init-chown
         image: alpine
@@ -38,9 +40,11 @@ spec:
       containers:
       - name: jenkins
         image: brainupgrade/jenkins:2.274jdk11x
-        # env:
-        #   - name: JAVA_OPTS
-        #     value: -Djenkins.install.runSetupWizard=false -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85        
+        env:
+          - name: JAVA_OPTS
+            value: -Djenkins.install.runSetupWizard=false -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85        
+          - name: DOCKER_HOST
+            value: tcp://localhost:2375
         ports:
         - containerPort: 8080
           name: web
@@ -49,13 +53,27 @@ spec:
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home
-        - name: docker-sock
-          mountPath: /var/run/docker.sock
-        - name: docker
-          mountPath: /usr/bin/docker  
+        # - name: docker-sock
+        #   mountPath: /var/run/docker.sock
+        # - name: docker
+        #   mountPath: /usr/bin/docker  
+        - name: dind-storage
+          mountPath: /var/lib/docker
         securityContext:
           allowPrivilegeEscalation: true
           runAsUser: 0
+      - name: dind
+        image: docker:19.03.3-dind
+        securityContext:
+          privileged: true
+        env:
+        - name: DOCKER_TLS_CERTDIR
+          value: ''
+        volumeMounts:
+          - name: dind-storage
+            mountPath: /var/lib/docker
+          - name: jenkins-home
+            mountPath: /var/jenkins_home
   volumeClaimTemplates:
   - metadata:
       name: jenkins-home

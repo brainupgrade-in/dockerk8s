@@ -1,0 +1,33 @@
+FROM ubuntu
+
+LABEL MAINTAINER info@brainupgrade.in
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN export DEBIAN_FRONTEND=noninteractive
+# Set timezone
+RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+
+RUN apt-get update && apt-get install -y gnupg software-properties-common curl  
+RUN apt-get update && apt-get install -y iputils-ping vim jq gzip tar git openssh-client unzip wget 
+RUN apt-get install -y nodejs maven openjdk-8-jdk mariadb-server
+
+WORKDIR /app
+RUN git clone https://github.com/brainupgrade-in/global-bank-frontend.git
+RUN git clone https://github.com/brainupgrade-in/global-bank-authentication.git
+RUN git clone https://github.com/brainupgrade-in/global-bank-rules.git
+RUN git clone https://github.com/brainupgrade-in/global-bank-customer.git
+RUN git clone https://github.com/brainupgrade-in/global-bank-account.git
+RUN git clone https://github.com/brainupgrade-in/global-bank-transaction.git
+RUN cd /app/global-bank-authentication/ && mvn clean package
+RUN apt-get install -y npm
+RUN cd /app/global-bank-frontend/ && npm install
+RUN cd /app/global-bank-rules/ && mvn clean package
+RUN cd /app/global-bank-customer/ && mvn clean package
+RUN cd /app/global-bank-account/ && mvn clean package
+RUN cd /app/global-bank-transaction/ && mvn clean package
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+RUN apt update && apt install -y docker-ce docker-ce-cli containerd.io
+
+# docker build -f Dockerfile-devtools -t brainupgrade/global-bank-dev:1.0.0 .

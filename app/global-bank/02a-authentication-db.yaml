@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentication-db
+  namespace: global-bank
+spec:
+  type: ClusterIP
+  ports:
+    - name: tcp
+      port: 3306
+      targetPort: 3306
+  selector:
+    app: authentication-db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-db
+  namespace: global-bank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authentication-db
+  template:
+    metadata:
+      labels:
+        app: authentication-db
+    spec:
+      containers:
+      - image: mariadb:10.3
+        name: authentication-db
+        ports:
+        - containerPort: 3306
+          name: tcp
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: auth
+          - name: MYSQL_DATABASE
+            value: auth
+          - name: MYSQL_USER
+            value: auth
+          - name: MYSQL_PASSWORD
+            value: auth

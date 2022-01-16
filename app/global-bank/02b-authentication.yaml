@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authentication
+  namespace: global-bank
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  selector:
+    app: authentication
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication
+  namespace: global-bank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authentication
+  template:
+    metadata:
+      labels:
+        app: authentication
+    spec:
+      containers:
+      - image: brainupgrade/global-bank-authentication:1.0.0
+        name: authentication
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+          - name: java.security.egd
+            value: file:/dev/./urandom
+          - name: server.port
+            value: "80"
+          - name: spring.datasource.url
+            value: jdbc:mariadb://authentication-db.global-bank.svc.cluster.local:3306/auth
+          - name: spring.datasource.driverClassName
+            value: "org.mariadb.jdbc.Driver"
+          - name: spring.jpa.database-platform
+            value: "org.hibernate.dialect.MariaDBDialect"
+          - name: spring.jpa.properties.hibernate.dialect
+            value: "org.hibernate.dialect.MariaDBDialect"
+          - name: spring.datasource.username
+            value: "auth"
+          - name: spring.datasource.password
+            value: "auth"
+          - name: spring.jpa.hibernate.ddl-auto
+            value: "create"  
+          - name: spring.jpa.generate-ddl
+            value: "true" 
