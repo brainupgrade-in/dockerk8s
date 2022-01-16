@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devtools
+  name: global-bank-dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: devtools
+      app: global-bank-dev
   template:
     metadata:
-      name: devtools
+      name: global-bank-dev
       labels:
-        app: devtools
+        app: global-bank-dev
     spec:
       volumes:
       - name: dind-storage
@@ -19,7 +19,7 @@ spec:
       - name: appdev
         emptyDir: {}  
       containers:
-      - name: devtools
+      - name: global-bank-dev
         image: brainupgrade/global-bank-dev:1.0.0
         command:
         - cat
