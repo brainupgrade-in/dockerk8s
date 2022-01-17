@@ -7,10 +7,8 @@ spec:
   selector:
     matchLabels:
       app: topology-constraint
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: topology-constraint
     spec:

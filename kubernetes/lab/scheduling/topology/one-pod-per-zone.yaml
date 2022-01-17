@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: one-pod-per-node-zone
+  name: one-pod-per-zone
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: one-pod-per-node-zone
+      app: one-pod-per-zone
   template:
     metadata:
       labels:
-        app: one-pod-per-node-zone
+        app: one-pod-per-zone
     spec:
       nodeSelector:
         kubernetes.io/role: node
@@ -20,13 +20,7 @@ spec:
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: one-pod-per-node-zone
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app: one-pod-per-node-zone
+            app: one-pod-per-zone
       containers:
       - image: gcr.io/google-samples/hello-app:1.0
         name: hello-app

@@ -7,10 +7,8 @@ spec:
   selector:
     matchLabels:
       app: one-pod-per-node
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: one-pod-per-node
     spec:
