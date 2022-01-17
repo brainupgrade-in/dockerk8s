@@ -55,7 +55,7 @@ Verify if the app is running as expected by running below command
 
 `kubectl expose global-bank-dev --port 80 --target-port 4200`
 
-and then modify ingress object (replace `docker` to `global-bank-dev` on line #31), save and exit (`ESC  :wq`)
+and then modify ingress object `k edit ingress` (replace `docker` to `global-bank-dev` on line #31), save and exit (`ESC  :wq`)
 
 Get the HOST using below command and access it using the browser
 
