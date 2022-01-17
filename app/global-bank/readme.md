@@ -34,7 +34,7 @@ Enter into the Dev environment using below command
 Build & launch the microservices
 
 ```
-cd /app/global-bank-authorization/ && mvn clean package && java -jar target/authorization.jar &
+cd /app/global-bank-authentication/ && mvn clean package && java -jar target/authentication.jar &
 cd /app/global-bank-rules/ && mvn clean package && java -jar target/rules.jar &
 cd /app/global-bank-customer/ && mvn clean package && java -jar target/customer.jar &
 cd /app/global-bank-account/ && mvn clean package && java -jar target/account.jar &
