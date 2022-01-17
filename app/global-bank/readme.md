@@ -66,6 +66,29 @@ Get the HOST using below command and access it using the browser
 Every microservice, contains Dockerfile which is used to build the microservice.  It takes care of launching dependent build tools as docker container itself and then once code is built, and then in a separate image the app is containerized thus making the final image as small as possible at the same time removing the burden on setting up build environment for any of the technologies used by the respective microservice.
 You can give the image name as you deem appropriate and if you did then update k8s.yaml accordingly.
 
-# How to Deploy
+# Deploy on Kubernetes
 
-Once the app is dockerized, then use the files starting with k8s*.yaml and deploy them in your respective cloud environment.
+Run below commands in your cluster
+
+```
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/01a-authentication-db.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/03a-customer-db.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/04a-account-db.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/05a-transaction-db.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/01b-authentication.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/02-rules.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/03b-customer.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/04b-account.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/05b-transaction.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/global-bank/06-frontend.yaml
+
+```
