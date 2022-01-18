@@ -27,3 +27,4 @@ spec:
   - hosts:
     - global-bank.brainupgrade.in
     secretName: global-bank.brainupgrade.in
+# kubectl apply -f ingress.yaml
