@@ -17,7 +17,7 @@ spec:
     - name: shared-logs
       mountPath: /var/log
   - name: adapter-container
-    image: alpine
+    image: alpine  # logstash message formatter
     command: ["/bin/sh"]
     args: ["-c", "while true; do (cat /var/log/top.txt | head -1 > /var/log/status.txt) && (cat /var/log/top.txt | head -2 | tail -1 | grep
  -o -E '\\d+\\w' | head -1 >> /var/log/status.txt) && (cat /var/log/top.txt | head -3 | tail -1 | grep

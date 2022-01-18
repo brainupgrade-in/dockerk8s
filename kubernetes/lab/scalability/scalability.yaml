@@ -2,29 +2,33 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: weather
-  name: weather
+    app: google
+  name: google
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: weather
+      app: google
   template:
     metadata:
       labels:
-        app: weather
+        app: google
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-      - image: brainupgrade/weather:monolith
-        name: weather
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: google
         ports:
         - containerPort: 8080
         resources:
           limits:
-            cpu: "100m"
-            memory: "512Mi"
-# monolith
-# scale up / down  kubectl scale --replicas=2 deploy weather
-# autoscale  kubectl autoscale --min 2 --max 5 deploy weather   (metrics-server should be running in the cluster)
+            cpu: "10m"
+            memory: "50Mi"
+
+# scale up / down  kubectl scale --replicas=2 deploy google
+# k set image deploy google-hello hello-app=gcr.io/google-samples/hello-app:2.0
+# k rollout history deploy google-hello
+# autoscale  kubectl autoscale --min 2 --max 5 --cpu-percent 20 deploy google  
+# (metrics-server should be running in the cluster)
+# k exec test -- while true;do sleep 0.01s;wget -qO- google-hello;done
