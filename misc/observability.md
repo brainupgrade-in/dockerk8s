@@ -9,9 +9,20 @@ helm install  kibana elastic/kibana --create-namespace=true --namespace elastics
 Access dashboard using: 
 kubectl port-forward -n elasticsearch svc/kibana-kibana 5601:5601
 ## Fluentd
-05b+c+d  (kubectly apply -f <file name>)
+
+kubectl create ns fluentd
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/05b-log-monitoring-fluentd-setup-crb.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/05c-log-monitoring-fluentd-setup-cm.yaml
+
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/05d-log-monitoring-fluentd.yaml
+
+
 ## APM Server
-07a
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/07a-apm-server.yaml
+
 ## Prometheus - Grafana
 helm repo add prometheus-community	https://prometheus-community.github.io/helm-charts
 helm repo add grafana	https://grafana.github.io/helm-charts
@@ -25,14 +36,20 @@ Access dashboard using:
 kubectl port-forward -n monitoring svc/grafana 3000:80
 
 # Secrets & Configuration
-08b & 08c
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/08b-config.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/08c-secret.yaml
+
 # User Scope - App Deployment (weather app )
 ## Database / Backend Service
-06c
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/06c-microservices-weather-db.yaml
+
 ## Middle layer service
-08e
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/08e-metrics-weather-services.yaml
+
 ## Frontend / User Interface Service 
-08d
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/08d-metrics-weather-front.yaml
 
 # Publish App to the internet - Ingress 
 Update ingress by routing URL requests to weather-front service & verify the app is working
