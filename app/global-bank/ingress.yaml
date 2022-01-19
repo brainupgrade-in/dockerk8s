@@ -18,10 +18,17 @@ spec:
       paths:
       - backend:
           service:
-            name: frontend
+            name: api-v1
             port:
               number: 80
-        path: /?(.*)
+        path: /api-v1/?(.*)
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: api-v2
+            port:
+              number: 80
+        path: /api-v2/?(.*)
         pathType: ImplementationSpecific
   tls:
   - hosts:

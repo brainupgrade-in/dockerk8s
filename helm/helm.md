@@ -2,7 +2,7 @@ git clone https://github.com/brainupgrade-in/helm-charts
 cd helm-charts
 git checkout -b gh-pages
 helm create bu-nginx
-touch bu-nginx/index.yaml
+<!-- touch bu-nginx/index.yaml -->
 helm package bu-nginx
 mv bu-nginx*.tgz bu-nginx/
 cd ..

@@ -9,7 +9,7 @@ export ASG_NAME=$(aws autoscaling describe-auto-scaling-groups --query "AutoScal
 aws autoscaling  update-auto-scaling-group --auto-scaling-group-name ${ASG_NAME} --min-size 1 --desired-capacity 1 --max-size 4
 
 
-# Done by Super Admin - Setting up ASG policy
+# Setting up ASG policy - Done by Super Admin 
 cat <<EoF > /tmp/k8s-asg-policy.json
 {
     "Version": "2012-10-17",

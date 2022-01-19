@@ -25,7 +25,7 @@ spec:
               - key: alpha.eksctl.io/nodegroup-name
                 operator: In
                 values:
-                - spot
+                - spotnodes
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
