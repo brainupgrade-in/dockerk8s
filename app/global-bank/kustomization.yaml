@@ -1,0 +1,11 @@
+resources:
+  - 01a-authentication-db.yaml
+  - 01b-authentication.yaml
+  - 02-rules.yaml
+  - 03a-customer-db.yaml
+  - 03b-customer.yaml
+  - 04a-account-db.yaml
+  - 04b-account.yaml
+  - 05a-transaction-db.yaml
+  - 05b-transaction.yaml
+  - 06-frontend.yaml

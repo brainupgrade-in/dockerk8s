@@ -25,6 +25,10 @@ spec:
       labels:
         app: account
     spec:
+      initContainers:
+      - name: init-mydb
+        image: busybox:1.28
+        command: ['sh', '-c', "until nslookup account-db.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting-for-database; sleep 2; done"]
       containers:
       - image: brainupgrade/global-bank-account:1.0.0
         name: account

@@ -22,10 +22,11 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: alpha.eksctl.io/nodegroup-name
+              # - key: alpha.eksctl.io/nodegroup-name
+              - key: kops.k8s.io/instancegroup
                 operator: In
                 values:
-                - spotnodes
+                - nodes
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:

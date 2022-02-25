@@ -24,6 +24,10 @@ spec:
         command:
         - cat
         tty: true
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh","-c","cd /appdev && ln -s /app ."]
         volumeMounts:
         - mountPath: /appdev
           name: appdev
