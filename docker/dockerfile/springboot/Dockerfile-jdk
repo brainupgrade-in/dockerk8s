@@ -12,5 +12,5 @@ RUN update-alternatives --config java
 
 COPY target/app.jar app.jar
 
-ENTRYPOINT ["java]
+ENTRYPOINT ["java"]
 CMD ["-jar","app.jar"]

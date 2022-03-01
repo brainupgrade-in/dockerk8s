@@ -1,9 +1,9 @@
 # To check autoscaling groups
 aws autoscaling describe-auto-scaling-groups \
-    --query "AutoScalingGroups[? Tags[? (Key=='eks:cluster-name') && Value=='k8sadmin']].[AutoScalingGroupName, MinSize, MaxSize,DesiredCapacity]" \
+    --query "AutoScalingGroups[? Tags[? (Key=='eks:cluster-name') && Value=='rajesh-cluster']].[AutoScalingGroupName, MinSize, MaxSize,DesiredCapacity]" \
     --output table
 
-export ASG_NAME=$(aws autoscaling describe-auto-scaling-groups --query "AutoScalingGroups[? Tags[? (Key=='eks:cluster-name') && Value=='k8sadmin']].AutoScalingGroupName" --output text)    
+export ASG_NAME=$(aws autoscaling describe-auto-scaling-groups --query "AutoScalingGroups[? Tags[? (Key=='eks:cluster-name') && Value=='rajesh-cluster']].AutoScalingGroupName" --output text)    
 
 # To update ASG if required
 aws autoscaling  update-auto-scaling-group --auto-scaling-group-name ${ASG_NAME} --min-size 1 --desired-capacity 1 --max-size 4
@@ -37,9 +37,9 @@ aws iam create-policy --policy-name k8s-asg-policy --policy-document file:///tmp
 # Setup Access
 export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query 'Account')
 
-eksctl utils associate-iam-oidc-provider --cluster k8sadmin --approve
+eksctl utils associate-iam-oidc-provider --cluster rajesh-cluster --approve
 
-eksctl create iamserviceaccount --name cluster-autoscaler-k8sadmin --namespace kube-system --cluster k8sadmin \
+eksctl create iamserviceaccount --name cluster-autoscaler-rajesh --namespace kube-system --cluster rajesh-cluster \
     --attach-policy-arn "arn:aws:iam::${ACCOUNT_ID}:policy/k8s-asg-policy" --approve 
 
 

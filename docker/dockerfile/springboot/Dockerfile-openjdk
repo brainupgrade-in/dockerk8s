@@ -1,0 +1,6 @@
+FROM adoptopenjdk:11-jre
+
+COPY target/*.jar app.jar
+
+ENTRYPOINT ["java"]
+CMD ["-jar","/app.jar"]

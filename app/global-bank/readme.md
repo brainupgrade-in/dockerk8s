@@ -39,23 +39,10 @@ cd /app/global-bank-rules/ && mvn clean package && java -jar target/rules.jar &
 cd /app/global-bank-customer/ && mvn clean package && java -jar target/customer.jar &
 cd /app/global-bank-account/ && mvn clean package && java -jar target/account.jar &
 cd /app/global-bank-transaction/ && mvn clean package && java -jar target/transaction.jar &
+cd /app/global-bank-frontend/ && git pull origin main && npm start
 ```
 
-Modify line #6 /app/global-bank-frontend/package.json to the below
-
-`ng serve --host 0.0.0.0 --disable-host-check --open --proxy-config proxy.conf.local.json`
-
-and then run below to start the user interface (frontend)
-
-`cd /app/global-bank-frontend/ && npm start &`
-
 # Verify
-
-Verify if the app is running as expected by running below command
-
-`kubectl expose deploy global-bank-dev --port 80 --target-port 4200`
-
-and then modify ingress object `k edit ingress` (replace `docker` to `global-bank-dev` on line #31), save and exit (`ESC  :wq`)
 
 Get the HOST using below command and access it using the browser
 

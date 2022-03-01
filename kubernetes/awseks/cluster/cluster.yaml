@@ -1,16 +1,13 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: autoscaling-rajesh
+  name: rajesh-cluster
   region: ap-south-1
   version: "1.20"
-availabilityZones:
-- ap-south-1a
-- ap-south-1b
 managedNodeGroups:
-- name: managed-nodes
+- name: ng-1
   labels:
-    role: managed-nodes
+    role: ng-1
   instanceType: t3a.small
   spot: true
   minSize: 1
