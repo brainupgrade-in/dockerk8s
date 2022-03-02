@@ -24,8 +24,8 @@ kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/mai
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/07a-apm-server.yaml
 
 ## Prometheus - Grafana
-helm repo add prometheus-community	https://prometheus-community.github.io/helm-charts
-helm repo add grafana	https://grafana.github.io/helm-charts
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm install prometheus prometheus-community/prometheus --create-namespace=true --namespace monitoring
 helm install grafana grafana/grafana  --create-namespace=true --namespace monitoring

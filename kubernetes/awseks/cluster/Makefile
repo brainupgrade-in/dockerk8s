@@ -7,6 +7,9 @@ delete_cluster:
 create_nodegroup:
 	eksctl create nodegroup --config-file=cluster.yaml
 
+create_nodegroup_t3axlarge:
+    eksctl create nodegroup --name ng-2 --cluster k2 --nodes 1 --node-type t3a.xlarge --spot --nodes-min 1 --nodes-max 1 --node-volume-size 50	
+
 delete_nodegroup:
 	eksctl delete nodegroup --cluster=rajesh-cluster --name=ng-1
 

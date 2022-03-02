@@ -1,12 +1,6 @@
-# Cluster Admin Environment
-kubectl create deploy k8sadmin --image brainupgrade/k8stools:1.0.0 -- tail -f /dev/null
-
-kubectl exec -it deploy/k8sadmin -- bash
-
 # EKSCTL
 
-eksctl create cluster -f ./autoscaling-cluster/cluster.yaml
-
+eksctl create cluster -f ./cluster/cluster.yaml
 
 eksctl create cluster --name k8sadmin --spot --node-type t3a.small --nodes 1 --nodes-min 1 --nodes-max 2 --node-volume-size 20 --version  1.20
 
@@ -18,9 +12,6 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.5.0/components.yaml
 
 # cert manager
-helm repo add jetstack https://charts.jetstack.io
-
-helm repo update
 
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
 
@@ -32,7 +23,9 @@ Ref: https://cert-manager.io/docs/installation/kubectl/
 https://github.com/brainupgrade-in/kubernetes/tree/main/observability
 
 # HELM
+
 helm repo add stable https://charts.helm.sh/stable
+helm repo add jetstack https://charts.jetstack.io
 
 helm repo update
 

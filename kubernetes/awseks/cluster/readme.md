@@ -41,16 +41,16 @@ system:serviceaccount:kube-system:<iamserviceaccount name>.  Also change the oid
 
 ## Print ASG 
 aws autoscaling describe-auto-scaling-groups \
-    --query "AutoScalingGroups[? Tags[? (Key=='eks:cluster-name') && Value=='rajesh']].[AutoScalingGroupName, MinSize, MaxSize,DesiredCapacity]" \
+    --query "AutoScalingGroups[? Tags[? (Key=='eks:cluster-name') && Value=='k2']].[AutoScalingGroupName, MinSize, MaxSize,DesiredCapacity]" \
     --output table
 
 ## Get ASG Name
 
-export ASG_NAME=$(aws autoscaling describe-auto-scaling-groups --query "AutoScalingGroups[? Tags[? (Key=='eks:cluster-name') && Value=='rajesh']].AutoScalingGroupName" --output text)    
+export ASG_NAME=$(aws autoscaling describe-auto-scaling-groups --query "AutoScalingGroups[? Tags[? (Key=='eks:cluster-name') && Value=='k2']].AutoScalingGroupName" --output text)    
 
 ## Update ASG manually
 
-aws autoscaling  update-auto-scaling-group --auto-scaling-group-name ${ASG_NAME} --min-size 1 --desired-capacity 3 --max-size 4
+aws autoscaling  update-auto-scaling-group --auto-scaling-group-name ${ASG_NAME} --min-size 1 --desired-capacity 2 --max-size 3
 
 ## Create AWS account wide ASG policy for EKS - one time
 cat <<EoF > /tmp/k8s-asg-policy.json
