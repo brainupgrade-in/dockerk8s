@@ -15,3 +15,5 @@ kubectl create secret docker-registry regcred \
   --docker-username=tiger \
   --docker-password=pass113 \
   --docker-email=tiger@acme.com
+
+  k set resources deploy/hello --limits=cpu=5m,memory=50Mi --requests=cpu=5m,memory=50Mi

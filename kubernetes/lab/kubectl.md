@@ -17,3 +17,6 @@ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP
 JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' \
  && kubectl get nodes -o jsonpath="$JSONPATH" | grep "Ready=True"
 
+# Patch Ingress with new service name
+kubectl patch ingress rajesh-app.brainupgrade.in  --type=json \
+ -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/name","value":"hello"}]'
