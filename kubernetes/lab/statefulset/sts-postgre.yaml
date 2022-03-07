@@ -29,7 +29,7 @@ spec:
         image: postgres
         envFrom:
         - configMapRef:
-          name: postgre-config
+            name: postgre-config
         ports:
         - containerPort: 5432
           name: db
