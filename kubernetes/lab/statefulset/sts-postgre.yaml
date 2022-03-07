@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgre
+spec:
+  serviceName: "postgre"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgre
+  template:
+    metadata:
+      labels:
+        app: postgre
+    spec:
+      containers:
+      - name: postgre
+        image: postgres
+        envFrom:
+        - configMapRef:
+          name: postgre-config
+        ports:
+        - containerPort: 5432
+          name: db
+        volumeMounts:
+        - name: data
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgre-config
+data:
+  POSTGRES_DB: smartbank
+  POSTGRES_USER: smartbank
+  POSTGRES_PASSWORD: smartbankpwd
+  PGDATA: /data/pgdata          

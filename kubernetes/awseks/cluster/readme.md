@@ -11,22 +11,18 @@ Using already created k8s-asg-policy, create the service account
 
 export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query 'Account')
 
-eksctl create iamserviceaccount --name cluster-autoscaler --namespace kube-system --cluster everest \
+eksctl create iamserviceaccount --name cluster-autoscaler --namespace kube-system --cluster annapurna \
     --attach-policy-arn "arn:aws:iam::${ACCOUNT_ID}:policy/k8s-asg-policy" \
     --override-existing-serviceaccounts --region=ap-south-1 --approve 
 
 # Launch auto-scaler
 
-<!-- curl -o autoscaler.yaml https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/kubernetes/awseks/cluster/autoscaler-cluster.yaml
+curl -o autoscaler.yaml https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/kubernetes/awseks/cluster/autoscaler-cluster.yaml
 
-sed -i 's/<YOUR CLUSTER NAME>/annapurna/g' autoscaler-cluster.yaml -->
+sed -i 's/<YOUR CLUSTER NAME>/annapurna/g' autoscaler-cluster.yaml 
 
 kubectl apply -f cluster-autoscaler.yaml
 
-# Annotate service account
-<!-- kubectl annotate serviceaccount cluster-autoscaler -n kube-system eks.amazonaws.com/role-arn=arn:aws:iam::627377777394:role/autoscaler-klaas1 -->
-
-<!-- kubectl annotate serviceaccount cluster-autoscaler -n kube-system  eks.amazonaws.com/role-arn=arn:aws:iam::627377777394:role/eksctl-everest-cluster-ServiceRole-N5WSPL1K23TG -->
 
 # Test Cluster Autoscaling
 
