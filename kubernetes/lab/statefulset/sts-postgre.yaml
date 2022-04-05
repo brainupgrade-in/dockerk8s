@@ -54,3 +54,4 @@ data:
   POSTGRES_USER: smartbank
   POSTGRES_PASSWORD: smartbankpwd
   PGDATA: /data/pgdata          
+  

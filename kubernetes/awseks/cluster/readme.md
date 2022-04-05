@@ -19,13 +19,14 @@ eksctl create iamserviceaccount --name cluster-autoscaler --namespace kube-syste
 
 curl -o autoscaler.yaml https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/kubernetes/awseks/cluster/autoscaler-cluster.yaml
 
-sed -i 's/<YOUR CLUSTER NAME>/annapurna/g' autoscaler-cluster.yaml 
+sed -i 's/<YOUR CLUSTER NAME>/annapurna/g' autoscaler.yaml 
 
-kubectl apply -f cluster-autoscaler.yaml
+kubectl apply -f autoscaler.yaml
 
 
 # Test Cluster Autoscaling
 
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/kubernetes/awseks/cluster/test-autoscaling-cluster.yaml
 
 # Misc
 ## Create a role (using aws console) to 
