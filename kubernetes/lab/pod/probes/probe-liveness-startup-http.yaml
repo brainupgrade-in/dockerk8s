@@ -13,6 +13,7 @@ spec:
         path: /healthz
         port: 8080
       failureThreshold: 1
+      successThreshold: 1
       periodSeconds: 10
     startupProbe:
       httpGet:
