@@ -10,7 +10,8 @@ data:
         server {
             listen 80;
             location / {
-                proxy_pass https://brainupgrade.in;
+                #rewrite ^/(.*)$ https://yahoo.com/$1 redirect;
+                proxy_pass https://yahoo.com;
             }
         }
     }
@@ -30,14 +31,17 @@ spec:
         app: nginx
     spec:
       containers:
-      - name: ambassador
-        image: nginx
+      - image: nginx
+        imagePullPolicy: Always
+        name: ambassador
         ports:
-        - containerPort: 80        
+        - containerPort: 80
+          protocol: TCP
         volumeMounts:
-          - name: nginx-config
-            mountPath: /etc/nginx
+        - mountPath: /etc/nginx
+          name: nginx-config
       volumes:
-        - name: nginx-config
-          configMap:
-            name: nginx-proxy
+      - configMap:
+          defaultMode: 420
+          name: nginx-proxy
+        name: nginx-config
