@@ -85,6 +85,6 @@ spec:
             - name: management.metrics.web.server.request.autotime.enabled
               value: "true"
             - name: management.metrics.tags.application
-              value: weather-services         
+              value: weather-services-jon         
           ports:
             - containerPort: 8080

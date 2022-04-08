@@ -9,6 +9,6 @@ spec:
     targetPort: 8080
   clusterIP: None
   selector:
-    app: api-v1
+    app: hello
 # k run test2 --image radial/busyboxplus:curl -- tail -f /dev/null
 # k exec test2 -- nslookup headless    
