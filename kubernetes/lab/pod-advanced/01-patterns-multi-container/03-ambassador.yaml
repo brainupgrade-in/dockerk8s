@@ -11,7 +11,7 @@ data:
             listen 80;
             location / {
                 #rewrite ^/(.*)$ https://yahoo.com/$1 redirect;
-                proxy_pass https://yahoo.com;
+                proxy_pass hello;
             }
         }
     }
@@ -40,6 +40,7 @@ spec:
         volumeMounts:
         - mountPath: /etc/nginx
           name: nginx-config
+          subPath: nginx.conf
       volumes:
       - configMap:
           defaultMode: 420

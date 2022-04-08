@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: migration-task
 spec:
-  backoffLimit: 5
+  backoffLimit: 6
   activeDeadlineSeconds: 100
   parallelism: 10
   template:

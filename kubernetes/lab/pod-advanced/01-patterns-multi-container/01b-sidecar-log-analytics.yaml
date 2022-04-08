@@ -10,22 +10,24 @@ spec:
     emptyDir: {}
   containers:  
   - name: main-container
-    image: nginx
+    image: busybox 
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do ping -c4 google.com >> /var/log/index-input.html; sleep 10;done"]
     resources:
       limits:
         cpu: "10m"
         memory: "10Mi"
     volumeMounts:
     - name: shared-logs
-      mountPath: /usr/share/nginx/html
+      mountPath: /var/log
   - name: sidecar-container
-    image: busybox # splunk adapter to ship the logs
+    image: busybox # splunk shipping agent  - logstsh shiping agent to ship the logs
     resources:
       limits:
         cpu: "10m"
         memory: "10Mi"
     command: ["/bin/sh"]
-    args: ["-c", "while true; do echo $(date) >> /var/log/index.html; sleep 10;done"]
+    args: ["-c", "while true; do cat /var/log/index-input.html > /tmp/index-output.html; sleep 60;done"]
     volumeMounts:
-    - name: shared-logs
+    - name: shared-logscd
       mountPath: /var/log
