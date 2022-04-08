@@ -4,5 +4,5 @@ metadata:
   name: kibana-in-other-ns
 spec:
   type: ExternalName
-  # externalName: google.com
-  externalName: kibana-kibana.elasticsearch.svc.cluster.local
+  externalName: google.com
+  # externalName: kibana-kibana.elasticsearch.svc.cluster.local
