@@ -32,11 +32,18 @@
  
  docker exec ubuntu-wget-curl curl google.com
 
- # Update the ingress
+# Volume Commands
+## Docker root space
+docker run -d --name devtest --mount source=app,target=/app nginx
+## Persist data on host
+- docker run -d -it --mount type=bind,source=/shared,target=/app nginx
+- docker run -d -it --mount type=bind,source=/shared,target=/app,readonly nginx
+## Persist data in memory
+docker run -d --restart always -it --name tmptest --mount type=tmpfs,destination=/app nginx
 
- for i in {1..1}; \
-do kubectl patch ingress/lab2202u$i-app.brainupgrade.in -n lab2202u$i --type=json \
-  -p='[{"op": "replace", "path": "/spec/rules/0/http/paths/0/backend/service/name", "value":"docker"},{"op": "replace", "path": "/spec/rules/0/http/paths/0/backend/service/port/number", "value":80}]' ; \
-  done
+## Simplied commands
+- docker run -d -p 5000:5000 -v docker_registry:/var/lib/registry registry:2
+- docker run -d -p 5000:5000 -v /shared/docker_registry:/var/lib/registry registry:2
+
 # Install docker-compose
 https://docs.docker.com/compose/install/
