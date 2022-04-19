@@ -1,0 +1,19 @@
+FROM adoptopenjdk/maven-openjdk11 AS BUILD
+
+MAINTAINER rajesh@unigps.in
+
+RUN apt-get update -y && apt-get install git -y
+WORKDIR /app
+RUN git clone https://github.com/harryhagrid/smart-bank-app
+RUN cd /app/smart-bank-app && git checkout api  &&  mvn clean package
+
+
+FROM openjdk:8-jre-alpine
+
+WORKDIR /app
+
+COPY --from=BUILD /app/smart-bank-app/target/smart-bank-api.jar /app
+
+ENTRYPOINT ["java"]
+CMD ["-jar","/app/smart-bank-api.jar"]
+
