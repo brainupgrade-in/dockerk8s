@@ -20,3 +20,4 @@ JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.ty
 # Patch Ingress with new service name
 kubectl patch ingress rajesh-app.brainupgrade.in  --type=json \
  -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/name","value":"hello"}]'
+

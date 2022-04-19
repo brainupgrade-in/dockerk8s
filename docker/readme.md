@@ -35,6 +35,8 @@
  # Update the ingress
 
  for i in {1..1}; \
-do kubectl patch ingress/klaas2112u$i-app.brainupgrade.in -n klaas2112u$i --type=json \
-  -p='[{"op": "replace", "path": "/spec/rules/0/http/paths/0/backend/service/name", "value":"global-bank-dev"}]' ; \
+do kubectl patch ingress/lab2202u$i-app.brainupgrade.in -n lab2202u$i --type=json \
+  -p='[{"op": "replace", "path": "/spec/rules/0/http/paths/0/backend/service/name", "value":"docker"},{"op": "replace", "path": "/spec/rules/0/http/paths/0/backend/service/port/number", "value":80}]' ; \
   done
+# Install docker-compose
+https://docs.docker.com/compose/install/
