@@ -4,7 +4,8 @@ MAINTAINER "info@brainupgrade.in"
 
 WORKDIR /app
 
-COPY  main.js package.json .
+COPY  main.js /app
+COPY package.json /app
 
 RUN ["npm","install"]
 CMD ["npm", "start"]
