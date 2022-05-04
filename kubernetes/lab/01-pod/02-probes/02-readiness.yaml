@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness
+spec:
+  containers:
+  - name: readiness
+    image: k8s.gcr.io/liveness
+    args:
+    - /server
+    readinessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      successThreshold: 1
+      failureThreshold: 1
