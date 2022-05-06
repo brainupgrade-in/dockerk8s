@@ -25,8 +25,8 @@ spec:
       labels:
         app: weather-db
     spec:
-      nodeSelector:
-        kops.k8s.io/instancegroup: "spotnodes"
+      # nodeSelector:
+      #   kops.k8s.io/instancegroup: "spotnodes"
       containers:
       - image: mariadb:10.3
         name: mariadb

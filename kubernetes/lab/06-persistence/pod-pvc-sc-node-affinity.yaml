@@ -31,4 +31,28 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi          
+      storage: 10Mi          
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-local-node-affinity
+spec:
+  capacity:
+    storage: 10Mi
+  # volumeMode field requires BlockVolume Alpha feature gate to be enabled.
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: manual
+  local:
+    path: /tmp
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - ip-172-31-110-184.ec2.internal      

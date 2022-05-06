@@ -3,10 +3,16 @@ kind: Pod
 metadata:
   name: annotations-pod
   annotations:
-    imageregistry: "https://hub.docker.com/"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8888"
+    prometheus.io/path: /actuator/prometheus       
 spec:
   containers:
-  - name: nginx
+  - name: springbootapp
     image: nginx
     ports:
     - containerPort: 80
+    env:
+    - name: management.server.port
+      value: "8888"
+

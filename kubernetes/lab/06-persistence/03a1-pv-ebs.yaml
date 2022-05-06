@@ -4,7 +4,7 @@ metadata:
   name: pv-ebs-user
 spec:
   nodeSelector:
-   topology.kubernetes.io/zone: us-east-1c
+   topology.kubernetes.io/zone: us-east-1a
   containers:
   - image: nginx
     name: test-container
@@ -15,3 +15,14 @@ spec:
   - name: ebs-volume
     persistentVolumeClaim:
       claimName: pv-ebs-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-ebs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi

@@ -16,4 +16,8 @@ kubectl create secret docker-registry regcred \
   --docker-password=pass113 \
   --docker-email=tiger@acme.com
 
-  k set resources deploy/hello --limits=cpu=5m,memory=50Mi --requests=cpu=5m,memory=50Mi
+  k set resources deploy/hello --limits=cpu=0.01,memory=50Mi --requests=cpu=0.01,memory=50Mi
+
+  # Load Testing command
+for i in {1..1000000};do echo hello; done | xargs -P100 -n 1 curl
+while true;do curl hello;echo $(date);sleep 0.01s;done

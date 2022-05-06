@@ -10,7 +10,7 @@ spec:
       httpGet:
         path: /
         port: 8080
-      failureThreshold: 6
+      failureThreshold: 5
       successThreshold: 1
-      periodSeconds: 5
+      periodSeconds: 60
       initialDelaySeconds: 0
