@@ -18,8 +18,11 @@ and Edit deploy spec by adding below args  (kubectl edit deploy -n metrics-serve
 
 kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"
 
-# Cluster Autoscaler
+# Cluster Autoscaler (Alternate: Karpenter)
 helm repo add stable https://charts.helm.sh/stable
 helm repo update
 helm install cluster-autoscaler stable/cluster-autoscaler --set autoDiscovery.clusterName=<cluster-name>
 kubectl --namespace=default get pods -l "app=aws-cluster-autoscaler,release=cluster-autoscaler"
+
+# List db instances in all aws regions
+aws ec2 describe-regions --query Regions[*].[RegionName] --output text | xargs -n 1 aws rds describe-db-instances --region

@@ -35,13 +35,14 @@ Get Password using: kubectl get secret --namespace monitoring grafana -o jsonpat
 Access dashboard using: 
 kubectl port-forward -n monitoring svc/grafana 3000:80
 
+
+# User Scope - App Deployment (weather app )
 # Secrets & Configuration
 
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/08b-config.yaml
 
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/08c-secret.yaml
 
-# User Scope - App Deployment (weather app )
 ## Database / Backend Service
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/06c-microservices-weather-db.yaml
 

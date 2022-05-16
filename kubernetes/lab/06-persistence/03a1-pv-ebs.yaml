@@ -3,8 +3,8 @@ kind: Pod
 metadata:
   name: pv-ebs-user
 spec:
-  nodeSelector:
-   topology.kubernetes.io/zone: us-east-1a
+  # nodeSelector:
+  #  topology.kubernetes.io/zone: us-east-1a
   containers:
   - image: nginx
     name: test-container
