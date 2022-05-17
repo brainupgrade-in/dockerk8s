@@ -15,10 +15,10 @@ spec:
         httpHeaders:
         - name: Custom-Header
           value: Awesome
-      initialDelaySeconds: 5
-      periodSeconds: 5
+      initialDelaySeconds: 0
+      periodSeconds: 60
       successThreshold: 1
-      failureThreshold: 5
+      failureThreshold: 3
     readinessProbe:
       httpGet:
         path: /healthz
@@ -26,7 +26,7 @@ spec:
         httpHeaders:
         - name: Custom-Header
           value: Awesome
-      initialDelaySeconds: 5
-      periodSeconds: 5
+      initialDelaySeconds: 0
+      periodSeconds: 2
       successThreshold: 1
       failureThreshold: 1
