@@ -16,18 +16,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redisapp
-  spec:
-    replicas: 1
-    selector:
-      matchLabels:
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redisapp
+  template:
+    metadata:
+      labels:
         app: redisapp
-    template:
-      metadata:
-        labels:
-          app: redisapp
-      spec:
-        containers:
-        - name: myapp
-          image: calinrus/api-redis-ha:1.0
-          ports:
-          - containerPort: 5000
+    spec:
+      containers:
+      - name: myapp
+        image: calinrus/api-redis-ha:1.0
+        ports:
+        - containerPort: 5000
