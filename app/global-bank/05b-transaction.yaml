@@ -54,9 +54,9 @@ spec:
           - name: spring.datasource.password
             value: "transaction"
           - name: feign.url-account-service
-            value: "account.global-bank.svc.cluster.local/account"
+            value: "account/account"
           - name: feign.url-rule-service
-            value: "rules.global-bank.svc.cluster.local/rules"
+            value: "rules/rules"
           - name: spring.jpa.hibernate.ddl-auto
             value: "create"  
           - name: spring.jpa.generate-ddl

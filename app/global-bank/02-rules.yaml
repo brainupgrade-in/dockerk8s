@@ -38,6 +38,6 @@ spec:
           - name: server.port
             value: "80"
           - name: feign.url-account-service
-            value: "account.global-bank.svc.cluster.local/account"
+            value: "account/account"
           - name: feign.url-auth-service
-            value: "authentication.global-bank.svc.cluster.local/auth"
+            value: "authentication/auth"
