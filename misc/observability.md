@@ -8,7 +8,7 @@ helm install  kibana elastic/kibana --create-namespace=true --namespace elastics
 ### Access kibana
 Access dashboard using: 
 kubectl port-forward -n elasticsearch svc/kibana-kibana 5601:5601
-## Fluentd
+## Fluentd /Fluentbit from AWS
 
 kubectl create ns fluentd
 

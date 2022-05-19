@@ -3,9 +3,9 @@ Below steps to be taken by admin to setup the cluster using EKSCTL
 
 ## EKSCTL
 
+eksctl create cluster --name microk8s --spot --node-type t3a.small --nodes 1 --nodes-min 1 --nodes-max 2 --node-volume-size 20 --version  1.21
+OR
 eksctl create cluster -f ./cluster/cluster.yaml
-
-eksctl create cluster --name k8sadmin --spot --node-type t3a.small --nodes 1 --nodes-min 1 --nodes-max 2 --node-volume-size 20 --version  1.20
 
 ## Ingress Controller
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.0/deploy/static/provider/aws/deploy.yaml
@@ -28,13 +28,9 @@ https://karpenter.sh/v0.9.1/getting-started/getting-started-with-eksctl/
 ## Misc apps using HELM
 
 helm repo add stable https://charts.helm.sh/stable
-helm repo add jetstack https://charts.jetstack.io
 
 helm repo update
 
-helm install kube-ops-view stable/kube-ops-view --set service.type=LoadBalancer --set rbac.create=True
-
-kubectl get svc kube-ops-view | tail -n 1 | awk '{ print "Kube-ops-view URL = http://"$4 }'
 
 # User - Apps
 ## Observability - Weather Application

@@ -4,4 +4,4 @@
 ## Git credentials cache
 git config --global credential.helper cache
 
-git config --global credential.helper "cache --timeout=36000000"    (in seconds)
+git config --global credential.helper "cache --timeout=3600d"    (in seconds)
