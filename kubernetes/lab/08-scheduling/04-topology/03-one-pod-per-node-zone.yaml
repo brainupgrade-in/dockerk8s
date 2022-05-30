@@ -12,8 +12,6 @@ spec:
       labels:
         app: one-pod-per-node-zone
     spec:
-      nodeSelector:
-        kubernetes.io/role: node
       topologySpreadConstraints:
       - maxSkew: 2
         topologyKey: topology.kubernetes.io/zone

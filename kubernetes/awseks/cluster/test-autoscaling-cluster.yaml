@@ -2,9 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
-  namespace: default
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: nginx
@@ -27,6 +26,4 @@ spec:
                 operator: In
                 values:
                 - nginx
-            topologyKey: kubernetes.io/hostname
-            namespaces:
-            - default
+            topologyKey: kubernetes.io/zone

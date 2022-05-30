@@ -47,7 +47,7 @@ spec:
             name: elastic-apm-agent          
           env:
             - name: spring.application.name
-              value: weather-front-jon
+              value: weather-front-klaas2205a1
             - name: spring.datasource.url
               valueFrom:
                 configMapKeyRef:
@@ -79,7 +79,7 @@ spec:
                   name: app-config
                   key: ELASTIC_APM_APPLICATION_PACKAGES
             - name: ELASTIC_APM_SERVICE_NAME 
-              value: "weather-front-jon" 
+              value: "weather-front-klaas2205a1" 
             - name: ELASTIC_APM_ENVIRONMENT 
               value: prod
             - name: ELASTIC_APM_LOG_LEVEL 
@@ -93,7 +93,7 @@ spec:
             - name: management.metrics.web.server.request.autotime.enabled
               value: "true"
             - name: management.metrics.tags.application
-              value: weather-front
+              value: weather-front-klaas2205a1
           ports:
             - containerPort: 8080
 ---

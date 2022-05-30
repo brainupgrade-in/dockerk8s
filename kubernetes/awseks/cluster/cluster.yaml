@@ -1,9 +1,9 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: annapurna
-  region: ap-south-1
-  version: "1.20"
+  name: microk8s
+  region: ap-southeast-1
+  version: "1.21"
 managedNodeGroups:
 - name: managed-nodes
   labels:

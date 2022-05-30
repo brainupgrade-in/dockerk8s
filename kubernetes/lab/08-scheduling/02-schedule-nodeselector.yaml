@@ -14,7 +14,7 @@ spec:
     spec:
         nodeSelector:
           # node-role.kubernetes.io/spot-worker: "true"
-          jci.nodes.group: "gpu"
+          app: "aiml"
         containers:
           - name: test-app
             image: nginx
