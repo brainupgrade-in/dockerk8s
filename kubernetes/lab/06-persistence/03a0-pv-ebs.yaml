@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pv-ebs-user
+spec:
+  # nodeSelector:
+  #  topology.kubernetes.io/zone: us-east-1a
+  containers:
+  - image: nginx
+    name: test-container
+    volumeMounts:
+    - mountPath: /test-ebs
+      name: ebs-volume
+  volumes:
+  - name: ebs-volume
+    persistentVolumeClaim:
+      claimName: pv-ebs-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pv-ebs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Mi

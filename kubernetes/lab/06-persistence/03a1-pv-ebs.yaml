@@ -1,10 +1,26 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-ebs
+  labels:
+    type: ebs
+spec:
+    storageClassName: gp2
+    accessModes: 
+    - ReadWriteMany
+    capacity:
+      storage: 1Gi
+    awsElasticBlockStore:
+      volumeID: vol-0b4e04c91db8e0ce0
+      fsType: ext4
+---
+apiVersion: v1
 kind: Pod
 metadata:
   name: pv-ebs-user
 spec:
-  # nodeSelector:
-  #  topology.kubernetes.io/zone: us-east-1a
+  nodeSelector:
+   topology.kubernetes.io/zone: us-east-1c
   containers:
   - image: nginx
     name: test-container
@@ -21,8 +37,12 @@ kind: PersistentVolumeClaim
 metadata:
   name: pv-ebs-pvc
 spec:
+  storageClassName: gp2
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 10Mi
+      storage: 1Gi             
+  selector: 
+    matchLabels: 
+      type: ebs
