@@ -10,10 +10,10 @@ spec:
     name: nginx
     resources: 
       requests:
-        cpu: "6000m"
+        cpu: "100"
         memory: "100Gi"
       limits:
-        cpu: "10000m"
+        cpu: "100"
         memory: "150Gi"  
   dnsPolicy: ClusterFirst
   restartPolicy: Never
