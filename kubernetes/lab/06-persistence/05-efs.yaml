@@ -27,8 +27,6 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   capacity:
     storage: 5Gi
-  accessModes:
-    - ReadWriteMany
   csi:
     driver: efs.csi.aws.com
     volumeHandle: fs-000bda5ebc83194bc    
@@ -44,8 +42,6 @@ metadata:
     app: efs-www-in
 spec:
   storageClassName: efs
-  accessModes:
-    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi    
