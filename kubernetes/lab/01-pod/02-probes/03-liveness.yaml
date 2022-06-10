@@ -10,7 +10,7 @@ spec:
     - /server
     livenessProbe:
       httpGet:
-        path: /healthz
+        path: /liveness
         port: 8080
       failureThreshold: 1
       successThreshold: 1

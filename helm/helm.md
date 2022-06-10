@@ -15,5 +15,5 @@ git push origin gh-pages
 helm repo add bu-charts https://brainupgrade-in.github.io/helm-charts/
 helm repo update
 helm install bu-nginx bu-charts/bu-nginx
-<!-- helm upgrde bu-nginx -->
+<!-- helm upgrade bu-nginx -->
 helm delete bu-nginx

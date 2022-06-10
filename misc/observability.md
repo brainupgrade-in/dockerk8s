@@ -37,7 +37,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm install prometheus prometheus-community/prometheus --create-namespace=true --namespace monitoring
-helm install grafana grafana/grafana  --create-namespace=true --namespace monitoring##
+helm install grafana grafana/grafana  --create-namespace=true --namespace monitoring
 ```
 
 # Grafana access

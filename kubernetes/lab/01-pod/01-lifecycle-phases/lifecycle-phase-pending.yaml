@@ -11,10 +11,10 @@ spec:
     resources: 
       requests:
         cpu: "100"
-        memory: "100Gi"
+        memory: "1000Gi"
       limits:
         cpu: "100"
-        memory: "150Gi"  
+        memory: "1500Gi"  
   dnsPolicy: ClusterFirst
   restartPolicy: Never
   

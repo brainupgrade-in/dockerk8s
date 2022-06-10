@@ -10,9 +10,9 @@ spec:
     - /server
     readinessProbe:
       httpGet:
-        path: /healthz
+        path: /readiness
         port: 8080
       initialDelaySeconds: 0
       periodSeconds: 2
       successThreshold: 1
-      failureThreshold: 1
+      failureThreshold: 10

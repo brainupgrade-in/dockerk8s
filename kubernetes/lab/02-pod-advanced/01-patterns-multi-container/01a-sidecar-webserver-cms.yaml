@@ -21,7 +21,7 @@ spec:
     - name: shared-logs
       mountPath: /usr/share/nginx/html
   - name: sidecar-container
-    image: busybox # splunk adapter to ship the logs
+    image: busybox # splunk adapter to ship the logs # CMS
     resources:
       limits:
         cpu: "10m"

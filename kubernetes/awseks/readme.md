@@ -24,12 +24,25 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/down
 
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.0/cert-manager.yaml
 
-k apply -f cluster-issuer-letsencrypt.yaml
+k apply -f cert-manager/cluster-issuer-letsencrypt.yaml
 
 Ref: https://cert-manager.io/docs/installation/kubectl/
 
 ## Cluster Autoscaler - karpenter
 https://karpenter.sh/v0.9.1/getting-started/getting-started-with-eksctl/
+
+## User Access
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/clusterrole-user.yaml
+
+eksctl create iamidentitymapping --cluster microk8s \
+  --arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/microk8sAdmin \
+  --username klaas2205u
+
+
+for i in {1..1};do kubectl create ns  klaas2205u$i;done
+
+for i in {1..1};do kubectl create rolebinding poweruser-klaas2205u --user klaas2205u --clusterrole poweruser --namespace klaas2205u$i;done
 
 ## Observability - Weather Application
 https://github.com/brainupgrade-in/kubernetes/tree/main/observability
