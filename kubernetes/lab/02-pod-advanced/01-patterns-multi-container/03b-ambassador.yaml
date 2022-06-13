@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ambassador
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ambassador
+  template:
+    metadata:
+      labels:
+        app: ambassador
+    spec:
+      containers:
+      - args:
+        - -c
+        - while true;do wget -O /tmp/app.txt localhost:80 ;sleep 30;done
+        command:
+        - /bin/sh
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        name: main-app
+      - image: nginx
+        imagePullPolicy: IfNotPresent
+        name: ambassador
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-config
+          subPath: nginx.conf
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: ambassador-nginx-config
+        name: nginx-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ambassador-nginx-config
+data:
+  nginx.conf: |
+    worker_processes 1;
+    worker_rlimit_nofile 4096;
+    events {
+      worker_connections 512;
+    }
+    http {
+      include mime.types;
+
+      server {
+        listen 80;
+
+        access_log /dev/stdout;
+        error_log  /dev/stderr;
+
+        location / {
+          proxy_http_version 1.1;
+          proxy_pass https://brainupgrade.in;
+        }
+      }
+    }
