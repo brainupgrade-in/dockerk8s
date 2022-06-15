@@ -31,9 +31,9 @@ spec:
     - ReadWriteOnce
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-000bda5ebc83194bc    
+    volumeHandle: fs-014cf21e1ac0676ff 
   # nfs:
-  #   server: fs-000bda5ebc83194bc.efs.ap-south-1.amazonaws.com
+  #   server: fs-014cf21e1ac0676ff.efs.ap-south-1.amazonaws.com
   #   path: "/www"
 ---
 kind: PersistentVolumeClaim
