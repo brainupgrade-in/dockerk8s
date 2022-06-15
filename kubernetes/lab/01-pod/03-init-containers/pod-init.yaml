@@ -6,11 +6,12 @@ metadata:
   name: box
 spec:
   initContainers: 
-  - args: 
-    - /bin/sh 
-    - -c 
-    - wget -O /work-dir/index.html https://google.com/index.html 
-    image: busybox 
+  - command: 
+    - curl
+    - --output
+    - /work-dir/index.html 
+    - https://brainupgrade.in
+    image: brainupgrade/tshoot
     name: box 
     volumeMounts: 
     - name: vol 
