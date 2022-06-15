@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kibana-in-other-ns
+  name: google
 spec:
   type: ExternalName
   externalName: google.com

@@ -1,17 +1,43 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: lifecycle-hooks
+  name: hooks
 spec:
+  volumes:
+  - name: shared-logs 
+    emptyDir: {}
   containers:
-  - name: lifecycle-hooks
-    image: nginx
+  - name: hooks
+    image: brainupgrade/tshoot
+    command:
+    - /bin/bash
+    - -c
+    - while true; do touch /tmp/healthy;sleep 30; rm -rf /tmp/healthy;sleep $[ $RANDOM % 30  ];touch /tmp/healthy;done
     lifecycle:
       postStart:
         exec:
-          command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
+          command: ["/bin/sh", "-c", "echo Hello from the postStart handler >> /var/log/message"]
       preStop:
         exec:
-          command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
-# kubectl exec -it lifecycle-hooks -- /bin/bash
-# cat /usr/share/message
+          command: ["/bin/sh", "-c", "echo Hello from the preStop handler >> /var/log/message"]
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /var/log
+    readinessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 0
+      periodSeconds: 1
+      successThreshold: 1
+      failureThreshold: 1
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      successThreshold: 1
+      failureThreshold: 1

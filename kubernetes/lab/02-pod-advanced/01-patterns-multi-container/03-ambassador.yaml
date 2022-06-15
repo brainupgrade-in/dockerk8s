@@ -1,3 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ambassador
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ambassador
+  template:
+    metadata:
+      labels:
+        app: ambassador
+    spec:
+      containers:
+      - name: main
+        args:
+        - -c
+        - while true;do wget -O /tmp/app.txt localhost:80 ;sleep 30;done
+        command:
+        - /bin/sh
+        image: busybox
+        imagePullPolicy: IfNotPresent
+      - name: ambassador
+        image: nginx
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-config
+          subPath: nginx.conf
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: ambassador-nginx-config
+        name: nginx-config
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -20,36 +59,7 @@ data:
 
         location / {
           proxy_http_version 1.1;
-          # proxy_set_header Host https://google.com;
-
           proxy_pass https://brainupgrade.in;
         }
       }
     }
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: ambassador
-  labels:
-    app: ambassador
-spec:
-  containers:
-  - name: main-app
-    image: busybox
-    imagePullPolicy: IfNotPresent
-    command: ["/bin/sh"]
-    args: ["-c","while true;do wget -O /tmp/app.txt localhost:80 ;sleep 30;done"]
-  - name: ambassador
-    image: nginx
-    imagePullPolicy: IfNotPresent
-    ports:
-    - containerPort: 80        
-    volumeMounts:
-      - name: nginx-config
-        mountPath: /etc/nginx/nginx.conf
-        subPath: nginx.conf
-  volumes:
-    - name: nginx-config
-      configMap:
-        name: ambassador-nginx-config

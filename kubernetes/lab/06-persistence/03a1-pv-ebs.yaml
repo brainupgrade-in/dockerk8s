@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-ebs
+  name: pv-ebs-2
   labels:
-    type: ebs
+    type: ebs2
 spec:
     storageClassName: gp2
     accessModes: 
@@ -17,7 +17,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pv-ebs-user
+  name: pv-ebs-2
 spec:
   nodeSelector:
    topology.kubernetes.io/zone: us-east-1c
@@ -30,12 +30,12 @@ spec:
   volumes:
   - name: ebs-volume
     persistentVolumeClaim:
-      claimName: pv-ebs-pvc
+      claimName: pv-ebs-pvc-2
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pv-ebs-pvc
+  name: pv-ebs-pvc-2
 spec:
   storageClassName: gp2
   accessModes:
@@ -45,4 +45,4 @@ spec:
       storage: 1Gi             
   selector: 
     matchLabels: 
-      type: ebs
+      type: ebs2
