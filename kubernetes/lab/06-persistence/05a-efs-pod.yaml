@@ -22,7 +22,7 @@ metadata:
   labels:
     app: efs-www-in
 spec:
-  storageClassName: efs
+  storageClassName: efs-sc
   volumeMode: Filesystem
   persistentVolumeReclaimPolicy: Retain
   capacity:
@@ -43,7 +43,7 @@ metadata:
   labels:
     app: efs-www-in
 spec:
-  storageClassName: efs
+  storageClassName: efs-sc
   accessModes:
     - ReadWriteOnce
   resources:
