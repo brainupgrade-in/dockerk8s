@@ -8,6 +8,7 @@ COPY  main.js /app
 COPY package.json /app
 
 RUN ["npm","install"]
-CMD ["npm", "start"]
+ENTRYPOINT ["npm"]
+CMD ["start"]
 
 EXPOSE 8000
