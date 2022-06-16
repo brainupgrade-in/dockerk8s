@@ -11,13 +11,28 @@ systemctl status kubelet
 ## kubeadm issue [ERROR CRI]: container runtime is not running
 rm /etc/containerd/config.toml
 systemctl restart containerd
-kubeadm init
+reinitialize kubeadm
 
 ## Re-initializing kubeadm
 
 sudo kubeadm reset
 IPADDR=$(wget -qO-  http://checkip.amazonaws.com)
 
-NODENAME=$(hostname -s)
+sudo kubeadm init --apiserver-advertise-address=$IPADDR --pod-network-cidr=192.168.0.0/16  --cri-socket /run/containerd/containerd.sock  
 
-sudo kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR  --pod-network-cidr=192.168.0.0/16 --node-name $NODENAME --ignore-preflight-errors Swap
+## Kubelet config
+/var/lib/kubelet/config.yaml
+
+## kubeadm config file
+/etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+## Unimplemented desc = unknown service runtime.v1alpha2.RuntimeService
+sudo -i 
+cat > /etc/containerd/config.toml <<EOF
+[plugins."io.containerd.grpc.v1.cri"]
+  systemd_cgroup = true
+EOF
+systemctl restart containerd
+
+## Generate join token again
+sudo kubeadm token create --print-join-command
