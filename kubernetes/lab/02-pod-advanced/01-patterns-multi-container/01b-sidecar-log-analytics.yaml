@@ -21,7 +21,7 @@ spec:
     - name: shared-logs
       mountPath: /var/log
   - name: sidecar-container
-    image: busybox # splunk shipping agent  - logstsh shiping agent to ship the logs
+    image: busybox # splunk shipping agent  - logstash shiping agent to ship the logs
     resources:
       limits:
         cpu: "10m"
