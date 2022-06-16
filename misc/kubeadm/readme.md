@@ -9,9 +9,10 @@ sudo journalctl -xeu kubelet
 systemctl status kubelet
 
 ## kubeadm issue [ERROR CRI]: container runtime is not running
+sudo -i
 rm /etc/containerd/config.toml
 systemctl restart containerd
-reinitialize kubeadm
+
 
 ## Re-initializing kubeadm
 
