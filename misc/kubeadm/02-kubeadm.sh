@@ -17,7 +17,7 @@ IPADDR=$(wget -qO-  http://checkip.amazonaws.com)
 
 rm /etc/containerd/config.toml
 systemctl restart containerd
-sudo kubeadm init  --pod-network-cidr=192.168.0.0/16  
+#sudo kubeadm init  --pod-network-cidr=192.168.0.0/16  
 sudo systemctl start kubelet
 
 #sudo kubeadm init --apiserver-advertise-address=$IPADDR --pod-network-cidr=192.168.0.0/16  --cri-socket /run/containerd/containerd.sock  
