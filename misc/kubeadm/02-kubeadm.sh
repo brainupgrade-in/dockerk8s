@@ -5,18 +5,16 @@ sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://pack
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 sudo apt-get update -y
-sudo apt-get install -y kubelet kubeadm kubectl
-
-# sudo apt-get install -y kubelet=1.20.6-00 kubectl=1.20.6-00 kubeadm=1.20.6-00
-# reference https://stackoverflow.com/questions/49721708/how-to-install-specific-version-of-kubernetes
+#sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-get install -y kubelet=1.20.6-00 kubectl=1.20.6-00 kubeadm=1.20.6-00
 
 sudo apt-mark hold kubelet kubeadm kubectl
 sudo systemctl enable kubelet
 
 IPADDR=$(wget -qO-  http://checkip.amazonaws.com)
 
-rm /etc/containerd/config.toml
-systemctl restart containerd
+sudo rm /etc/containerd/config.toml
+sudo systemctl restart containerd
 #sudo kubeadm init  --pod-network-cidr=192.168.0.0/16  
 sudo systemctl start kubelet
 
