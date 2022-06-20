@@ -24,3 +24,7 @@ sudo systemctl start kubelet
 #mkdir -p $HOME/.kube
 #sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 #sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+kubeadm join 172.31.24.140:6443 --token 920fmu.lg211n55lv4m5c8l \
+    --discovery-token-ca-cert-hash sha256:d2a54f8ac04f36f067cf15f4a7233d9e90614e29ed7b404ddf4fbc3cc057735d

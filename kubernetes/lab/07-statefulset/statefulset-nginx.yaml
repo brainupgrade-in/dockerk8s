@@ -26,10 +26,11 @@ spec:
   - metadata:
       name: www2
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: efs-pv
+      accessModes: [ "ReadWriteMany" ]
       resources:
         requests:
-          storage: 100Mi
+          storage: 1Gi
 # kubectl patch statefulset sts-web -p '{"spec":{"updateStrategy":{"type":"RollingUpdate","rollingUpdate":{"partition":3}}}}'
 # kubectl patch statefulset sts-web --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"nginx:1.17"}]'
 # kubectl get pod sts-web-1 --template '{{range $i, $c := .spec.containers}}{{$c.image}}{{end}}'

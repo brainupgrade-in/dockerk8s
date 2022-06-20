@@ -3,7 +3,8 @@ kind: Pod
 metadata:
   name: hostpath-volume-2
 spec:
-  # nodeName: ip-172-31-102-18.ec2.internal
+  # nodeName: ip-172-31-102-18.ec2.internal  (run 1)r1   r3
+  # nodeName: ip-172-31-102-19.ec2.internal  (run 2) r2  r4
   containers:
   - image: nginx
     name: test-container

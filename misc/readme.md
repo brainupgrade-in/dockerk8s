@@ -26,3 +26,8 @@ kubectl --namespace=default get pods -l "app=aws-cluster-autoscaler,release=clus
 
 # List db instances in all aws regions
 aws ec2 describe-regions --query Regions[*].[RegionName] --output text | xargs -n 1 aws rds describe-db-instances --region
+
+# SSH Server
+kubectl create deploy ssh-server --image linuxserver/openssh-server
+kubectl set env deploy ssh-server SUDO_ACCESS=true PASSWORD_ACCESS=true USER_PASSWORD=linux USER_NAME=ubuntu
+kubectl expose deploy ssh-server --port 22 --target-port 2222

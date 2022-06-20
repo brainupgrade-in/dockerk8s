@@ -28,7 +28,7 @@ spec:
   capacity:
     storage: 5Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   csi:
     driver: efs.csi.aws.com
     volumeHandle: fs-014cf21e1ac0676ff 
@@ -45,7 +45,7 @@ metadata:
 spec:
   storageClassName: efs-sc
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 5Gi    

@@ -14,11 +14,11 @@ spec:
     spec:
         nodeSelector:
           # node-role.kubernetes.io/spot-worker: "true"
-          app: "aiml"
+          class: kyndryl
         containers:
           - name: test-app
             image: nginx
             imagePullPolicy: IfNotPresent
             ports:
               - containerPort: 80
-# k label <node name> jci.nodes.group=gpu
+# k label ip-192-168-31-41.ap-south-1.compute.internal class=kyndryl
