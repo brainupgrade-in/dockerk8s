@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    run: box
+    run: initC-syncup
   name: box
 spec:
   initContainers: 
