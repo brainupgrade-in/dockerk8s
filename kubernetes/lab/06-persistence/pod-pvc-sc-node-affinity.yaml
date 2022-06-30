@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: app/v1
 kind: Deployment
 metadata:
   name: pod-local-storage
