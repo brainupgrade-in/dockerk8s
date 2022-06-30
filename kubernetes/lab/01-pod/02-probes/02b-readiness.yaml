@@ -13,6 +13,6 @@ spec:
         path: /readiness
         port: 8080
       initialDelaySeconds: 0
-      periodSeconds: 2
+      periodSeconds: 1
       successThreshold: 1
       failureThreshold: 10
