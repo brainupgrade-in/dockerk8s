@@ -1,18 +1,20 @@
 #  User Commands
-- kubectl get pods 
-- kubectl run hello-world --image=tutum/hello-world --port=80
-- kubectl describe pod hello-world 
+- kubectl run hello --image=brainupgrade/hello --port=80
+- kubectl get pods -owide
+- kubectl describe pod hello
 - kubectl run -it busybox --image=busybox --restart=Never
-- kubectl describe pod/nginx 
+- kubectl run tutum --image tutum/hello-world
 - kubectl run nginx --image=nginx
+- kubectl describe pod/nginx 
 - kubectl delete pod nginx 
+- kubectl run test --image brainupgrade/tshoot
+- kubectl exec -it test -- bash
 - kubectl get all 
 - kubectl get pods -oyaml 
-- kubectl get services -ojson 
 - kubectl get pods --sort-by=.metadata.name 
-- kubectl get rs,deployments,service 
-- kubectl describe pods - kubectl get pod/<pod-name> svc/<svc-name> 
-- kubectl get pod -l <labe-name>=<label-value> 
+- kubectl describe pods 
+- kubectl get pod/< pod-name > 
+- kubectl get pod -l < labe-name >=< label-value > 
 - kubectl delete pods --all 
 - kubectl get pods -ojson | jq '.items[]|{name:.metadata.name}' 
 

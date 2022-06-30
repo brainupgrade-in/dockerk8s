@@ -5,4 +5,4 @@ eksctl create nodegroup --name  spotnodes --instance-types t3a.medium --node-vol
 
 eksctl create nodegroup --config-file=cluster.yaml
 
-eksctl create nodegroup --name ng-1 --cluster kyndryl --nodes 2 --node-type t3a.xlarge --spot --nodes-min 1 --nodes-max 2 --node-volume-size 50
+eksctl create nodegroup --name ng-2 --cluster kyndryl --nodes 1 --node-type t3a.xlarge --spot --nodes-min 1 --nodes-max 2 --node-volume-size 50
