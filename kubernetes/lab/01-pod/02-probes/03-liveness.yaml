@@ -5,14 +5,18 @@ metadata:
 spec:
   containers:
   - name: liveness
-    image: k8s.gcr.io/liveness
+    image: brainupgrade/tshoot
+    command:
+    - /bin/sh
     args:
-    - /server
+    - -c
+    - while true; do touch /tmp/healthy;sleep 15; rm -rf /tmp/healthy;sleep 10;touch /tmp/healthy;done
     livenessProbe:
-      httpGet:
-        path: /liveness
-        port: 8080
-      failureThreshold: 1
-      successThreshold: 1
-      periodSeconds: 5
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
       initialDelaySeconds: 0
+      periodSeconds: 1
+      successThreshold: 1
+      failureThreshold: 5
