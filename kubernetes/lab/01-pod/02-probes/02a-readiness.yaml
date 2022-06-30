@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: readiness-b
+  name: readiness-a
 spec:
   containers:
-  - name: readiness-b
-    image: k8s.gcr.io/busybox
-    args:
+  - name: readiness-a
+    image: brainupgrade/tshoot
+    command:
     - /bin/sh
+    args:
     - -c
     - while true; do touch /tmp/healthy;sleep 15; rm -rf /tmp/healthy;sleep 5;touch /tmp/healthy;done
     readinessProbe:
