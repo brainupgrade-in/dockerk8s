@@ -14,5 +14,5 @@ spec:
         port: 8080
       failureThreshold: 1
       successThreshold: 1
-      periodSeconds: 1
+      periodSeconds: 5
       initialDelaySeconds: 0
