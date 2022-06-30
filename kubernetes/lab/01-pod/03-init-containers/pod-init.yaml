@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    run: initC-syncup
-  name: initC-syncup
+    run: initc-syncup
+  name: initc-syncup
 spec:
   initContainers: 
   - command: 
