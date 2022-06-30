@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   labels:
     run: initC-syncup
-  name: box
+  name: initC-syncup
 spec:
   initContainers: 
   - command: 
