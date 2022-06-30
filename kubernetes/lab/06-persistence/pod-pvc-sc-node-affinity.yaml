@@ -1,25 +1,27 @@
 apiVersion: v1
-kind: Pod
+kind: Deployment
 metadata:
   name: pod-local-storage
 spec:
-  volumes:
-    - name: pvc-local-storage
-      persistentVolumeClaim:
-        claimName: pvc-local-storage
-  containers:
-    - name: nginx
-      image: nginx
-      ports:
-        - containerPort: 80
-          name: "http-server"
-      volumeMounts:
-        - mountPath: "/tmp"
-          name: pvc-local-storage
-      resources:
-        limits:
-          cpu: "20m"
-          memory: "50Mi"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:  
+      volumes:
+        - name: pvc-local-storage
+          persistentVolumeClaim:
+            claimName: pvc-local-storage
+      containers:
+        - name: nginx
+          image: nginx
+          volumeMounts:
+            - mountPath: "/tmp"
+              name: pvc-local-storage
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -52,7 +54,7 @@ spec:
     required:
       nodeSelectorTerms:
       - matchExpressions:
-        - key: kubernetes.io/hostname
+        - key: topology.kubernetes.io/zone
           operator: In
           values:
-          - ip-172-31-110-184.ec2.internal      
+          - ap-south-1b      
