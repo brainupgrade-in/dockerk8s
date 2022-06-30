@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: sidecar
+  name: vol-emptydir-sidecar
   labels:
     app: sidecar
 spec:

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: hostpath-volume-2
+  name: vol-hostpath
 spec:
   # nodeName: ip-172-31-102-18.ec2.internal  (run 1)r1   r3
   # nodeName: ip-172-31-102-19.ec2.internal  (run 2) r2  r4
