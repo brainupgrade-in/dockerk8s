@@ -15,3 +15,5 @@ k create ingress app --rule="<your-domain>/?(.*)=frontend:80,tls=sba" --rule="<y
 
 k create deploy apiserver --image brainupgrade/sba-apiserver:2.0.0-metrics-sqs
 k set env deploy apiserver --env cloud.aws.region.static=ap-south-1 --env cloud.aws.credentials.access-key=  --env cloud.aws.credentials.secret-key=
+
+k create ingress app --rule="scbcepb3u1-app.brainupgrade.net/?(.*)=frontend:80,tls=sba" --class nginx --annotation=cert-manager.io/cluster-issuer=letsencrypt-prod --annotation=nginx.ingress.kubernetes.io/rewrite-target=/\$1
