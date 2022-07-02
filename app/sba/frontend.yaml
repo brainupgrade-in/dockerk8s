@@ -17,8 +17,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: frontend
   name: frontend
 spec:
   replicas: 1
@@ -32,5 +30,80 @@ spec:
     spec:
       containers:
       - image: brainupgrade/sba-frontend:nginx
-        name: sba-frontend
+        name: frontend
         imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: nginx
+        volumeMounts:
+          - name: nginx-config
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: ambassador-nginx-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ambassador-nginx-config
+data:
+  nginx.conf: |
+    events{}
+    http {
+        include /etc/nginx/mime.types;
+        server {
+            listen 80;
+            listen [::]:80 default_server;
+            server_name frontend;
+            default_type application/octet-stream;
+            gzip on;
+            gzip_http_version 1.1;
+            gzip_disable      "MSIE [1-6]\.";
+            gzip_min_length   256;
+            gzip_vary         on;
+            gzip_proxied      expired no-cache no-store private auth;
+            gzip_types        text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+            gzip_comp_level   9;
+            root /usr/share/nginx/html;
+            index index.html index.htm;
+            location ^~ /ccuser/ {
+              proxy_pass http://apiserver;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header   X-Forwarded-User $http_authorization;
+              proxy_set_header X-Forwarded-Proto  $scheme;
+              proxy_http_version 1.1;
+              proxy_cache_bypass $http_upgrade;
+            }
+            location ^~ /history/ {
+              proxy_pass http://apiserver;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header   X-Forwarded-User $http_authorization;
+              proxy_set_header X-Forwarded-Proto  $scheme;
+              proxy_http_version 1.1;
+              proxy_cache_bypass $http_upgrade;
+            }
+            location ^~ /catalogue/ {
+              proxy_pass http://apiserver;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header   X-Forwarded-User $http_authorization;
+              proxy_set_header X-Forwarded-Proto  $scheme;
+              proxy_http_version 1.1;
+              proxy_cache_bypass $http_upgrade;
+            }
+            location ^~ /rewards/ {
+              proxy_pass http://apiserver;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header   X-Forwarded-User $http_authorization;
+              proxy_set_header X-Forwarded-Proto  $scheme;
+              proxy_http_version 1.1;
+              proxy_cache_bypass $http_upgrade;
+            }
+        }
+    }
