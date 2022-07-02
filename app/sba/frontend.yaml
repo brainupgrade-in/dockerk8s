@@ -33,3 +33,4 @@ spec:
       containers:
       - image: brainupgrade/sba-frontend:nginx
         name: sba-frontend
+        imagePullPolicy: Always

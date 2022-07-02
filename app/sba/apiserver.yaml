@@ -47,6 +47,7 @@ spec:
       containers:
       - image: brainupgrade/sba-apiserver:observability
         name: sba-apiserver
+        imagePullPolicy: Always
         volumeMounts: 
         - mountPath: /elastic/apm/agent 
           name: elastic-apm-agent          
