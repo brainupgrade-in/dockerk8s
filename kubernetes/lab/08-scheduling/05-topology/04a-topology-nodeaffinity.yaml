@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: topology-nodeaffinity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: middle-tier
+  template:
+    metadata:
+      labels:
+        app: topology-nodeaffinity
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: topology-nodeaffinity
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: NotIn
+                values:
+                - us-east-1a
+      containers:
+      - name: pause
+        image: k8s.gcr.io/pause:3.1
