@@ -31,7 +31,6 @@ spec:
       labels:
         app: jenkins
     spec:
-      serviceAccountName: jenkins
       initContainers:
       - name: init-chown
         image: alpine
