@@ -18,10 +18,11 @@ spec:
     targetPort: 50000   
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: jenkins
 spec:
+  serviceName: jenkins
   replicas: 1
   selector:
     matchLabels:
@@ -54,13 +55,6 @@ spec:
           env:
             - name: JAVA_OPTS
               value: -Djenkins.install.runSetupWizard=true -Dhudson.slaves.NodeProvisioner.MARGIN=50 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.85
-          resources:
-            requests:
-              cpu: "200m"
-              memory: "512Mi"
-            limits:
-              cpu: "250m"
-              memory: "1024Mi"  
           ports:
             - name: http-port
               containerPort: 8080
@@ -72,10 +66,14 @@ spec:
             - name: docker-sock-volume
               mountPath: /var/run/docker.sock              
       volumes:
-        - name: jenkins-home
-          hostPath:
-            path: /var/jenkins_home
         - name: docker-sock-volume
           hostPath:
             path: /var/run/docker.sock              
-            
+  volumeClaimTemplates:
+  - metadata:
+      name: jenkins-home
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi            
