@@ -13,7 +13,7 @@ metadata:
   name: jenkins
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: jenkins
 subjects:
 - apiGroup: rbac.authorization.k8s.io
