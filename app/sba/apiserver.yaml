@@ -45,7 +45,7 @@ spec:
           name: elastic-apm-agent 
         command: ['cp', '-v', '/usr/agent/elastic-apm-agent.jar', '/elastic/apm/agent']     
       containers:
-      - image: brainupgrade/sba-apiserver:observability
+      - image: brainupgrade/sba-apiserver:sqsses
         name: sba-apiserver
         imagePullPolicy: Always
         volumeMounts: 
@@ -84,3 +84,15 @@ spec:
             value: "true"
           - name: management.metrics.tags.application
             value: apiserver-rajesh
+          - name: spring.profiles.active
+            value: SQS,SES
+          - name: cloud.aws.region.static
+            value: ap-south-1
+          - name: cloud.aws.credentials.access-key
+            value: accesskey
+          - name: cloud.aws.credentials.secret-key
+            value: secretkey
+          - name: spring.mail.username
+            value: mailuser
+          - name: spring.mail.password
+            value: mailpasswd        

@@ -21,4 +21,4 @@ spec:
             imagePullPolicy: IfNotPresent
             ports:
               - containerPort: 80
-# k label ip-192-168-31-41.ap-south-1.compute.internal class=k8s
+# k label node ip-192-168-31-41.ap-south-1.compute.internal class=k8s

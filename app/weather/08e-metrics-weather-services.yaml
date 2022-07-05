@@ -57,7 +57,7 @@ spec:
             name: elastic-apm-agent          
           env:
             - name: spring.application.name
-              value: weather-services-klaas2205a1
+              value: weather-services-scbcepb3a1
             - name: server.port
               value: "8080"
             - name: ELASTIC_APM_SERVER_URL 
@@ -71,7 +71,7 @@ spec:
                   name: app-config
                   key: ELASTIC_APM_APPLICATION_PACKAGES
             - name: ELASTIC_APM_SERVICE_NAME 
-              value: "weather-services-klaas2205a1" 
+              value: "weather-services-scbcepb3a1" 
             - name: ELASTIC_APM_ENVIRONMENT 
               value: prod
             - name: ELASTIC_APM_LOG_LEVEL 
@@ -85,6 +85,6 @@ spec:
             - name: management.metrics.web.server.request.autotime.enabled
               value: "true"
             - name: management.metrics.tags.application
-              value: weather-services-klaas2205a1         
+              value: weather-services-scbcepb3a1         
           ports:
             - containerPort: 8080

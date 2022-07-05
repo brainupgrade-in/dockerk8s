@@ -26,8 +26,8 @@ spec:
   - metadata:
       name: www2
     spec:
-      storageClassName: efs-pv
-      accessModes: [ "ReadWriteMany" ]
+      # storageClassName: efs-pv
+      accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
           storage: 1Gi
