@@ -1,6 +1,13 @@
-FROM alpine:latest
+FROM ubuntu
 
-LABEL MAINTAINER info@brainupgrade.in
+LABEL MAINTAINER rajesh@brainupgrade.in
+
+RUN apt-get update -y && apt-get install iputils-ping -y
 
 ENTRYPOINT ["ping"]
+
 CMD ["google.com"]
+
+# docker build -f Dockerfile -t myping .
+# docker run myping 
+# docker run myping yahoo.com
