@@ -31,6 +31,8 @@ spec:
         volumeMounts:
         - mountPath: /appdev
           name: appdev
+        - name: dind-storage
+          mountPath: /var/lib/docker
         env:
         - name: DOCKER_HOST
           value: tcp://localhost:2375
