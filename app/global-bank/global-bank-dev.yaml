@@ -35,7 +35,7 @@ spec:
         - name: DOCKER_HOST
           value: tcp://localhost:2375
       - name: dind
-        image: docker:19.03.3-dind
+        image: brainupgrade/docker:20-dind
         securityContext:
           privileged: true
         env:
