@@ -18,6 +18,8 @@ spec:
         emptyDir: {}
       - name: appdev
         emptyDir: {}  
+      - name: shared
+        emptyDir: {}  
       containers:
       - name: global-bank-dev
         image: brainupgrade/global-bank-dev:1.0.0
@@ -31,6 +33,8 @@ spec:
         volumeMounts:
         - mountPath: /appdev
           name: appdev
+        - mountPath: /shared
+          name: shared
         - name: dind-storage
           mountPath: /var/lib/docker
         env:
@@ -48,3 +52,5 @@ spec:
             mountPath: /var/lib/docker
           - name: appdev
             mountPath: /appdev
+          - mountPath: /shared
+            name: shared
