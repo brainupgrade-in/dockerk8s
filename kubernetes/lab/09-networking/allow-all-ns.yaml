@@ -12,7 +12,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: klaas2112u1
+          kubernetes.io/metadata.name: weather
     ports:
     - protocol: TCP
       port: 3306

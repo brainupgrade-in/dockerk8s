@@ -31,12 +31,15 @@ Ref: https://cert-manager.io/docs/installation/kubectl/
 ## Cluster Autoscaler - karpenter
 https://karpenter.sh/v0.9.1/getting-started/getting-started-with-eksctl/
 
+## Software Firewall using network policy (CNI - Callico)
+kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.6/calico.yaml
+
 ## User Access
 
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/clusterrole-user.yaml
 
 eksctl create iamidentitymapping --cluster microk8s \
-  --arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/microk8sAdmin \
+  --arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/microk8sDev \
   --username klaas2205u
 
 scbcepb3u1   scbcepb3u  Dev Role (RBAC)

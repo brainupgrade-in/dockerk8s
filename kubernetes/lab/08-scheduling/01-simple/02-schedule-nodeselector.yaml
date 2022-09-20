@@ -13,8 +13,8 @@ spec:
         component: schedule-nodeselector
     spec:
         nodeSelector:
-          # node-role.kubernetes.io/spot-worker: "true"
-          class: k8s
+          karpenter.sh/capacity-type: spot
+          #topology.kubernetes.io/zone: ap-south-1b
         containers:
           - name: test-app
             image: nginx

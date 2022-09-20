@@ -15,27 +15,6 @@ spec:
       persistentVolumeClaim:
         claimName: efs-www-in
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: efs-www-in
-  labels:
-    app: efs-www-in
-spec:
-  storageClassName: efs-sc
-  volumeMode: Filesystem
-  persistentVolumeReclaimPolicy: Retain
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteMany
-  csi:
-    driver: efs.csi.aws.com
-    volumeHandle: fs-014cf21e1ac0676ff 
-  # nfs:
-  #   server: fs-014cf21e1ac0676ff.efs.ap-south-1.amazonaws.com
-  #   path: "/www"
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
