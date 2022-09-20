@@ -1,18 +1,27 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: ebs-dynamic
 spec:
-  containers:
-  - image: nginx
-    name: test-container
-    volumeMounts:
-    - mountPath: /test-ebs
-      name: ebs-volume
-  volumes:
-  - name: ebs-volume
-    persistentVolumeClaim:
-      claimName: ebs-dynamic
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ebs-dynamic
+  template:
+    metadata:
+      labels:
+        app: ebs-dynamic
+    spec:
+      containers:
+      - image: nginx
+        name: test-container
+        volumeMounts:
+        - mountPath: /test-ebs
+          name: ebs-volume
+      volumes:
+      - name: ebs-volume
+        persistentVolumeClaim:
+          claimName: ebs-dynamic
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
