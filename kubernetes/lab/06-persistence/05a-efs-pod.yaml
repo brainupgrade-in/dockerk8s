@@ -1,26 +1,32 @@
-kind: Pod
-apiVersion: v1
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: test-efs-pod
+  name: efs-wordpress
 spec:
-  containers:
-  - name: test-pod
-    image: wordpress:5.3.2-apache
-    volumeMounts:
-      - name: efs-pvc
-        mountPath: "/var/www/html"
-  restartPolicy: "Never"
-  volumes:
-    - name: efs-pvc
-      persistentVolumeClaim:
-        claimName: efs-www-in
+  replicas: 2
+  selector:
+    matchLabels:
+      app: efs-wordpress
+  template:
+    metadata:
+      labels:
+        app: efs-wordpress
+    spec:
+      containers:
+      - name: test-pod
+        image: wordpress:5.3.2-apache
+        volumeMounts:
+          - name: efs-pvc
+            mountPath: "/var/www/html"
+      volumes:
+        - name: efs-pvc
+          persistentVolumeClaim:
+            claimName: efs-www-in
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: efs-www-in
-  labels:
-    app: efs-www-in
 spec:
   storageClassName: efs-sc
   accessModes:
@@ -28,6 +34,3 @@ spec:
   resources:
     requests:
       storage: 5Gi    
-  selector: 
-    matchLabels: 
-      app: efs-www-in
