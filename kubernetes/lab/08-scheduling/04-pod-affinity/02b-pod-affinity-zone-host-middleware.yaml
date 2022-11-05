@@ -23,7 +23,7 @@ spec:
                   - cache
               topologyKey: topology.kubernetes.io/zone
           podAntiAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
+            preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
               podAffinityTerm:
                 labelSelector:
