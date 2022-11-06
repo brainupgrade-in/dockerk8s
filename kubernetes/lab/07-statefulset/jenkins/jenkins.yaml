@@ -35,6 +35,21 @@ spec:
       volumes:
       - name: dind-storage
         emptyDir: {}
+      initContainers:
+      - name: init-chown
+        image: alpine
+        volumeMounts:
+          - name: jenkins-home
+            mountPath: /var/jenkins_home
+        env:
+        - name: JENKINS_HOME
+          value: /var/jenkins_home
+        - name: UID
+          value: '1000'
+        command:
+        - sh
+        - -c
+        - if [ ! -f $JENKINS_HOME ]; then chown $UID:$UID -R $JENKINS_HOME; touch $JENKINS_HOME; chown $UID:$UID $JENKINS_HOME; fi        
       containers:
       - name: jenkins
         image: brainupgrade/jenkins:docker20221105

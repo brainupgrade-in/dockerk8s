@@ -1,6 +1,6 @@
 FROM node:alpine
 
-MAINTAINER "info@brainupgrade.in"
+LABEL MAINTAINER "info@brainupgrade.in"
 
 WORKDIR /app
 

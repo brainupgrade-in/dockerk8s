@@ -42,8 +42,6 @@ eksctl create iamidentitymapping --cluster microk8s \
   --arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/microk8sDev \
   --username klaas2205u
 
-scbcepb3u1   scbcepb3u  Dev Role (RBAC)
-
 for i in {1..1};do kubectl create ns  klaas2205u$i;done
 
 for i in {1..1};do kubectl create rolebinding poweruser-klaas2205u --user klaas2205u --clusterrole poweruser --namespace klaas2205u$i;done

@@ -1,7 +1,10 @@
-FROM openjdk:8-jre-alpine
-
-MAINTAINER rajesh@unigps.in
-
-COPY target/spring-db.jar app.jar
-#RUN java -jar app.jar  #build time
-ENTRYPOINT ["/usr/bin/java", "-jar","app.jar"]
+FROM ubuntu:20.04
+LABEL MAINTAINER info@brainupgrade.in
+ARG DEBIAN_FRONTEND=noninteractive
+RUN export DEBIAN_FRONTEND=noninteractive
+RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+RUN apt-get update && apt-get install openjdk-11-jdk -y
+RUN update-alternatives --config java
+COPY target/app.jar app.jar
+ENTRYPOINT ["java"]
+CMD ["-jar","app.jar"]

@@ -12,7 +12,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          app: weather
+          kubernetes.io/metadata.name: weather
       podSelector:
         matchLabels:
           app: weather-service    

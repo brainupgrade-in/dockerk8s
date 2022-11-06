@@ -4,7 +4,7 @@ metadata:
   name: efs-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: 1Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
