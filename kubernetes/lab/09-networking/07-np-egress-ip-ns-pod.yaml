@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-front-layer
+spec:
+  podSelector:
+    matchLabels:
+      app: weather-db
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/24
+    - namespaceSelector:
+        matchLabels:
+          app: rajesh
+    - podSelector:
+        matchLabels:
+          app: weather-services
+    ports:
+    - protocol: TCP
+      port: 8080

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-db-layer
+spec:
+  podSelector:
+    matchLabels:
+      app: weather-db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: klaas2112u1
+      podSelector:
+        matchLabels:
+          app: weather-service    
+    - podSelector:
+        matchLabels:
+          app: weather
+    ports:
+    - protocol: TCP
+      port: 3306

@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-service-layer
+spec:
+  podSelector:
+    matchLabels:
+      app: weather-services
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: weather-front
+    ports:
+    - protocol: TCP
+      port: 8080
