@@ -16,6 +16,9 @@ spec:
       podSelector:
         matchLabels:
           app: weather-service    
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: klaas2112u2
     - podSelector:
         matchLabels:
           app: weather
