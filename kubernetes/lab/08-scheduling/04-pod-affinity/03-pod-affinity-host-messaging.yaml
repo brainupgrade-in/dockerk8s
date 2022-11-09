@@ -22,7 +22,7 @@ spec:
             #         values:
             #         - messaging
             #   topologyKey: kubernetes.io/zone
-            preferredDuringSchedulingIgnoredDuringExecution:
+            requiredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
               podAffinityTerm:            
                 labelSelector:

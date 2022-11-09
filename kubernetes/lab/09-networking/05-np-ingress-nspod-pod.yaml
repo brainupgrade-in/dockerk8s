@@ -5,23 +5,22 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: weather-db
+      app: weather-front
   policyTypes:
   - Ingress
   ingress:
   - from:
+    - ipBlock:
+        cidr: 10.0.0.0/24  
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: klaas2112u1
       podSelector:
         matchLabels:
           app: weather-service    
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: klaas2112u2
     - podSelector:
         matchLabels:
-          app: weather
+          app: weather-service
     ports:
     - protocol: TCP
-      port: 3306
+      port: 8080
