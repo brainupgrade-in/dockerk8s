@@ -1,4 +1,4 @@
-BOX_IMAGE    = "ubuntu/focal64"
+BOX_IMAGE    = "generic/ubuntu2204"
 MASTER_COUNT = 1
 NODE_COUNT   = 2
 MASTER_IP    = "192.168.26.10"
@@ -6,8 +6,7 @@ MASTER_PORT  = "8443"
 NODE_IP_NW   = "192.168.26."
 POD_NW_CIDR  = "10.244.0.0/16"
 
-DOCKER_VER = "5:20.10.7~3-0~ubuntu-focal"
-KUBE_VER   = "1.23.0"
+KUBE_VER   = "1.25.0"
 KUBE_TOKEN = "ayngk7.m1555duk5x2i3ctt"
 IMAGE_REPO = "k8s.gcr.io"
 
@@ -32,7 +31,7 @@ add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
-apt-get update && apt-get install -y docker-ce=#{DOCKER_VER}
+apt-get update && apt-get install -y containerd.io
 cat > /etc/docker/daemon.json <<EOF
 {
   "exec-opts": ["native.cgroupdriver=systemd"]
@@ -40,7 +39,11 @@ cat > /etc/docker/daemon.json <<EOF
 EOF
 mkdir -p /etc/systemd/system/docker.service.d
 systemctl daemon-reload
-systemctl enable docker && systemctl restart docker
+
+containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
+sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
+systemctl restart containerd
+systemctl enable containerd
 
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - 
 cat > /etc/apt/sources.list.d/kubernetes.list <<EOF

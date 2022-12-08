@@ -1,0 +1,20 @@
+# For single node cluster - minikube / kubeadm / microk8s
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-hostpath
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+    openebs.io/cas-type: local
+    cas.openebs.io/config: |
+      - name: StorageType
+        value: hostpath
+      - name: BasePath
+        value: /var/openebs/local
+provisioner: openebs.io/local
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+# Run the below provisioner to have above SC work
+# helm repo add openebs https://openebs.github.io/charts
+# helm repo update
+# helm install openebs --namespace openebs openebs/openebs --create-namespace

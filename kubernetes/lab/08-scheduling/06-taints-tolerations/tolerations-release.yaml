@@ -11,8 +11,8 @@ spec:
   - image: nginx
     name: nginx
   tolerations:
-    - key: "app"
-      operator: "Exists"
+    - key: "klaas"
+      operator: "Equal"
       value: "aiml"
       effect: "NoSchedule"
 
