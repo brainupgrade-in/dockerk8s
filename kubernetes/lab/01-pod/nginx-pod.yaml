@@ -3,19 +3,8 @@ kind: Pod
 metadata:
   labels:
     run: nginx
-    environment: production
-    tier: frontend
-    app: rajesh
   name: nginx
 spec:
-  imagePullSecrets:
-    - name: regcred
   containers:
   - image: nginx
     name: nginx
-    resources:
-      limits:
-        cpu: "20m"
-        memory: "50Mi"
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always

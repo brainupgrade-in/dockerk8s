@@ -10,4 +10,3 @@ spec:
   containers:
   - image: brainupgrade/weather:monolith
     name: monolith
-  restartPolicy: Always

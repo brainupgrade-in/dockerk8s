@@ -1,6 +1,6 @@
 # Deploy EFS driver and Storage Class
 
-kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.3"
+kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.4"
 
 cat <<EOF | kubectl apply -f -
 kind: StorageClass

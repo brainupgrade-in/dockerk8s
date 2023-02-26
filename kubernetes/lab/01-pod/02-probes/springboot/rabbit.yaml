@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit
+spec:
+  selector:
+    matchLabels:
+      app: rabbit
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rabbit
+    spec:
+      containers:
+        - name: rabbit
+          image: rabbitmq:3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5672
+          env:
+          - name: RABBIMQ_DEFAUT_USERNAME
+            value: guest
+          - name: RABBITMQ_DEFAULT_PASSWORD
+            value: guest  
+          startupProbe:
+            tcpSocket:
+              port: 5672
+            initialDelaySeconds: 0
+            periodSeconds: 3
+            successThreshold: 1
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: 5672
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 1
+          livenessProbe:
+            tcpSocket:
+              port: 5672
+            initialDelaySeconds: 0
+            periodSeconds: 60
+            failureThreshold: 3
+            successThreshold: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit
+spec:
+  ports:
+  - port: 5672
+    protocol: TCP
+    targetPort: 5672
+  selector:
+    app: rabbit

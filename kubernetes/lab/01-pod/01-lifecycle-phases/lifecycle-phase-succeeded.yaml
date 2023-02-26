@@ -1,12 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  labels:
-    run: busybox
-  name: busybox-succeeded
+  name: whatismyip
 spec:
   containers:
-  - image: busybox
-    name: busybox
-  dnsPolicy: ClusterFirst
+  - image: brainupgrade/whatismyip
+    name: myip
   restartPolicy: Never

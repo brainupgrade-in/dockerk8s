@@ -1,9 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  labels:
-    run: nginx
-  name: nginx
+  name: pending
 spec:
   containers:
   - image: nginx
@@ -15,6 +13,4 @@ spec:
       limits:
         cpu: "10"
         memory: "100Gi"  
-  dnsPolicy: ClusterFirst
-  restartPolicy: Never
   

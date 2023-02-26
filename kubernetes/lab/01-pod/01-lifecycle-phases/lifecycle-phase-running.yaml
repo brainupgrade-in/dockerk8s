@@ -1,15 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  labels:
-    run: busybox
-  name: busybox
+  name: running
 spec:
   containers:
   - command:
     - ping
     - google.com
     image: busybox
-    name: busybox
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always
+    name: running

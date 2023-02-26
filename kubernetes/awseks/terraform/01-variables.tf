@@ -19,5 +19,5 @@ variable "cluster_desired_size"{
   default = 1
 }
 variable "cluster_version"{
-  default = 1.23
+  default = 1.25
 }

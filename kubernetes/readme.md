@@ -11,3 +11,6 @@ do kubectl patch ingress/user$i-app.<URL> -n user$i --type=json \
 kubectl  patch resourcequota compute-resources --type='json' -p='[{"op":"replace","path":"/spec/hard/requests.storage","value":"20Gi"}]'
 
 for node in $(kubectl get nodes -ojsonpath='{..metadata.name}'); do echo $node;done
+
+# View events
+k -n team-red get events --sort-by='{.metadata.creationTimestamp}'
