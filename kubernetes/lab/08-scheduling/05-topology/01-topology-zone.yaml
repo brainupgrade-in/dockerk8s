@@ -20,5 +20,5 @@ spec:
           matchLabels:
             app: one-pod-per-zone
       containers:
-      - image: gcr.io/google-samples/hello-app:1.0
+      - image: brainupgrade/hello
         name: hello-app

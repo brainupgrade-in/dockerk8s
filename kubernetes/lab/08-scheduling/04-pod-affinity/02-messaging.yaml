@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: middle
+  name: messaging
 spec:
   replicas: 2
   selector:
     matchLabels:
-      tier: middle
+      tier: messaging
   template:
     metadata:
       labels:
-        tier: middle
+        tier: messaging
     spec:
         affinity:
           podAffinity:
@@ -20,7 +20,7 @@ spec:
                 - key: tier
                   operator: In  # NotIn, Exists, NotExists
                   values:
-                  - middle
+                  - messaging
               topologyKey: topology.kubernetes.io/zone
           podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
@@ -29,7 +29,7 @@ spec:
                   - key: tier
                     operator: In
                     values:
-                    - middle
+                    - messaging
               topologyKey: kubernetes.io/hostname
         containers:
           - name: nginx

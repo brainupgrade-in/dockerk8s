@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: payroll
+spec:
+  restartPolicy: Always
+  containers:
+  - name: hello
+    image: brainupgrade/hello
+  tolerations:
+    - key: "payroll/region"
+      operator: "Equal"
+      value: "india"
+      effect: "NoExecute"
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: topology.kubernetes.io/zone
+            operator: In  #In, NotIn, Exists, DoesNotExist, Gt, Lt  
+            values:
+            - ap-south-1b
+
+# k taint node ip-172-31-92-88.ec2.internal payroll/region=india:NoExecute

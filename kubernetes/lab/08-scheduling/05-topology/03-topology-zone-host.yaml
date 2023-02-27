@@ -26,5 +26,5 @@ spec:
           matchLabels:
             app: topology-zone-host
       containers:
-      - image: gcr.io/google-samples/hello-app:1.0
+      - image: brainupgrade/hello
         name: hello-app

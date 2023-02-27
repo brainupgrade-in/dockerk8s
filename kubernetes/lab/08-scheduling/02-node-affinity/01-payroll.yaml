@@ -1,16 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-affinity
+  name: payroll
 spec:
   replicas: 1
   selector:
     matchLabels:
-      tier: middle-tier
+      app: payroll
+      region: india
   template:
     metadata:
       labels:
-        tier: middle-tier
+        app: payroll
+        region: india
     spec:
       affinity:
         nodeAffinity:
@@ -31,7 +33,7 @@ spec:
                 values:
                 - spotnodes
       containers:
-        - name: nginx
+        - name: payroll
           image: nginx
           imagePullPolicy: IfNotPresent
           ports:

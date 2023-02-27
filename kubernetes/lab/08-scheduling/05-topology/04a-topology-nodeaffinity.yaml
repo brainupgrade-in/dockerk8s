@@ -6,7 +6,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      tier: middle-tier
+      app: topology-nodeaffinity
   template:
     metadata:
       labels:
@@ -27,7 +27,7 @@ spec:
               - key: topology.kubernetes.io/zone
                 operator: NotIn
                 values:
-                - us-east-1a
+                - ap-south-1b
       containers:
-      - name: pause
-        image: k8s.gcr.io/pause:3.1
+      - name: hello
+        image: brainupgrade/hello

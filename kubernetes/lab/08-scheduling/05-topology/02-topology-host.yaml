@@ -13,7 +13,7 @@ spec:
         app: topology-host
     spec:
       nodeSelector:
-        kubernetes.io/role: node
+        node-role.kubernetes.io/node: "true"
       topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname

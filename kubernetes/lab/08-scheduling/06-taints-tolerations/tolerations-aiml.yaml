@@ -3,15 +3,14 @@ kind: Pod
 metadata:
   labels:
     app: statements
-    release: prod
-    region: hongkong
-  name: tolerations-release-qa
+    feature: aiml
+  name: aiml
 spec:
   containers:
-  - image: nginx
-    name: nginx
+  - image: brainupgrade/hello
+    name: statements
   tolerations:
-    - key: "klaas"
+    - key: "feature"
       operator: "Equal"
       value: "aiml"
       effect: "NoSchedule"

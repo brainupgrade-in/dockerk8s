@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: front
+  name: apiserver
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      tier: front
+      tier: apiservice
   template:
     metadata:
       labels:
-        tier: front
+        tier: apiservice
     spec:
         affinity:
           podAffinity:
@@ -20,19 +20,21 @@ spec:
                 - key: tier
                   operator: In  # NotIn, Exists, NotExists
                   values:
-                  - front
+                  - messaging
               topologyKey: topology.kubernetes.io/zone
           podAntiAffinity:
-            requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
                   matchExpressions:
                   - key: tier
                     operator: In
                     values:
                     - front
-              topologyKey: kubernetes.io/hostname
+                topologyKey: kubernetes.io/hostname
         containers:
-          - name: nginx
+          - name: apiservice
             image: nginx
             imagePullPolicy: IfNotPresent
             ports:

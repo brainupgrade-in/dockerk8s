@@ -1,38 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: messaging
+  name: cache
 spec:
   replicas: 2
   selector:
     matchLabels:
-      tier: messaging
+      tier: cache
   template:
     metadata:
       labels:
-        tier: messaging
+        tier: cache
     spec:
         affinity:
           podAffinity:
-            # requiredDuringSchedulingIgnoredDuringExecution:
-            # - labelSelector:
-            #       matchExpressions:
-            #       - key: tier
-            #         operator: In
-            #         values:
-            #         - messaging
-            #   topologyKey: kubernetes.io/zone
-            requiredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:            
-                labelSelector:
-                  matchExpressions:
-                  - key: tier
-                    operator: In  # NotIn, Exists, NotExists
-                    values:
-                    - middle
-                topologyKey: topology.kubernetes.io/hostname
-          podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                   matchExpressions:
@@ -40,10 +21,29 @@ spec:
                     operator: In
                     values:
                     - front
+              topologyKey: topology.kubernetes.io/zone
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:            
+                labelSelector:
+                  matchExpressions:
+                  - key: tier
+                    operator: In  # NotIn, Exists, NotExists
+                    values:
+                    - front
+                topologyKey: kubernetes.io/hostname
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                  matchExpressions:
+                  - key: tier
+                    operator: In
+                    values:
+                    - cache
               topologyKey: kubernetes.io/hostname
         containers:
-          - name: nginx
-            image: nginx
+          - name: redis
+            image: redis:3.2-alpine
             imagePullPolicy: IfNotPresent
             ports:
               - containerPort: 80
