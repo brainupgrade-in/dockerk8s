@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: klaas-microk8s
+  name: klaas-microk8s
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: klaas-microk8s
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: klaas-microk8s
+    spec:
+      # nodeSelector:
+      #   klaas: microk8s
+      tolerations:
+      - key: "klaas"
+        operator: "Equal"
+        value: "microk8s"
+        effect: "NoExecute"
+      containers:
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: hello-app
+        resources: {}
+status: {}
