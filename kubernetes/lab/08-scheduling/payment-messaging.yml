@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: payment-messaging
+  name: payment-messaging
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payment-messaging
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: payment-messaging
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - payment-messaging
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - image: gcr.io/google-samples/hello-app:2.0
+        name: hello-app
+        resources: {}
+status: {}

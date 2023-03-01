@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: payment-rest-server
+  name: payment-rest-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payment-rest-server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: payment-rest-server
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In  # NotIn, Exists, NotExists
+                values:
+                - payment-messaging
+            topologyKey: topology.kubernetes.io/zone
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In  # NotIn, Exists, NotExists
+                values:
+                - payment-rest-server
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: hello-app
+        resources: {}
+status: {}

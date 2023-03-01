@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: cache
+  name: cache
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cache
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cache
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 2
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: cache
+      # - maxSkew: 1
+      #   topologyKey: kubernetes.io/hostname
+      #   whenUnsatisfiable: DoNotSchedule
+      #   labelSelector:
+      #     matchLabels:
+      #       app: cache
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - cache
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: hello-app
+        resources: {}
+status: {}

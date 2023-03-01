@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: payment-ui
+  name: payment-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: payment-ui
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: payment-ui
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In  # NotIn, Exists, NotExists
+                values:
+                - payment-ui
+            topologyKey: topology.kubernetes.io/zone
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - payment-ui
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - image: tutum/hello-world
+        name: hello-world
+        resources: {}
+status: {}
