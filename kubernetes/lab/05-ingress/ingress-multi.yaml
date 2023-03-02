@@ -3,23 +3,16 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    ingress.kubernetes.io/add-base-url: "true"
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: 50m
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/use-regex: "true"
-  creationTimestamp: "2021-11-21T13:28:52Z"
-  generation: 61
-  name: rajesh.brainupgrade.in
-  namespace: rajesh
-  resourceVersion: "10465833"
-  uid: 72739e32-add8-40f1-a58b-400b02044634
+  name: api.brainupgrade.in
+  namespace: api
 spec:
   rules:
-  - host: rajesh.brainupgrade.in
+  - host: api.brainupgrade.in
     http:
       paths:
       - backend:
@@ -31,13 +24,6 @@ spec:
         pathType: ImplementationSpecific
       - backend:
           service:
-            name: api-v1
-            port:
-              number: 80
-        path: /v1/?(.*)
-        pathType: ImplementationSpecific
-      - backend:
-          service:
             name: api-v2
             port:
               number: 80
@@ -45,19 +31,19 @@ spec:
         pathType: ImplementationSpecific
       - backend:
           service:
-            name: weather
+            name: sms
             port:
               number: 80
-        path: /weather/?(.*)
+        path: /sms/v1/?(.*)
         pathType: ImplementationSpecific
       - backend:
           service:
-            name: tutum
+            name: mms
             port:
               number: 80
-        path: /hello(/|$)(.*)
+        path: /mms/?(.*)
         pathType: ImplementationSpecific
   tls:
   - hosts:
-    - rajesh.brainupgrade.in
-    secretName: rajesh.brainupgrade.in
+    - api.brainupgrade.in
+    secretName: api.brainupgrade.in

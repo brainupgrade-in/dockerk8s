@@ -22,8 +22,8 @@ spec:
               - key: topology.kubernetes.io/zone
                 operator: In  #In, NotIn, Exists, DoesNotExist, Gt, Lt  
                 values:
+                - ap-south-1a
                 - ap-south-1b
-                - ap-south-1c
           preferredDuringSchedulingIgnoredDuringExecution:
           - weight: 1
             preference:

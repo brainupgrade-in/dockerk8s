@@ -5,14 +5,14 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: weather-db
+      app: db
   policyTypes:
   - Ingress
   ingress:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: weather
+          kubernetes.io/metadata.name: logger
     ports:
     - protocol: TCP
       port: 3306

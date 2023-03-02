@@ -14,8 +14,6 @@ spec:
       labels:
         app: facebook
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
       - image: gcr.io/google-samples/hello-app:1.0
         name: hello
