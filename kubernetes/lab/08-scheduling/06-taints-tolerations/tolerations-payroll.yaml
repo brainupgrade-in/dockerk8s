@@ -17,8 +17,8 @@ spec:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
         - matchExpressions:
-          - key: topology.kubernetes.io/zone
+          - key: topology.kubernetes.io/region
             operator: In  #In, NotIn, Exists, DoesNotExist, Gt, Lt  
             values:
-            - ap-south-1b
+            - ap-south-1
 # k taint node ip-172-31-92-88.ec2.internal payroll/region=india:NoExecute

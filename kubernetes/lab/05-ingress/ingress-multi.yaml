@@ -17,24 +17,24 @@ spec:
       paths:
       - backend:
           service:
-            name: api-v2
+            name: api-v1
             port:
               number: 80
         path: /?(.*)
         pathType: ImplementationSpecific
       - backend:
           service:
-            name: api-v1
+            name: api-v2
             port:
               number: 80
-        path: /v1/?(.*)
+        path: /v2/?(.*)
         pathType: ImplementationSpecific
       - backend:
           service:
             name: sms
             port:
               number: 80
-        path: /sms/?(.*)
+        path: /sms/v1/?(.*)
         pathType: ImplementationSpecific
       - backend:
           service:

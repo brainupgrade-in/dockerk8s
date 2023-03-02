@@ -6,6 +6,8 @@ metadata:
     feature: aiml
   name: aiml
 spec:
+  # nodeSelector:
+  #   feature: aiml
   containers:
   - image: brainupgrade/hello
     name: statements
@@ -15,4 +17,6 @@ spec:
       value: "aiml"
       effect: "NoSchedule"
 
+# k taint node k8s-worker feature=aiml:NoSchedule
+# k label node k8s-worker feature=aiml
 # kubectl get nodes -o json | jq ".items[]|{name:.metadata.name,taints:.spec.taints}"

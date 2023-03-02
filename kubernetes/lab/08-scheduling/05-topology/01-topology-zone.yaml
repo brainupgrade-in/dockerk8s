@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: one-pod-per-zone
 spec:
-  replicas: 1
+  replicas: 10
   selector:
     matchLabels:
       app: one-pod-per-zone
@@ -13,7 +13,7 @@ spec:
         app: one-pod-per-zone
     spec:
       topologySpreadConstraints:
-      - maxSkew: 1
+      - maxSkew: 3
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
