@@ -52,7 +52,7 @@ spec:
         - if [ ! -f $JENKINS_HOME ]; then chown $UID:$UID -R $JENKINS_HOME; touch $JENKINS_HOME; chown $UID:$UID $JENKINS_HOME; fi        
       containers:
       - name: jenkins
-        image: brainupgrade/jenkins:docker20221105
+        image: brainupgrade/jenkins:docker20221110
         env:
           - name: DOCKER_HOST
             value: tcp://localhost:2375
