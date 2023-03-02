@@ -11,16 +11,18 @@ spec:
   ingress:
   - from:
     - ipBlock:
-        cidr: 10.0.0.0/24  
+        cidr: 140.90.0.0/16  # Partner network
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: klaas2112u1
+          kubernetes.io/metadata.name: iot
       podSelector:
         matchLabels:
-          app: weather-service    
+          app: location-service   
     - podSelector:
         matchLabels:
           app: weather-service
     ports:
     - protocol: TCP
-      port: 8080
+      port: 443
+    - protocol: TCP
+      port: 8080      

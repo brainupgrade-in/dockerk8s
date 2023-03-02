@@ -1,23 +1,23 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: np-front-layer
+  name: np-paymentgw
 spec:
   podSelector:
     matchLabels:
-      app: weather-db
+      app: paymentgw
   policyTypes:
   - Egress
   egress:
   - to:
     - ipBlock:
-        cidr: 10.0.0.0/24
+        cidr: 100.20.0.0/16  # Third party gateway network 
     - namespaceSelector:
         matchLabels:
-          app: rajesh
+          kubernetes.io/metadata.name: account
     - podSelector:
         matchLabels:
-          app: weather-services
+          app: payment
     ports:
     - protocol: TCP
-      port: 8080
+      port: 443
