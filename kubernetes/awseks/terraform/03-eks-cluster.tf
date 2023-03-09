@@ -30,6 +30,5 @@ module "eks" {
       desired_size = var.cluster_desired_size
       capacity_type = "SPOT"
     }
-
   }
 }

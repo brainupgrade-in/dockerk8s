@@ -2,17 +2,18 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: db-network-policy
+  namespace: mtvlab2303a1
 spec:
   podSelector:
     matchLabels:
-      app: db
+      app: mysql
   policyTypes:
   - Ingress
   ingress:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: logger
+          kubernetes.io/metadata.name: mtvlab2303a1
     ports:
     - protocol: TCP
       port: 3306

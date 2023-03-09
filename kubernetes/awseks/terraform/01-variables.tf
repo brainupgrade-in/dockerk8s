@@ -1,10 +1,7 @@
 variable "region" {
   description = "AWS region"
   type        = string
-  default     = "ap-southeast-1"
-}
-varible "account_id"{
-  default = "11111111"
+  default     = "ap-south-1"
 }
 variable "cluster_name" {
   default = "testeks"
