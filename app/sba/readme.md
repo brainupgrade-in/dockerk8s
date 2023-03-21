@@ -1,9 +1,11 @@
 # Simple deployment steps
 ## API server
+```
 kubectl create deploy apiserver --image brainupgrade/sba-apiserver:hsql
 kubectl expose deploy apiserver --port 80 --target-port 8080
+```
 ## Frontend
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/sba-front/nginx/k8s.yaml
+`kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/sba-front/nginx/k8s.yaml`
 ## Ingress - Update
 Update ingress with the service name sba-frontend
 
