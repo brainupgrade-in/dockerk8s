@@ -21,3 +21,9 @@ kubectl create secret docker-registry regcred \
   # Load Testing command
 for i in {1..1000000};do echo hello; done | xargs -P100 -n 1 curl
 while true;do curl hello;echo $(date);sleep 0.01s;done
+
+k run loadtest -it --rm artilleryio/artillery -- quick -c 10 -n 1 http://hello
+
+k run loadtest --image artilleryio/artillery --command tail -- "-f" "/dev/null"
+k exec -it loadtest -- sh
+./bin/run quick -c 10 -n 1 http://hello

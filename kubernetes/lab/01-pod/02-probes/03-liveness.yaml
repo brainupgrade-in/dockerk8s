@@ -29,5 +29,7 @@ spec:
       periodSeconds: 1
       successThreshold: 1
       failureThreshold: 1
+
+
 # kubectl get events --sort-by='.metadata.creationTimestamp' -A
 # k get events  --sort-by='.lastTimestamp'
