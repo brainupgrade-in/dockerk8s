@@ -87,8 +87,6 @@ data:
         Match           *
         Host            ${FLUENT_ELASTICSEARCH_HOST}
         Port            ${FLUENT_ELASTICSEARCH_PORT}
-        HTTP_User       ${FLUENT_ELASTICSEARCH_USER}
-        HTTP_Passwd     ${FLUENT_ELASTICSEARCH_PASSWORD}
         Logstash_Format On
         Replace_Dots    On
         Retry_Limit     False
@@ -165,16 +163,9 @@ spec:
           - containerPort: 2020
         env:
         - name: FLUENT_ELASTICSEARCH_HOST
-          value: "elasticsearch-master"
+          value: "es-elasticsearch.elasticsearch.svc"
         - name: FLUENT_ELASTICSEARCH_PORT
           value: "9200"
-        - name: FLUENT_ELASTICSEARCH_USER
-          value: "elastic"
-        - name: FLUENT_ELASTICSEARCH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: elasticsearch-master-credentials
-              key: password
         volumeMounts:
         - name: varlog
           mountPath: /var/log

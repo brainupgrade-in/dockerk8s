@@ -28,7 +28,7 @@ spec:
         image: fluent/fluentd-kubernetes-daemonset:v1.12.0-debian-elasticsearch7-1.0
         env:
           - name:  FLUENT_ELASTICSEARCH_HOST
-            value: "elasticsearch-master.elasticsearch.svc.cluster.local"
+            value: "es-elasticsearch.elasticsearch.svc.cluster.local"
           - name:  FLUENT_ELASTICSEARCH_PORT
             value: "9200"
         resources:

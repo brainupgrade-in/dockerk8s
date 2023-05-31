@@ -4,16 +4,15 @@
 ## Elastic Search
 
 ```
-helm repo add elastic https://helm.elastic.co
-helm repo update
-helm install  elasticsearch elastic/elasticsearch --set replicas=1 --create-namespace=true --namespace elasticsearch
-helm install  kibana elastic/kibana --create-namespace=true --namespace elasticsearch
+helm install es oci://registry-1.docker.io/bitnamicharts/elasticsearch
+helm install kibana oci://registry-1.docker.io/bitnamicharts/kibana --set elasticsearch.hosts[0]=es-elasticsearch.elasticsearch.svc --set elasticsearch.port=9200
+
 ```
 
 ### Access kibana
 
 Access dashboard using:
-`kubectl port-forward -n elasticsearch svc/kibana-kibana 5601:5601`
+`kubectl port-forward -n elasticsearch svc/kibana 5601:5601`
 
 ## Fluentd /Fluentbit from AWS
 

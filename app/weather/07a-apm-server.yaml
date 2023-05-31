@@ -69,6 +69,18 @@ spec:
       containers:
       - name: apm-server
         image: docker.elastic.co/apm/apm-server:7.5.0
+        env:
+        - name: output.elasticsearch.username
+          value: "elastic"
+        - name: output.elasticsearch.password
+          valueFrom:
+            secretKeyRef:
+              name: elasticsearch-master-credentials
+              key: password
+        - name: output.elasticsearch.protocol
+          value: https
+        - name: output.elasticsearch.ssl.verification_mode
+          value: none
         ports:
         - containerPort: 8200
           name: apm-port
