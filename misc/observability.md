@@ -1,4 +1,3 @@
-# Deploying microservices on Kubernetes Cluster with Observability
 
 # Cluster scope
 
@@ -7,7 +6,7 @@
 ```
 helm repo add elastic https://helm.elastic.co
 helm repo update
-helm install  elasticsearch elastic/elasticsearch --set replicas=2 --create-namespace=true --namespace elasticsearch
+helm install  elasticsearch elastic/elasticsearch --set replicas=1 --create-namespace=true --namespace elasticsearch
 helm install  kibana elastic/kibana --create-namespace=true --namespace elasticsearch
 ```
 

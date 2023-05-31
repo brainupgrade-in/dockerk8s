@@ -173,7 +173,7 @@ spec:
         - name: FLUENT_ELASTICSEARCH_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: elasticsearch-master-password
+              name: elasticsearch-master-credentials
               key: password
         volumeMounts:
         - name: varlog
