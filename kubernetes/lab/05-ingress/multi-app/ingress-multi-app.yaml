@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: app
+  namespace: mtvlabeksa1
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mtvlabeksa1-app.brainupgrade.in
+    http:
+      paths:
+      - backend:
+          service:
+            name: hello
+            port:
+              number: 80
+        path: /(/|$)(.*)
+        pathType: Prefix
+      - backend:
+          service:
+            name: logger
+            port:
+              number: 80
+        path: /logger(/|$)(.*)
+        pathType: Prefix
+      - backend:
+          service:
+            name: weather
+            port:
+              number: 80
+        path: /weather(/|$)(.*)
+        pathType: Prefix
+      - backend:
+          service:
+            name: hello
+            port:
+              number: 80
+        path: /hello(/|$)(.*)
+        pathType: Prefix
+  tls:
+  - hosts:
+    - mtvlabeksa1-app.brainupgrade.in
+    secretName: secre8shh              
