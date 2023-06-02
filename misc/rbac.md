@@ -34,3 +34,8 @@ echo "export KUBECONFIG=/home/unigps/kube-conf-${user}"
 echo "KUBECONFIG=/home/unigps/kube-conf-${user} kubectl get pods"
 KUBECONFIG=/home/unigps/kube-conf-${user} kubectl get pods
 chmod 644 /home/unigps/kube-conf-${user}
+
+# Giving user permission to work in other namespace
+
+k create role demo --verb=create,get --resource=pods/exec --resource-name=test --namespace target
+k create rolebinding demo --user=user --role demo   (k edit rolebinding and add namespace to the user) --namespace target

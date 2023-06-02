@@ -1,0 +1,18 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: mtvlabeks
+  region: ap-southeast-1
+managedNodeGroups:
+  - name: terraform
+    minSize: 1
+    maxSize: 1
+    instanceType: t3a.small
+    spot: true
+    labels: {
+      terraform: awseks
+    }
+    taints:
+      - key: terraform
+        value: "awseks"
+        effect: NoExecute

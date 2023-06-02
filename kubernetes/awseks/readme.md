@@ -32,7 +32,9 @@ Ref: https://cert-manager.io/docs/installation/kubectl/
 https://karpenter.sh/v0.9.1/getting-started/getting-started-with-eksctl/
 
 ## Software Firewall using network policy (CNI - Callico)
-kubectl apply -f https://raw.githubusercontent.com/aws/amazon-vpc-cni-k8s/release-1.6/config/v1.6/calico.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
+kubectl edit installation (comment line encapsulation: VXLANCrossSubnet)
 
 ## User Access
 
