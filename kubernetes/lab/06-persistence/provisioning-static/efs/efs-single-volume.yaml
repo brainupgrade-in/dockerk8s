@@ -1,24 +1,21 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: efs-app-sts
+  name: efs-single-volume
 spec:
   selector:
     matchLabels:
-      app: test-efs
-  serviceName: efs-app
-  replicas: 3
+      app: efs-single-volume
+  replicas: 1
   template:
     metadata:
       labels:
-        app: test-efs
+        app: efs-single-volume
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: linux
-        image: amazonlinux:2 
-        command: ["/bin/sh"]
-        args: ["-c", "while true; do echo $(date -u) >> /efs-data/out.txt; sleep 5; done"]
+      - name: tshoot
+        image: brainupgrade/tshoot 
         volumeMounts:
         - name: efs-storage
           mountPath: /efs-data
@@ -34,10 +31,10 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: efs-sc
+  storageClassName: efs-simple
   resources:
     requests:
-      storage: 5Gi
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -45,12 +42,12 @@ metadata:
   name: efs-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: 1Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: efs-sc
+  storageClassName: efs-simple
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-08ae9c24c2ce9cce5
+    volumeHandle: fs-id

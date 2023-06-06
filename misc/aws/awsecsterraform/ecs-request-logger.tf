@@ -134,7 +134,7 @@ resource "aws_ecs_task_definition" "request_logger" {
     "image": "brainupgrade/request-logger:v1.1.0",
     "cpu": 1024,
     "memory": 2048,
-    "name": "request-logger",
+    "name": "request-logger-app",
     "networkMode": "awsvpc",
     "portMappings": [
       {

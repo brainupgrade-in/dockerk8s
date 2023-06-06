@@ -1,0 +1,99 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auditstatements
+spec:
+  selector:
+    matchLabels:
+      app: auditstatements
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: auditstatements
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: tshoot
+        image: brainupgrade/tshoot
+        volumeMounts:
+        - name: audit
+          mountPath: /audit
+        - name: statements
+          mountPath: /statements
+      volumes:
+      - name: audit
+        persistentVolumeClaim:
+          claimName: audit
+      - name: statements
+        persistentVolumeClaim:
+          claimName: statements
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audit
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-simple
+  resources:
+    requests:
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      app: audit
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: statements
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-simple
+  resources:
+    requests:
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      app: statements
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: audit
+  labels:
+    app: audit
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-simple
+  mountOptions:
+    - tls  
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-id:/app1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: statements
+  labels:
+    app: statements
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-simple
+  mountOptions:
+    - tls  
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-id:/app2
