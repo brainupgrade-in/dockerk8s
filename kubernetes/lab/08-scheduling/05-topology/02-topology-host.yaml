@@ -1,26 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: topology-host
+  name: weather-services
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: topology-host
+      app: weather
+      tier: apiservices
   template:
     metadata:
       labels:
-        app: topology-host
+        app: weather
+        tier: apiservices
     spec:
-      nodeSelector:
-        node-role.kubernetes.io/worker: "yes"
       topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: topology-host
+            app: weather
+            tier: apiservices
       containers:
-      - image: gcr.io/google-samples/hello-app:1.0
-        name: hello-app
+      - image: brainupgrade/weather-services:openmeteo-v2
+        name: weather-service

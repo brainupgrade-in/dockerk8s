@@ -2,15 +2,15 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    app: statements
+    app: image-analytics
     feature: aiml
   name: aiml
 spec:
-  # nodeSelector:
-  #   feature: aiml
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: gpu-nodes
   containers:
   - image: brainupgrade/hello
-    name: statements
+    name: image-analytics
   tolerations:
     - key: "feature"
       operator: "Equal"

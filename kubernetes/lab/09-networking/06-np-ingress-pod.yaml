@@ -5,14 +5,14 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: weather-services
+      app: reporting
   policyTypes:
   - Ingress
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: weather-front
+          tier: apiservices
     ports:
     - protocol: TCP
       port: 8080

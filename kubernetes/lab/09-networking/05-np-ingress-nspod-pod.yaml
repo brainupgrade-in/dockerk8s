@@ -5,7 +5,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: weather-front
+      app: paymentgw
   policyTypes:
   - Ingress
   ingress:
@@ -14,13 +14,13 @@ spec:
         cidr: 140.90.0.0/16  # Partner network
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: iot
+          kubernetes.io/metadata.name: location
       podSelector:
         matchLabels:
-          app: location-service   
+          app: commonlabel   
     - podSelector:
         matchLabels:
-          app: weather-service
+          app: fixedincome
     ports:
     - protocol: TCP
       port: 443

@@ -3,14 +3,14 @@ kind: Deployment
 metadata:
   name: facebook
 spec:
-  replicas: 1
+  replicas: 10
   selector:
     matchLabels:
       app: facebook
   strategy:
     rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+      maxSurge: 30%
+      maxUnavailable: 30%
     type: RollingUpdate
   template:
     metadata:

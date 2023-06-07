@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: topology-nodeaffinity
+  name: sports-live-streaming
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
-      app: topology-nodeaffinity
+      app: sports-live-streaming
   template:
     metadata:
       labels:
-        app: topology-nodeaffinity
+        app: sports-live-streaming
     spec:
       topologySpreadConstraints:
       - maxSkew: 2
@@ -18,16 +18,16 @@ spec:
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: topology-nodeaffinity
+            app: sports-live-streaming
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: topology.kubernetes.io/zone
-                operator: NotIn
+              - key: eks.amazonaws.com/nodegroup
+                operator: In
                 values:
-                - ap-south-1d
+                - gpu-nodes
       containers:
-      - name: hello
+      - name: streaming-server
         image: brainupgrade/hello

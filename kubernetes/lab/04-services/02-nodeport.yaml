@@ -5,7 +5,9 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: api-v1
+    app: payment
+    tier: frontend
+    release: ap-1
   ports:
   - name: 80-8080
     port: 80

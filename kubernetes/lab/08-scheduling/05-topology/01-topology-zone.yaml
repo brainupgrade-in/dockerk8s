@@ -1,24 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: one-pod-per-zone
+  name: weather-front
 spec:
   replicas: 10
   selector:
     matchLabels:
-      app: one-pod-per-zone
+      app: weather
+      tier: front
   template:
     metadata:
       labels:
-        app: one-pod-per-zone
+        app: weather
+        tier: front
     spec:
       topologySpreadConstraints:
-      - maxSkew: 3
+      - maxSkew: 1
         topologyKey: topology.kubernetes.io/zone
         whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            app: one-pod-per-zone
+            app: weather
+            tier: front
       containers:
-      - image: brainupgrade/hello
-        name: hello-app
+      - image: brainupgrade/weather:openmeteo-v2
+        name: weather
