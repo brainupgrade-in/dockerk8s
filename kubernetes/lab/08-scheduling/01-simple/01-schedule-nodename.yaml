@@ -12,10 +12,10 @@ spec:
       labels:
         component: schedule-node
     spec:
-        nodeName: k8s-worker
+        nodeName: sap
         containers:
           - name: test-app
-            image: brainupgrade/test-app:all-tiers-in-one
+            image: brainupgrade/sap
             imagePullPolicy: IfNotPresent
             ports:
               - containerPort: 8080

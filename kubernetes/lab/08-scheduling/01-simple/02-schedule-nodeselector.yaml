@@ -13,8 +13,8 @@ spec:
         component: schedule-nodeselector
     spec:
         nodeSelector:
-          karpenter.sh/capacity-type: spot
-          #topology.kubernetes.io/zone: ap-south-1b
+          business: fixedincome
+          #topology.kubernetes.io/zone: ap-south-1ub
         containers:
           - name: test-app
             image: nginx

@@ -22,29 +22,29 @@ Ref: https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/examples/
 # IAM role & policy
 
 
-curl -o iam-policy-example.json https://raw.githubusercontent.com/kubernetes-sigs/aws-efs-csi-driver/master/docs/iam-policy-example.json
+curl -o efs-iam-policy-example.json https://raw.githubusercontent.com/kubernetes-sigs/aws-efs-csi-driver/master/docs/iam-policy-example.json
 
 aws iam create-policy \
     --policy-name AmazonEKS_EFS_CSI_Driver_Policy \
-    --policy-document file://iam-policy-example.json
+    --policy-document file://efs-iam-policy-example.json
 
 aws eks describe-cluster --name microk8s --query "cluster.identity.oidc.issuer" --output text    
 
 Output: https://oidc.eks.ap-south-1.amazonaws.com/id/<oidc-id>
 
-Create this file: trust-policy.json
+Create this file: efs-trust-policy.json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "arn:aws:iam::<aws-account-id>:oidc-provider/oidc.eks.ap-south-1.amazonaws.com/id/<oidc-id>"
+        "Federated": "arn:aws:iam::${AWS_ACCOUNT_ID}:oidc-provider/oidc.eks.ap-south-1.amazonaws.com/id/${OIDC_ID}"
       },
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "oidc.eks.ap-south-1.amazonaws.com/id/<oidc-id>:sub": "system:serviceaccount:kube-system:efs-csi-controller-sa"
+          "oidc.eks.ap-south-1.amazonaws.com/id/${OIDC_ID}:sub": "system:serviceaccount:kube-system:efs-csi-controller-sa"
         }
       }
     }
@@ -52,24 +52,24 @@ Create this file: trust-policy.json
 }
 
 aws iam create-role \
-  --role-name AmazonEKS_EFS_CSI_DriverRole \
-  --assume-role-policy-document file://"trust-policy.json"
+  --role-name AmazonEKS_EFS_CSI_DriverRole_${CLUSTER_NAME} \
+  --assume-role-policy-document file://"efs-trust-policy.json"
 
 aws iam attach-role-policy \
-  --policy-arn arn:aws:iam::<aws-account-id>:policy/AmazonEKS_EFS_CSI_Driver_Policy \
-  --role-name AmazonEKS_EFS_CSI_DriverRole
+  --policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AmazonEKS_EFS_CSI_Driver_Policy \
+  --role-name AmazonEKS_EFS_CSI_DriverRole_${CLUSTER_NAME}
 
 Ref: https://docs.aws.amazon.com/eks/latest/userguide/efs-csi.html
 
 # EKS Service account
 
 eksctl create iamserviceaccount \
-    --cluster <cluster-name> \
+    --cluster ${CLUSTER_NAME} \
     --namespace kube-system \
     --name efs-csi-controller-sa \
-    --attach-policy-arn arn:aws:iam::<aws-account-id>:policy/AmazonEKS_EFS_CSI_Driver_Policy \
+    --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AmazonEKS_EFS_CSI_Driver_Policy \
     --approve \
-    --region ap-south-1    
+    --region ap-south-1  --override-existing-serviceaccounts  
 
 ## SA Annotation - Add if not added by above command 
 apiVersion: v1

@@ -12,11 +12,13 @@ spec:
   - image: brainupgrade/hello
     name: image-analytics
   tolerations:
-    - key: "feature"
+    - key: "storage"
       operator: "Equal"
-      value: "aiml"
+      value: "ephemeral"
       effect: "NoSchedule"
 
-# k taint node k8s-worker feature=aiml:NoSchedule
+# k taint node k8s-worker storage=ephemeral:NoSchedule
 # k label node k8s-worker feature=aiml
 # kubectl get nodes -o json | jq ".items[]|{name:.metadata.name,taints:.spec.taints}"
+# n1 - ephemeral  (n1 taint storage=ephemeral:NoSchedule )  
+# n2 - no storage

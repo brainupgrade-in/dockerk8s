@@ -28,10 +28,10 @@ spec:
           - weight: 1
             preference:
               matchExpressions:
-              - key: kops.k8s.io/instancegroup
+              - key: eks.amazonaws.com/capacityType
                 operator: In  #NotIn,  DoesNotExist for AntiAffinity
                 values:
-                - spotnodes
+                - SPOT
       containers:
         - name: payroll
           image: nginx
