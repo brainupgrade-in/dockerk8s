@@ -12,10 +12,10 @@ spec:
       labels:
         component: schedule-node
     spec:
-        nodeName: sap
+        nodeName: ip-192-168-113-151.ap-south-1.compute.internal
         containers:
           - name: test-app
-            image: brainupgrade/sap
+            image: brainupgrade/hello:1.0
             imagePullPolicy: IfNotPresent
             ports:
               - containerPort: 8080

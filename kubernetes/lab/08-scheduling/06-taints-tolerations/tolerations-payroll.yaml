@@ -11,7 +11,7 @@ spec:
     - key: "payroll/region"
       operator: "Equal"
       value: "india"
-      effect: "NoExecute"
+      effect: "NoSchedule"
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -22,3 +22,4 @@ spec:
             values:
             - ap-south-1
 # k taint node ip-172-31-92-88.ec2.internal payroll/region=india:NoExecute
+# k taint node ip-172-31-92-88.ec2.internal feature=aiml:NoSchedule

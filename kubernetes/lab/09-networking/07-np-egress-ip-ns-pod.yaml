@@ -11,7 +11,7 @@ spec:
   egress:
   - to:
     - ipBlock:
-        cidr: 100.20.0.0/16  # Third party gateway network 
+        cidr: 100.20.4.0/24  # Third party gateway network 
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: account
