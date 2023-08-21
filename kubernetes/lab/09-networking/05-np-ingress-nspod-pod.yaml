@@ -5,7 +5,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: paymentgw
+      app: authdb
   policyTypes:
   - Ingress
   ingress:
@@ -14,10 +14,10 @@ spec:
         cidr: 140.90.0.0/16  # Partner network
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: location
+          kubernetes.io/metadata.name: mtvlabeksa1
       podSelector:
         matchLabels:
-          app: commonlabel   
+          app: auth
     - podSelector:
         matchLabels:
           app: fixedincome

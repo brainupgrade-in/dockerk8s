@@ -13,10 +13,10 @@ spec:
         component: schedule-nodeselector
     spec:
         nodeSelector:
-          business: fixedincome
+          gpu: nvidia
           #topology.kubernetes.io/zone: ap-south-1ub
         containers:
-          - name: test-app
+          - name: aimlcomponent
             image: nginx
             imagePullPolicy: IfNotPresent
             ports:

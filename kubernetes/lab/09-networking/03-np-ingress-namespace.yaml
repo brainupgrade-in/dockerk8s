@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: hello-network-policy
+  name: np-authdb
 spec:
   podSelector:
     matchLabels:
-      app: hello
+      app: authdb
   policyTypes:
   - Ingress
   ingress:
   - from:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: mtvlabeksu25
+          kubernetes.io/metadata.name: mtvlabeksa1
     ports:
     - protocol: TCP
-      port: 8080
+      port: 3306
