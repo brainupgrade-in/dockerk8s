@@ -2,11 +2,13 @@
 
 kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.4"
 
+kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.6"
+
 cat <<EOF | kubectl apply -f -
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: efs-sc
+  name: efs-sc-dynamic
 provisioner: efs.csi.aws.com
 parameters:
   provisioningMode: efs-ap

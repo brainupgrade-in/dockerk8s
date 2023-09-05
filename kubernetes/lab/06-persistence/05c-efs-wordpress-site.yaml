@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: efs-wordpress-site
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: wordpress
+        image: wordpress:5.3.2-apache
+        volumeMounts:
+          - name: html
+            mountPath: "/var/www/html"
+            subPath: html
+      volumes:
+      - name: html
+        persistentVolumeClaim:
+          claimName: wordpress-mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: efs-wordpress-site
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  selector:
+    app: wordpress
+---    
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: efs-wordpress-mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mysql
+        image: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "rootpasswd"        
+        - name: MYSQL_PASSWORD
+          value: "passwd"        
+        - name: MYSQL_USERNAME
+          value: "admin"        
+        - name: MYSQL_DATABASE
+          value: "wordpress"        
+        volumeMounts:
+          - name: mysql
+            mountPath: "/var/lib/mysql"
+            subPath: mysql
+      volumes:
+      - name: mysql
+        persistentVolumeClaim:
+          claimName: wordpress-mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: efs-wordpress-mysql
+spec:
+  type: ClusterIP
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
+  selector:
+    app: mysql
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-mysql
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-sc-dynamic
+  resources:
+    requests:
+      storage: 1Gi
+  selector: 
+    matchLabels: 
+      app: wordpress-mysql
