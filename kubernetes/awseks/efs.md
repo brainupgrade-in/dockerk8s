@@ -30,7 +30,7 @@ aws iam create-policy \
     --policy-name AmazonEKS_EFS_CSI_Driver_Policy \
     --policy-document file://efs-iam-policy-example.json
 
-aws eks describe-cluster --name microk8s --query "cluster.identity.oidc.issuer" --output text    
+aws eks describe-cluster --name ${CLUSTER_NAME} --query "cluster.identity.oidc.issuer" --output text    
 
 Output: https://oidc.eks.ap-south-1.amazonaws.com/id/<oidc-id>
 
