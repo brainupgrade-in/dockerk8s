@@ -102,6 +102,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql
 spec:
+  accessModes:
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
