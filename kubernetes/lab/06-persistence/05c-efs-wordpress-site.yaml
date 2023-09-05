@@ -19,11 +19,10 @@ spec:
         volumeMounts:
           - name: html
             mountPath: "/var/www/html"
-            subPath: html
       volumes:
       - name: html
         persistentVolumeClaim:
-          claimName: wordpress-mysql
+          claimName: wordpress
 ---
 apiVersion: v1
 kind: Service
@@ -68,11 +67,10 @@ spec:
         volumeMounts:
           - name: mysql
             mountPath: "/var/lib/mysql"
-            subPath: mysql
       volumes:
       - name: mysql
         persistentVolumeClaim:
-          claimName: wordpress-mysql
+          claimName: mysql
 ---
 apiVersion: v1
 kind: Service
@@ -90,7 +88,19 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wordpress-mysql
+  name: mysql
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-dynamic
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql
 spec:
   accessModes:
     - ReadWriteMany
