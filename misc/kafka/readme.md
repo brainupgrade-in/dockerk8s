@@ -4,7 +4,7 @@
 # Setup
 - ``` kubectl create namespace kafka ```
 - ```kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka```
-- ```kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n kafka``` 
+- ```kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/kafka/kafka-cluster.yaml -n kafka``` 
 
 # Test
 ## Producer
@@ -19,16 +19,16 @@ kubectl -n kafka run kafka-consumer -ti --image=quay.io/strimzi/kafka:0.31.1-kaf
 # Kafka from Bitnami
 helm install kafka oci://registry-1.docker.io/bitnamicharts/kafka --set controller.persistence.size=1Gi --set broker.persistence.size=1Gi
 
-kubectl run kafka-client --restart='Never' --image docker.io/bitnami/kafka:3.4.1-debian-11-r0 --namespace mtvlabeksa1 --command -- sleep infinity
+kubectl run kafka-client --restart='Never' --image docker.io/bitnami/kafka:3.4.1-debian-11-r0 --namespace kafka --command -- sleep infinity
 
 Producer:
 kafka-console-producer.sh \
-            --broker-list kafka-0.kafka-headless.mtvlabeksa1.svc.cluster.local:9092 \
+            --broker-list kafka-0.kafka-headless.kafka.svc.cluster.local:9092 \
             --topic test
 
 Client:
 kafka-console-consumer.sh \
-            --bootstrap-server kafka.mtvlabeksa1.svc.cluster.local:9092 \
+            --bootstrap-server kafka.kafka.svc.cluster.local:9092 \
             --topic test \
             --from-beginning            
 
@@ -53,7 +53,7 @@ security.protocol=SASL_PLAINTEXT
 sasl.mechanism=SCRAM-SHA-256
 sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required \
     username="user1" \
-    password="$(kubectl get secret kafka-user-passwords --namespace mtvlabeksa1 -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
+    password="$(kubectl get secret kafka-user-passwords --namespace kafka -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
 
 To create a pod that you can use as a Kafka client run the following commands:
 
@@ -62,14 +62,11 @@ To create a pod that you can use as a Kafka client run the following commands:
     kubectl exec --tty -i kafka-client --namespace mtvlabeksa1 -- bash
 
     PRODUCER:
-        kafka-console-producer.sh \
-            --producer.config /tmp/client.properties \
-            --broker-list kafka-controller-0.kafka-controller-headless.mtvlabeksa1.svc.cluster.local:19092,kafka-controller-1.kafka-controller-headless.mtvlabeksa1.svc.cluster.local:19092,kafka-controller-2.kafka-controller-headless.mtvlabeksa1.svc.cluster.local:19092 \
-            --topic test
+        kafka-console-producer.sh --producer.config /tmp/client.properties  --broker-list kafka-controller-0.kafka-controller-headless.kafka.svc.cluster.local:9092,kafka-controller-1.kafka-controller-headless.kafka.svc.cluster.local:9092,kafka-controller-2.kafka-controller-headless.kafka.svc.cluster.local:9092  --topic test
 
     CONSUMER:
         kafka-console-consumer.sh \
             --consumer.config /tmp/client.properties \
-            --bootstrap-server kafka.mtvlabeksa1.svc.cluster.local:19092 \
+            --bootstrap-server kafka.kafka.svc.cluster.local:19092 \
             --topic test \
             --from-beginning
