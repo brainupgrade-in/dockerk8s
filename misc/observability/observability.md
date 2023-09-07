@@ -24,6 +24,11 @@ kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/mai
 
 ```
 
+## Fluent - bit (Optional)
+k apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/observability/fluent-bit/fluent-bit.yaml
+
+helm install fluent-bit oci://registry-1.docker.io/bitnamicharts/fluent-bit
+
 ## APM Server
 
 `kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/07a-apm-server.yaml`

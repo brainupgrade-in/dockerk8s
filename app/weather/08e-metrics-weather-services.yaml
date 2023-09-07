@@ -71,7 +71,7 @@ spec:
                   name: app-config
                   key: ELASTIC_APM_APPLICATION_PACKAGES
             - name: ELASTIC_APM_SERVICE_NAME 
-              value: "weather-services-mtvlabeksa1" 
+              value: "weather-services-mtvlabeksu11" 
             - name: ELASTIC_APM_ENVIRONMENT 
               value: prod
             - name: ELASTIC_APM_LOG_LEVEL 
@@ -85,6 +85,6 @@ spec:
             - name: management.metrics.web.server.request.autotime.enabled
               value: "true"
             - name: management.metrics.tags.application
-              value: weather-services-mtvlabeksa1        
+              value: weather-services-mtvlabeksu11        
           ports:
             - containerPort: 8080

@@ -36,6 +36,12 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.1/manifests/custom-resources.yaml
 kubectl edit installation (comment line encapsulation: VXLANCrossSubnet)
 
+## User Setup
+
+### AWS
+Create user on AWS IAM
+Create role testeksDev (specify trust relationship to sts:Assumerole) and attach testeks policy
+
 ## User Access
 
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/clusterrole-user.yaml
@@ -47,6 +53,10 @@ eksctl create iamidentitymapping --cluster microk8s \
 for i in {1..1};do kubectl create ns  klaas2205u$i;done
 
 for i in {1..1};do kubectl create rolebinding poweruser-klaas2205u --user klaas2205u --clusterrole poweruser --namespace klaas2205u$i;done
+
+## User console
+aws eks update-kubeconfig --name testeks --region ap-south-1
+kubectl config set-context --current --namespace testeksu1
 
 ## Observability - Weather Application
 https://github.com/brainupgrade-in/kubernetes/tree/main/observability

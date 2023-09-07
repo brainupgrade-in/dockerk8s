@@ -7,17 +7,18 @@ metadata:
   name: aiml
 spec:
   nodeSelector:
-    eks.amazonaws.com/nodegroup: gpu-nodes
+    gpu: ready
   containers:
   - image: brainupgrade/hello
     name: image-analytics
   tolerations:
-    - key: "storage"
+    - key: "gpu"
       operator: "Equal"
-      value: "ephemeral"
+      value: "ready"
       effect: "NoSchedule"
 
 # k taint node k8s-worker storage=ephemeral:NoSchedule
+# k taint node k8s-worker gpu=ready:NoSchedule  PreferNoSchedule NoExceute
 # k label node k8s-worker feature=aiml
 # kubectl get nodes -o json | jq ".items[]|{name:.metadata.name,taints:.spec.taints}"
 # n1 - ephemeral  (n1 taint storage=ephemeral:NoSchedule )  

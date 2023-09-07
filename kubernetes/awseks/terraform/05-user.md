@@ -1,6 +1,6 @@
-resource "aws_iam_role_policy" "userDev" {
-  name = "devPolicy-${local.cluster_name}"
-  role = iam_role_name.userDev
+resource "aws_iam_role_policy" "${local.cluster_name}" {
+  name = "${local.cluster_name}"
+  role = iam_role_name.${local.cluster_name}Dev
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -38,11 +38,11 @@ resource "aws_iam_role_policy" "userDev" {
 }
 
 
-resource "aws_iam_role" "userDev" {
-  name = "userDevRole-${local.cluster_name}"
+resource "aws_iam_role" "${local.cluster_name}Dev" {
+  name = "${local.cluster_name}Dev"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
             "Effect": "Allow",
@@ -52,7 +52,7 @@ resource "aws_iam_role" "userDev" {
             },
             "Action": "sts:AssumeRole",
             "Condition": {}
-      },
+      }
     ]
   })
 

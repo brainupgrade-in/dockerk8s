@@ -12,7 +12,7 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          tier: apiservices
+          app: apiservices
     ports:
     - protocol: TCP
       port: 8080
