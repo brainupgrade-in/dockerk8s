@@ -7,8 +7,8 @@ kubectl get pods --show-labels
 ## List all Secrets currently in use by a pod
 kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq
 
-
-
+# Delete pods using label
+kubectl get pods -o name --selector=app=hello  |xargs -I {} kubectl delete {}
 
 k get nodes -ojson | jq '.items[]|{name:.metadata.name,cap:.status.capacity}'
 kubectl get pv --sort-by=.spec.capacity.storage
