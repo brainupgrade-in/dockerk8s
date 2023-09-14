@@ -52,7 +52,7 @@ spec:
         - if [ ! -f $JENKINS_HOME ]; then chown $UID:$UID -R $JENKINS_HOME; touch $JENKINS_HOME; chown $UID:$UID $JENKINS_HOME; fi        
       containers:
       - name: jenkins
-        image: brainupgrade/jenkins:2.414.1x2
+        image: brainupgrade/jenkins:2.414.1x3
         imagePullPolicy: Always
         resources:
           requests:
