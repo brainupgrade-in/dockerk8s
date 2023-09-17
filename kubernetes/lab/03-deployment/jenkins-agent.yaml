@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: agent-docker
+  name: agent-docker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agent-docker
+  template:
+    metadata:
+      labels:
+        app: agent-docker
+    spec:
+      containers:
+      - image: brainupgrade/jenkins:agent-docker
+        name: agent-docker
+        securityContext:
+          privileged: true
+        env:
+        - name: DOCKER_TLS_CERTDIR
+          value: ''
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-docker
+spec:
+  type: ClusterIP
+  selector:
+    app: agent-docker  
+  ports:
+  - port: 2375
+    name: "tcp"
+    targetPort: 2375
