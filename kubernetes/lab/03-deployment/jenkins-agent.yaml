@@ -27,9 +27,9 @@ spec:
         - name: USER_PASSWORD
           value: linux
         - name: PASSWORD_ACCESS
-          value: true
+          value: "true"
         - name: SUDO_ACCESS
-          value: true  
+          value: "true"  
 ---
 apiVersion: v1
 kind: Service
