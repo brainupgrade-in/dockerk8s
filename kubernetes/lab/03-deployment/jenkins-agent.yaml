@@ -41,8 +41,11 @@ spec:
     app: docker  
   ports:
   - port: 2375
-    name: "tcp"
+    name: "docker"
     targetPort: 2375
   - port: 22
-    name: "tcp"
+    name: "ssh"
     targetPort: 22
+  - port: 80
+    name: "http"
+    targetPort: 80
