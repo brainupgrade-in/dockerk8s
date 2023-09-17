@@ -54,6 +54,9 @@ spec:
       - name: jenkins
         image: brainupgrade/jenkins:2.414.1x3
         imagePullPolicy: Always
+        env:
+        - name: DOCKER_HOST
+          value: "tcp://docker:2375"
         resources:
           requests:
             cpu: 0.5
