@@ -17,6 +17,7 @@ spec:
       containers:
       - image: brainupgrade/jenkins:agent-docker
         name: agent-docker
+        imagePullPolicy: Always
         securityContext:
           privileged: true
         env:
