@@ -22,14 +22,14 @@ spec:
         env:
         - name: DOCKER_HOST
           value: "tcp://docker:2375"
-        - name: USER_NAME
-          value: ubuntu
-        - name: USER_PASSWORD
-          value: linux
         - name: PASSWORD_ACCESS
           value: "true"
         - name: SUDO_ACCESS
           value: "true"  
+        - name: USER_NAME
+          value: ubuntu
+        - name: USER_PASSWORD
+          value: linux
 ---
 apiVersion: v1
 kind: Service
