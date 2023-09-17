@@ -30,6 +30,9 @@ spec:
         env:
         - name: DOCKER_TLS_CERTDIR
           value: ''
+        volumeMounts:
+          - name: docker-home
+            mountPath: /var/lib/docker
 ---
 apiVersion: v1
 kind: Service
@@ -49,3 +52,14 @@ spec:
   - port: 80
     name: "http"
     targetPort: 80
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: docker-home
+spec: 
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
