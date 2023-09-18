@@ -72,6 +72,30 @@ spec:
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home
+        startupProbe:
+          httpGet:
+            path: /static/jenkins/images/svgs/logo.svg
+            port: 8080
+          failureThreshold: 30
+          successThreshold: 1
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        livenessProbe:
+          httpGet:
+            path: /static/jenkins/images/svgs/logo.svg
+            port: 8080
+          initialDelaySeconds: 60
+          failureThreshold: 2
+          successThreshold: 1
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /static/jenkins/images/svgs/logo.svg
+            port: 8080
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 1
       volumes:
       - name: jenkins-home
         persistentVolumeClaim:
