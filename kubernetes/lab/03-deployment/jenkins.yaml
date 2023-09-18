@@ -82,8 +82,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: jenkins-home
 spec:
+  # storageClassName: efs-dynamic
   accessModes:
     - ReadWriteOnce
+    # - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
