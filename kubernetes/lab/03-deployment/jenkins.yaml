@@ -16,6 +16,10 @@ spec:
   - port: 50000
     name: "slave"
     targetPort: 50000   
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
 ---
 apiVersion: apps/v1
 kind: Deployment
