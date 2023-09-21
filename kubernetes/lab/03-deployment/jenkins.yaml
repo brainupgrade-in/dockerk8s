@@ -61,6 +61,10 @@ spec:
         env:
         - name: DOCKER_HOST
           value: "tcp://docker:2375"
+        - name: spring.application.name
+          value: jenkins-mtvlabcicda1
+        - name: management.metrics.tags.application
+          value: jenkins-mtvlabcicda1
         resources:
           requests:
             cpu: 0.5
