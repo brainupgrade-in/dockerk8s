@@ -5,10 +5,12 @@ metadata:
 spec:
   containers:
   - image: nginx
-    name: test-container
+    name: web-server
     volumeMounts:
     - mountPath: /cache
       name: cache-volume
   volumes:
   - name: cache-volume
     emptyDir: {}
+
+    
