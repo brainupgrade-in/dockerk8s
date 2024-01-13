@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-net
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-net
+  template:
+    metadata:
+      labels:
+        app: k8s-net
+    spec:
+      containers:
+      - image: brainupgrade/hello:net
+        name: c1
+        imagePullPolicy: Always
+        env:
+        - name: port
+          value: "8080"
+      - image: brainupgrade/hello:net
+        name: c2        
+        imagePullPolicy: Always
+        env:
+        - name: port
+          value: "8081"
