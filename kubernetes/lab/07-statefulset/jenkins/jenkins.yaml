@@ -10,6 +10,7 @@ spec:
   - port: 80
     name: "http"
     targetPort: 8080
+    nodePort: 32400
   - port: 8080
     name: "ui"
     targetPort: 8080
