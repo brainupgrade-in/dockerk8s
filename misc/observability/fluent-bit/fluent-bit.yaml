@@ -1,43 +1,51 @@
 apiVersion: v1
+kind: Namespace
+metadata:
+  name: fluentbit-system
+---
+apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: fluent-bit
-  namespace: fluent-bit
+  name: fluentbitds
+  namespace: fluentbit-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: fluent-bit
+  name: fluentbit
 rules:
-  - nonResourceURLs:
-      - /metrics
-    verbs:
-      - get
   - apiGroups: [""]
     resources:
       - namespaces
       - pods
-      - pods/logs
-    verbs: ["get", "list", "watch"]
+      - nodes
+      - nodes/proxy
+    verbs: 
+      - get
+      - list
+      - watch
 ---
-kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
 metadata:
-  name: fluent-bit
+  name: fluentbit
 roleRef:
-  kind: ClusterRole
-  name: fluent-bit
   apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: fluentbit
 subjects:
-- kind: ServiceAccount
-  name: fluent-bit
-  namespace: fluent-bit
+  - kind: ServiceAccount
+    name: fluentbitds
+    namespace: fluentbit-system
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:serviceaccounts    
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: fluent-bit
-  namespace: fluent-bit
+  namespace: fluentbit-system
 data:
   # Configuration files: server, input, filters and output
   # ======================================================
@@ -51,8 +59,10 @@ data:
         HTTP_Listen   0.0.0.0
         HTTP_Port     2020
     @INCLUDE input-kubernetes.conf
+    @INCLUDE input-prometheus.conf
     @INCLUDE filter-kubernetes.conf
     @INCLUDE output-elasticsearch.conf
+    @INCLUDE output-prometheus.conf
   input-kubernetes.conf: |
     [INPUT]
         Name              tail
@@ -63,6 +73,11 @@ data:
         Mem_Buf_Limit     5MB
         Skip_Long_Lines   On
         Refresh_Interval  10
+  input-prometheus.conf: |
+    [INPUT]
+        name            node_exporter_metrics
+        tag             node_metrics
+        scrape_interval 2
   filter-kubernetes.conf: |
     [FILTER]
         Name                kubernetes
@@ -73,17 +88,39 @@ data:
         Kube_Tag_Prefix     kube.var.log.containers.*
         Merge_Log           On
         Merge_Log_Key       log_processed
+        # Use_Kubelet         true
+        # Kubelet_Port        10250
         K8S-Logging.Parser  On
         K8S-Logging.Exclude Off
   output-elasticsearch.conf: |
     [OUTPUT]
         Name            es
-        Match           *
+        Match           kube.*
         Host            ${FLUENT_ELASTICSEARCH_HOST}
         Port            ${FLUENT_ELASTICSEARCH_PORT}
         Logstash_Format On
         Replace_Dots    On
+        Suppress_Type_Name On
         Retry_Limit     False
+    [OUTPUT]
+        Name            es
+        Match           host.*
+        Host            ${FLUENT_ELASTICSEARCH_HOST}
+        Port            ${FLUENT_ELASTICSEARCH_PORT}
+        Logstash_Format On
+        Logstash_Prefix node
+        Replace_Dots    On
+        Suppress_Type_Name On
+        Retry_Limit     False                
+  output-prometheus.conf: |
+    [OUTPUT]
+        name            prometheus_exporter
+        match           node_metrics
+        host            0.0.0.0
+        port            2021
+        # add user-defined labels
+        add_label       app fluent-bit
+        add_label       color blue    
   parsers.conf: |
     [PARSER]
         Name   apache
@@ -119,6 +156,12 @@ data:
         Time_Format %Y-%m-%dT%H:%M:%S.%L
         Time_Keep   On
     [PARSER]
+        Name cri
+        Format regex
+        Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z        
+    [PARSER]
         Name        syslog
         Format      regex
         Regex       ^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
@@ -128,41 +171,48 @@ data:
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: fluent-bit
-  namespace: fluent-bit
+  name: fluentbit
+  namespace: fluentbit-system
+  labels:
+    app.kubernetes.io/name: fluentbit
 spec:
   selector:
     matchLabels:
-      k8s-app: fluent-bit
+      name: fluentbit
   template:
     metadata:
       labels:
-        k8s-app: fluent-bit
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "2020"
-        prometheus.io/path: /api/v1/metrics/prometheus
+        name: fluentbit
     spec:
+      serviceAccountName: fluentbitds
       containers:
-      - name: fluent-bit
-        image: fluent/fluent-bit:2.1.9
-        imagePullPolicy: Always
-        ports:
-          - containerPort: 2020
-        env:
-        - name: FLUENT_ELASTICSEARCH_HOST
-          value: "es-elasticsearch.elasticsearch.svc.cluster.local"
-        - name: FLUENT_ELASTICSEARCH_PORT
-          value: "9200"
-        volumeMounts:
-        - name: varlog
-          mountPath: /var/log
-        - name: varlibdockercontainers
-          mountPath: /var/lib/docker/containers
-          readOnly: true
         - name: fluent-bit
-          mountPath: /fluent-bit/etc/
+          imagePullPolicy: Always
+          image: fluent/fluent-bit:latest
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+            - name: fluentbit-config
+              mountPath: /fluent-bit/etc/
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi              
+          ports:
+            - containerPort: 2020
+          env:
+          - name: FLUENT_ELASTICSEARCH_HOST
+            value: "es-elasticsearch-master-hl.elasticsearch.svc.cluster.local"
+          - name: FLUENT_ELASTICSEARCH_PORT
+            value: "9200"
       terminationGracePeriodSeconds: 10
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet      
       volumes:
       - name: varlog
         hostPath:
@@ -170,8 +220,14 @@ spec:
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
-      - name: fluent-bit
+      - name: fluentbit-config
         configMap:
           name: fluent-bit
-      serviceAccountName: fluent-bit
----
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      - operator: "Exists"
+        effect: "NoExecute"
+      - operator: "Exists"
+        effect: "NoSchedule"
