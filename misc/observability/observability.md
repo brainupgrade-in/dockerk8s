@@ -9,6 +9,8 @@ helm install es oci://registry-1.docker.io/bitnamicharts/elasticsearch \
 --set master.replicaCount=1 --set data.replicaCount=1 \ 
 --namespace elasticsearch --create-namespace
 
+https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/observability/fluent-bit/fluent-bit.yaml
+
 helm install kibana oci://registry-1.docker.io/bitnamicharts/kibana \ 
  --set elasticsearch.hosts[0]=es-elasticsearch.elasticsearch.svc \ 
  --set elasticsearch.port=9200 --set service.type=NodePort \ 
