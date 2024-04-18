@@ -3,7 +3,7 @@ Below steps to be taken by admin to setup the cluster using EKSCTL
 
 ## EKSCTL
 
-eksctl create cluster --name microk8s --spot --node-type t3a.medium --nodes 1 --nodes-min 1 --nodes-max 2 --node-volume-size 20 --version  1.21
+eksctl create cluster --name microk8s --spot --node-type t3a.medium --nodes 1 --nodes-min 1 --nodes-max 2 --node-volume-size 20 --version  1.29
 OR
 eksctl create cluster -f ./cluster/cluster.yaml
 

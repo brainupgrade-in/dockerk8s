@@ -9,23 +9,23 @@ spec:
     - name: regcred
   volumes:
   - name: shared-logs 
-    emptyDir: {}
+    emptyDir: {} 
   containers:  
   - name: main-container
     image: nginx
-    resources:
-      limits:
-        cpu: "10m"
-        memory: "10Mi"
+    # resources:
+    #   limits:
+    #     cpu: "10m"
+    #     memory: "10Mi"
     volumeMounts:
     - name: shared-logs
       mountPath: /usr/share/nginx/html
   - name: sidecar-container
     image: busybox # content generation for CMS or websites
-    resources:
-      limits:
-        cpu: "10m"
-        memory: "10Mi"
+    # resources:
+    #   limits:
+    #     cpu: "10m"
+    #     memory: "10Mi"
     command: ["/bin/sh"]
     args: ["-c", "while true; do echo $(date) >> /var/log/index.html; sleep 10;done"]
     volumeMounts:

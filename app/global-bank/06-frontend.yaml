@@ -26,9 +26,9 @@ spec:
         app: frontend
     spec:
       containers:
-      - image: brainupgrade/global-bank-frontend:2.0.0
-        name: frontend
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-          name: nginx
+        - image: brainupgrade/global-bank-frontend:2.0.0
+          name: frontend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: nginx

@@ -4,8 +4,15 @@
 ## Elastic Search
 
 ```
-helm install es oci://registry-1.docker.io/bitnamicharts/elasticsearch --set master.persistence.size=1Gi --set data.persistence.size=1Gi --set master.replicaCount=1 --set data.replicaCount=1
-helm install kibana oci://registry-1.docker.io/bitnamicharts/kibana --set elasticsearch.hosts[0]=es-elasticsearch.elasticsearch.svc --set elasticsearch.port=9200
+helm install es oci://registry-1.docker.io/bitnamicharts/elasticsearch \ 
+--set master.persistence.size=1Gi --set data.persistence.size=1Gi \ 
+--set master.replicaCount=1 --set data.replicaCount=1 \ 
+--namespace elasticsearch --create-namespace
+
+helm install kibana oci://registry-1.docker.io/bitnamicharts/kibana \ 
+ --set elasticsearch.hosts[0]=es-elasticsearch.elasticsearch.svc \ 
+ --set elasticsearch.port=9200 --set service.type=NodePort \ 
+ --namespace elasticsearch --create-namespace
 
 ```
 
@@ -14,20 +21,6 @@ helm install kibana oci://registry-1.docker.io/bitnamicharts/kibana --set elasti
 Access dashboard using:
 `kubectl port-forward -n elasticsearch svc/kibana 5601:5601`
 
-## Fluentd /Fluentbit from AWS
-
-```
-kubectl create ns fluentd
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/05b-log-monitoring-fluentd-setup-crb.yaml
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/05c-log-monitoring-fluentd-setup-cm.yaml
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/app/weather/05d-log-monitoring-fluentd.yaml
-
-```
-
-## Fluent - bit (Optional)
-k apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/observability/fluent-bit/fluent-bit.yaml
-
-helm install fluent-bit oci://registry-1.docker.io/bitnamicharts/fluent-bit
 
 ## APM Server
 
@@ -40,7 +33,9 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm install prometheus prometheus-community/prometheus --create-namespace=true --namespace monitoring
-helm install grafana grafana/grafana  --create-namespace=true --namespace monitoring
+
+helm install grafana grafana/grafana --set service.type=NodePort \
+--namespace monitoring --values grafana/grafana-values.yaml
 ```
 
 # Grafana access

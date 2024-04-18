@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apm-server-config
+  namespace: elasticsearch
+  labels:
+    k8s-app: apm-server
+data:
+  apm-server.yml: |-
+    apm-server:
+      host: "0.0.0.0:8200"
+      frontend:
+        enabled: false
+    setup.template.settings:
+      index:
+        number_of_shards: 1
+        codec: best_compression
+    setup.kibana:
+      host: "http://kibana.elasticsearch.svc.cluster.local:5601"
+    output.elasticsearch:
+      hosts: ["http://es-elasticsearch-master-hl.elasticsearch.svc.cluster.local"]
+      indices:
+        - index: "apm-%{[beat.version]}-sourcemap"
+          when.contains:
+            processor.event: "sourcemap"
+        - index: "apm-%{[beat.version]}-error-%{+yyyy.MM.dd}"
+          when.contains:
+            processor.event: "error"
+        - index: "apm-%{[beat.version]}-transaction-%{+yyyy.MM.dd}"
+          when.contains:
+            processor.event: "transaction"
+        - index: "apm-%{[beat.version]}-span-%{+yyyy.MM.dd}"
+          when.contains:
+            processor.event: "span"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apm-server
+  namespace: elasticsearch
+  labels:
+    app: apm-server
+spec:
+  ports:
+  - port: 8200
+    targetPort: 8200
+    name: http
+  selector:
+    app: apm-server
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apm-server
+  namespace: elasticsearch
+spec:
+  # this replicas value is default
+  # modify it according to your case
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apm-server  
+  template:
+    metadata:
+      labels:
+        app: apm-server
+    spec:
+      containers:
+      - name: apm-server
+        image: docker.elastic.co/apm/apm-server:7.5.0
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: 100m
+          requests:
+            cpu: 100m
+            memory: 256Mi 
+        # env:
+        # - name: output.elasticsearch.username
+        #   value: "elastic"
+        # - name: output.elasticsearch.password
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: elasticsearch-master-credentials
+        #       key: password
+        # - name: output.elasticsearch.protocol
+        #   value: https
+        # - name: output.elasticsearch.ssl.verification_mode
+        #   value: none
+        ports:
+        - containerPort: 8200
+          name: apm-port
+        volumeMounts:
+        - name: apm-server-config
+          mountPath: /usr/share/apm-server/apm-server.yml
+          readOnly: true
+          subPath: apm-server.yml
+      volumes:
+      - name: apm-server-config
+        configMap:
+          name: apm-server-config

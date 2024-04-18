@@ -35,7 +35,7 @@ chmod +x /vagrant/configs/join.sh
 kubeadm token create --print-join-command > /vagrant/configs/join.sh
 
 # Install Calico Network Plugin
-curl https://docs.projectcalico.org/manifests/calico.yaml -O
+wget https://docs.projectcalico.org/manifests/calico.yaml 
 kubectl apply -f calico.yaml
 # Metal LB
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/baremetal/deploy.yaml

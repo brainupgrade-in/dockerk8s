@@ -15,6 +15,10 @@ spec:
       containers:
       - image: nginx
         name: test-container
+        resources: 
+          limits:
+            memory: "64Mi"
+            cpu: "250m"
         volumeMounts:
         - mountPath: /test-ebs
           name: ebs-volume
