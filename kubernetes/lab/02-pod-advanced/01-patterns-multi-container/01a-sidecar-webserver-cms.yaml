@@ -5,8 +5,8 @@ metadata:
   labels:
     app: sidecar
 spec:
-  imagePullSecrets:
-    - name: regcred
+  # imagePullSecrets:
+  #   - name: regcred
   volumes:
   - name: shared-logs 
     emptyDir: {} 

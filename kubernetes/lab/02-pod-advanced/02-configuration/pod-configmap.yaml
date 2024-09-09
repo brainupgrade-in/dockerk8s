@@ -14,6 +14,7 @@ spec:
           memory: "20Mi"
       env:
         - name: PLAYER_INITIAL_LIVES 
+          # value: 3
           valueFrom:
             configMapKeyRef:
               name: cm-game-demo           

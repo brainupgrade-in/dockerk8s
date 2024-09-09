@@ -1,0 +1,27 @@
+{
+    "Name": "mtvlabk8su",
+    "IsCustom": true,
+    "Description": "Read-only access to AKS clusters",
+    "Actions": [
+        "Microsoft.ContainerService/managedClusters/read",
+        "Microsoft.ContainerService/managedClusters/listClusterAdminCredential/action",
+        "Microsoft.ContainerService/managedClusters/listClusterUserCredential/action",
+        "Microsoft.ContainerService/managedClusters/listClusterMonitoringUserCredential/action",
+        "Microsoft.ContainerService/managedClusters/agentPools/read",
+        "Microsoft.Resources/subscriptions/resourceGroups/read",
+        "Microsoft.Network/loadBalancers/read",
+        "Microsoft.Network/publicIPAddresses/read",
+        "Microsoft.Network/virtualNetworks/read",
+        "Microsoft.Network/virtualNetworks/subnets/read",
+        "Microsoft.Authorization/*/read",
+        "Microsoft.Insights/alertRules/read",
+        "Microsoft.Insights/diagnosticSettings/read",
+        "Microsoft.Insights/metrics/read",
+        "Microsoft.OperationalInsights/workspaces/read",
+        "Microsoft.Support/*"
+    ],
+    "NotActions": [],
+    "AssignableScopes": [
+        "/subscriptions/908d8a1f-46f3-4a57-b8c8-7a1cf9b322a5"
+    ]
+}

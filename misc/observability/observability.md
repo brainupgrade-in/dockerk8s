@@ -4,17 +4,11 @@
 ## Elastic Search
 
 ```
-helm install es oci://registry-1.docker.io/bitnamicharts/elasticsearch \ 
---set master.persistence.size=1Gi --set data.persistence.size=1Gi \ 
---set master.replicaCount=1 --set data.replicaCount=1 \ 
---namespace elasticsearch --create-namespace
+helm install es oci://registry-1.docker.io/bitnamicharts/elasticsearch --set master.persistence.size=1Gi --set data.persistence.size=1Gi --set master.replicaCount=1 --set data.replicaCount=1 --namespace elasticsearch --create-namespace
 
-https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/observability/fluent-bit/fluent-bit.yaml
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/main/misc/observability/fluent-bit/fluent-bit.yaml
 
-helm install kibana oci://registry-1.docker.io/bitnamicharts/kibana \ 
- --set elasticsearch.hosts[0]=es-elasticsearch.elasticsearch.svc \ 
- --set elasticsearch.port=9200 --set service.type=NodePort \ 
- --namespace elasticsearch --create-namespace
+helm install kibana oci://registry-1.docker.io/bitnamicharts/kibana --set persistence.size=1Gi --set elasticsearch.hosts[0]=es-elasticsearch.elasticsearch.svc  --set elasticsearch.port=9200 --set service.type=NodePort  --namespace elasticsearch --create-namespace
 
 ```
 
@@ -36,8 +30,7 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm install prometheus prometheus-community/prometheus --create-namespace=true --namespace monitoring
 
-helm install grafana grafana/grafana --set service.type=NodePort \
---namespace monitoring --values grafana/grafana-values.yaml
+helm install grafana grafana/grafana --set service.type=NodePort --namespace monitoring --values grafana/grafana-values.yaml
 ```
 
 # Grafana access

@@ -85,7 +85,7 @@ metadata:
     eks.amazonaws.com/role-arn: arn:aws:iam::<aws-account-id>:role/AmazonEKS_EFS_CSI_DriverRole    
 
 # Restart EFS CSI Controller
-kubectl rollout restart deploy efs-csi-controller -n kube-system
+kubectl rollout restart deploy/efs-csi-controller  ds/efs-csi-node -n kube-system
 
 # Security Group - Inbound rule
 Allow access to port 2049 from cluster CIDR to aws efs sg            
