@@ -594,3 +594,6 @@ rules:
   - get
   - list
   - describe  
+- apiGroups: ["discovery.k8s.io"]
+  resources: ["endpointslices"]
+  verbs: ["get", "list", "watch"]  
