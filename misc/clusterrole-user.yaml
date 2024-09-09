@@ -76,6 +76,9 @@ rules:
   - deletecollection
   - patch
   - update
+  - get
+  - list
+  - watch
 - apiGroups:
   - apps
   resources:
