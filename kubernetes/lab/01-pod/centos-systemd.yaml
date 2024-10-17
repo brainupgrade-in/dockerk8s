@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: node-network1
+  labels:
+    app: node-network1
+spec:
+  containers:
+  - name: centos-systemd
+    image: brainupgrade/rhel-ssh-ansible:20241012
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "100m"
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+    volumeMounts:
+    - name: cgroup
+      mountPath: /sys/fs/cgroup
+      readOnly: true
+    # command: ["/usr/sbin/init"]
+  volumes:
+  - name: cgroup
+    hostPath:
+      path: /sys/fs/cgroup
+      type: Directory
