@@ -16,3 +16,7 @@ spec:
     ports:
     - protocol: TCP
       port: 8080
+
+# curl -L -O https://docs.projectcalico.org/manifests/calico.yaml
+
+# kubectl apply -f calico.yaml

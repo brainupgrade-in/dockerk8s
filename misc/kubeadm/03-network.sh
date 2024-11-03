@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl https://docs.projectcalico.org/manifests/calico.yaml -O
+curl -L -O https://docs.projectcalico.org/manifests/calico.yaml
 
 kubectl apply -f calico.yaml
 

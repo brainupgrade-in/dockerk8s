@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: build-agent-azd
+  name: build-agent-azd
+spec:
+  serviceName: build-agent-azd
+  replicas: 1
+  selector:
+    matchLabels:
+      app: build-agent-azd
+  template:
+    metadata:
+      labels:
+        app: build-agent-azd
+    spec:
+      containers:
+      - image: brainupgrade/build-agent-azd:v7
+        name: build-agent-azd
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            memory: "2048Mi"
+            cpu: "1000m"
+          requests:
+            memory: "1024Mi"
+            cpu: "250m"

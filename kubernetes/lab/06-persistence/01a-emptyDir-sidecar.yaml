@@ -15,11 +15,19 @@ spec:
     image: busybox 
     command: ["/bin/sh"]
     args: ["-c", "while true; do echo -e '\n'$(date) >> /var/log/index.html; sleep 10;done"]
+    resources:
+      limits:
+        cpu: "20m"
+        memory: "50Mi"    
     volumeMounts:
     - name: shared-storage
       mountPath: /var/log
   - name: main-container
     image: nginx 
+    resources:
+      limits:
+        cpu: "20m"
+        memory: "50Mi"    
     volumeMounts:
     - name: shared-storage
       mountPath: /usr/share/nginx/html

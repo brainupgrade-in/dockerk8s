@@ -6,10 +6,10 @@ spec:
   containers:
   - image: nginx
     name: web-server
-    resources: 
+    resources:
       limits:
-        memory: "64Mi"
-        cpu: "250m"
+        cpu: "20m"
+        memory: "50Mi"
     volumeMounts:
     - mountPath: /cache
       name: cache-volume
