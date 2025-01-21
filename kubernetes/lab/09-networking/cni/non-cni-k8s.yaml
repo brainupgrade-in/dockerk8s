@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: k8s
+  name: k8s
+spec:
+  selector:
+    matchLabels:
+      app: k8s
+  template:
+    metadata:
+      labels:
+        app: k8s
+    spec:
+      containers:
+      - image: brainupgrade/kink:250121
+        imagePullPolicy: IfNotPresent
+        name: k8s
+        resources:
+          limits:
+            cpu: "1"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 2Gi
+        securityContext:
+          privileged: true
