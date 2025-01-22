@@ -74,7 +74,7 @@ spec:
           value: "rootpasswd"        
         - name: MYSQL_PASSWORD
           value: "joomla@123"        
-        - name: MYSQL_USERNAME
+        - name: MYSQL_USER
           value: "joomla"        
         - name: MYSQL_DATABASE
           value: "joomla"        
