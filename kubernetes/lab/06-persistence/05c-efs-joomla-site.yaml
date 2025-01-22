@@ -15,13 +15,6 @@ spec:
       securityContext:
         fsGroup: 1000    
       terminationGracePeriodSeconds: 10
-      initContainers:
-      - name: set-permissions
-        image: busybox
-        command: ["sh", "-c", "chown -R 33:33 /var/www/html && chmod -R 775 /var/www/html"]
-        volumeMounts:
-        - name: html
-          mountPath: /var/www/html      
       containers:
       - name: joomla
         image: joomla:4.3
