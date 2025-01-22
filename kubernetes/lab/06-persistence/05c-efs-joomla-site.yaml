@@ -23,13 +23,13 @@ spec:
           runAsGroup: 1000        
         env:
         - name: JOOMLA_DB_PASSWORD
-          value: "joomla@123"        
+          value: mtvlabeks
         - name: JOOMLA_DB_USER 
-          value: "joomla"        
+          value: mtvlabeks
         - name: JOOMLA_DB_NAME
           value: "joomla"
         - name: JOOMLA_DB_HOST
-          value: "efs-joomla-mysql:3306"         
+          value: "efs-joomla-mysql:3306"
         volumeMounts:
           - name: html
             mountPath: "/var/www/html"
@@ -71,13 +71,13 @@ spec:
         image: mysql:5.6
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: "rootpasswd"        
+          value: rootpasswd
         - name: MYSQL_PASSWORD
-          value: "joomla@123"        
-        - name: MYSQL_USER
-          value: "joomla"        
+          value: mtvlabeks
+        - name:  MYSQL_USER
+          value: mtvlabeks
         - name: MYSQL_DATABASE
-          value: "joomla"        
+          value: joomla
         volumeMounts:
           - name: mysql
             mountPath: "/var/lib/mysql"
