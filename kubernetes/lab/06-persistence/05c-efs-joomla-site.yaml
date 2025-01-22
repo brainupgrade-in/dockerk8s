@@ -1,33 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: efs-wordpress-site
+  name: efs-joomla-site
 spec:
   selector:
     matchLabels:
-      app: wordpress
+      app: joomla
   replicas: 1
   template:
     metadata:
       labels:
-        app: wordpress
+        app: joomla
     spec:
       terminationGracePeriodSeconds: 10
       containers:
-      - name: wordpress
-        image: wordpress:5.3.2-apache
+      - name: joomla
+        image: joomla:4.3
+        env:
+        - name: JOOMLA__DB_PASSWORD
+          value: "passwd"        
+        - name: JOOMLA_DB_USER
+          value: "admin"        
+        - name: JOOMLA_DB_HOST
+          value: "efs-joomla-mysql:3306"         
         volumeMounts:
           - name: html
             mountPath: "/var/www/html"
       volumes:
       - name: html
         persistentVolumeClaim:
-          claimName: wordpress
+          claimName: joomla
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: efs-wordpress-site
+  name: efs-joomla-site
 spec:
   type: ClusterIP
   ports:
@@ -35,12 +42,12 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: wordpress
+    app: joomla
 ---    
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: efs-wordpress-mysql
+  name: efs-joomla-mysql
 spec:
   selector:
     matchLabels:
@@ -63,7 +70,7 @@ spec:
         - name: MYSQL_USERNAME
           value: "admin"        
         - name: MYSQL_DATABASE
-          value: "wordpress"        
+          value: "joomla"        
         volumeMounts:
           - name: mysql
             mountPath: "/var/lib/mysql"
@@ -75,7 +82,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: efs-wordpress-mysql
+  name: efs-joomla-mysql
 spec:
   type: ClusterIP
   ports:
@@ -88,11 +95,11 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wordpress
+  name: joomla
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: efs-dynamic
+  storageClassName: efs-sc
   resources:
     requests:
       storage: 1Gi
