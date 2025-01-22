@@ -12,6 +12,8 @@ spec:
       labels:
         app: joomla
     spec:
+      securityContext:
+        fsGroup: 1000    
       terminationGracePeriodSeconds: 10
       initContainers:
       - name: set-permissions
@@ -23,6 +25,9 @@ spec:
       containers:
       - name: joomla
         image: joomla:4.3
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000        
         env:
         - name: JOOMLA_DB_PASSWORD
           value: "passwd"        
