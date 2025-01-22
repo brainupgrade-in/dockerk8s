@@ -23,9 +23,9 @@ spec:
           runAsGroup: 1000        
         env:
         - name: JOOMLA_DB_PASSWORD
-          value: "passwd"        
+          value: "joomla@123"        
         - name: JOOMLA_DB_USER 
-          value: "admin"        
+          value: "joomla"        
         - name: JOOMLA_DB_NAME
           value: "joomla"
         - name: JOOMLA_DB_HOST
@@ -73,9 +73,9 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           value: "rootpasswd"        
         - name: MYSQL_PASSWORD
-          value: "passwd"        
+          value: "joomla@123"        
         - name: MYSQL_USERNAME
-          value: "admin"        
+          value: "joomla"        
         - name: MYSQL_DATABASE
           value: "joomla"        
         volumeMounts:
