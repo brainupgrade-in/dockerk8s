@@ -17,10 +17,12 @@ spec:
       - name: joomla
         image: joomla:4.3
         env:
-        - name: JOOMLA__DB_PASSWORD
+        - name: JOOMLA_DB_PASSWORD
           value: "passwd"        
-        - name: JOOMLA_DB_USER
+        - name: JOOMLA_DB_USER 
           value: "admin"        
+        - name: JOOMLA_DB_NAME
+          value: "joomla"
         - name: JOOMLA_DB_HOST
           value: "efs-joomla-mysql:3306"         
         volumeMounts:
