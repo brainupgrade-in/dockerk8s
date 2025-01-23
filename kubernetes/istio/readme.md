@@ -85,4 +85,5 @@ kubectl logs -l app=productpage -c istio-proxy | grep productpage
 - Fault Injection https://istio.io/latest/docs/tasks/traffic-management/fault-injection/
 - Request routing https://istio.io/latest/docs/tasks/traffic-management/request-routing/
 - Rate Limit - https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/
-
+- mTLS - https://istio.io/latest/docs/tasks/security/authentication/mtls-migration/ 
+- mTLS (DestinationRule) - https://istio.io/latest/docs/reference/config/networking/destination-rule/
