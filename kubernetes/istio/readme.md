@@ -69,15 +69,20 @@ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.24/samp
 ## Redeploy product page
 k rollout restart deploy productpage-v1
 
+# User commands
+kubectl apply -l version!=v2,version!=v3 -f https://raw.githubusercontent.com/istio/istio/release-1.24/samples/bookinfo/platform/kube/bookinfo.yaml
+
 ## Verify calls via proxy
 ```
 kubectl exec $(kubectl get pods -l app=productpage -o jsonpath='{.items[0].metadata.name}') -c istio-proxy -- curl -X POST "http://localhost:15000/logging?level=debug"
 
-kubectl logs -l app=productpage -c istio-proxy | grep GET
+kubectl logs -l app=productpage -c istio-proxy | grep productpage
 ```
-# User commands
-kubectl apply -l version!=v2,version!=v3 -f https://raw.githubusercontent.com/istio/istio/release-1.24/samples/bookinfo/platform/kube/bookinfo.yaml
 
 # References:
 - https://istio.io/latest/docs/ops/deployment/deployment-models/
+- Traffic shifting / Canary Deployment - https://istio.io/latest/docs/tasks/traffic-management/traffic-shifting/
+- Fault Injection https://istio.io/latest/docs/tasks/traffic-management/fault-injection/
+- Request routing https://istio.io/latest/docs/tasks/traffic-management/request-routing/
+- Rate Limit - https://istio.io/latest/docs/tasks/policy-enforcement/rate-limit/
 
