@@ -7,6 +7,13 @@ spec:
   - name: main-container
     image: busybox:1.28
     command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+    resources:
+      requests:
+        memory: "32Mi"
+        cpu: "20m"
+      limits:
+        memory: "64Mi"
+        cpu: "50m"
   initContainers:
   - name: init-service
     image: busybox:1.28
