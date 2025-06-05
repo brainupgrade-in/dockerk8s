@@ -31,6 +31,4 @@ unexpected status code https://registry-1.docker.io/v2/brainupgrade/docker/manif
 - Create kubernetes secret containing docker registry credentials
 kubectl create secret docker-registry regcred --docker-username=  --docker-password=  --docker.email=
 - Assign this secret to sa
-kubectl patch serviceaccount default \
-  -n <your-namespace> \
-  -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+kubectl patch serviceaccount default -n <your-namespace> -p '{"imagePullSecrets": [{"name": "regcred"}]}'
