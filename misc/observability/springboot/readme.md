@@ -19,13 +19,23 @@ wget https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/
 wget https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/04-k8s-prometheus-rbac.sh
 
 ./04-k8s-prometheus-rbac.sh <user|namespace>
+
+## Prometheus installation
+wget https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/03-k8s-prometheus.sh
+
+chmod +x ./03-k8s-prometheus.sh
+./03-k8s-prometheus.sh <userid>
+
 ## Set SA 
 kubectl set sa sts/prometheus prometheus
 
-# Deploy spring boot app
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/05-k8s-obs-springboot-prom-otel.yaml
 
 # Grafana
+## Installation
+wget https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/02-k8s-grafana.sh
+chmod +x ./02-k8s-grafana.sh
+ ./02-k8s-grafana.sh <userid> <password> <namespace>
+
 ## Loki DB
 Add loki datasource and configure it as below:
     Name: TraceId Regex: (?:trace_id)=(\w+) 
@@ -51,6 +61,9 @@ Link Label: Error Rate  Query: sum by (client, server)(rate(traces_service_graph
 
 # Dashboard
 17175 - Spring boot
+
+# Deploy spring boot app
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/05-k8s-obs-springboot-prom-otel.yaml
 
 # Load Test
     kubectl create deploy loadtest --image brainupgrade/load-test
