@@ -10,6 +10,9 @@ spec:
     - mountPath: /data-path-inside-container
       name: hostpath-volume
     resources:
+      requests:
+        cpu: "10m"
+        memory: "25Mi"
       limits:
         cpu: "20m"
         memory: "50Mi"  

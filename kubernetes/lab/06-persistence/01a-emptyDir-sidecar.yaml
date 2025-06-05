@@ -16,6 +16,9 @@ spec:
     command: ["/bin/sh"]
     args: ["-c", "while true; do echo -e '\n'$(date) >> /var/log/index.html; sleep 10;done"]
     resources:
+      requests:
+        cpu: "10m"
+        memory: "25Mi"
       limits:
         cpu: "20m"
         memory: "50Mi"    
@@ -25,6 +28,9 @@ spec:
   - name: main-container
     image: nginx 
     resources:
+      requests:
+        cpu: "10m"
+        memory: "25Mi"
       limits:
         cpu: "20m"
         memory: "50Mi"    
