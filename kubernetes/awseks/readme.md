@@ -7,7 +7,7 @@ eksctl create cluster --name microk8s --spot --node-type t3a.medium --nodes 1 --
 OR
 eksctl create cluster -f ./cluster/cluster.yaml
 
-eksctl create nodegroup --name ng-zone-1a --cluster microk8s --nodes 3 --node-type t3a.xlarge --spot --nodes-min 1 --nodes-max 3 --node-volume-size 20 --node-zones ap-southeast-1a
+eksctl create nodegroup --name ng-zone-1a --cluster mtvlabk8s --nodes 3 --node-type t3a.xlarge --spot --nodes-min 1 --nodes-max 3 --node-volume-size 20 --node-zones ap-southeast-1a
 
 eksctl create nodegroup --name ng-zone-1b --cluster microk8s --nodes 1 --node-type t3a.xlarge --spot --nodes-min 1 --nodes-max 1 --node-volume-size 20 --node-zones ap-southeast-1b
 
