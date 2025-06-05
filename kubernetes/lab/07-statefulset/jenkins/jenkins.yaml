@@ -90,7 +90,7 @@ spec:
         - name: dind-storage
           mountPath: /var/lib/docker
       - name: dind
-        image: brainupgrade/docker:20-dind
+        image: brainupgrade/docker:27-dind
         securityContext:
           privileged: true
         env:
