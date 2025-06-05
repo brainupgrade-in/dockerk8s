@@ -23,3 +23,14 @@ kubectl patch ingress rajesh-app.brainupgrade.in  --type=json \
 
 # Patch svc port
 kubectl patch svc test --type='json' -p='[{"op": "add", "path": "/spec/ports", "value": [{"name": "dind","port":2375,"protocol":"TCP","targetPort":2375 },{"name": "docker","port":80,"protocol":"TCP","targetPort":80 },{"name": "main","port":8080,"protocol":"TCP","targetPort":8080 }] }]'
+
+# Too many docker pull requests - issue
+unexpected status code https://registry-1.docker.io/v2/brainupgrade/docker/manifests/sha256:173738a1999b3a3f40c9aa624c1d81cd770da6560342ba3670b3d5df31ec5497: 429 Too Many Requests - Server message: toomanyrequests: You have reached your unauthenticated pull rate limit. https://www.docker.com/increase-rate-limit
+
+## Solution
+- Create kubernetes secret containing docker registry credentials
+kubectl create secret docker-registry regcred --docker-username=  --docker-password=  --docker.email=
+- Assign this secret to sa
+kubectl patch serviceaccount default \
+  -n <your-namespace> \
+  -p '{"imagePullSecrets": [{"name": "regcred"}]}'

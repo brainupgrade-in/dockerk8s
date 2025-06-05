@@ -17,6 +17,4 @@ spec:
     - protocol: TCP
       port: 8080
 
-# curl -L -O https://docs.projectcalico.org/manifests/calico.yaml
-
-# kubectl apply -f calico.yaml
+# https://docs.tigera.io/calico/latest/getting-started/kubernetes/managed-public-cloud/eks
