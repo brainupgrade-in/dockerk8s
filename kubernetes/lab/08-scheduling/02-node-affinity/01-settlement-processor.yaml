@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: settlement-batch-processor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: settlement-batch-processor
+  template:
+    metadata:
+      labels:
+        app: settlement-batch-processor
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                  - ap-south-1a                # run only in this AZ  # label set on target nodes
+      containers:
+      - name: processor
+        image: brainupgrade/nginx
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aml-realtime-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aml-realtime-gateway
+  template:
+    metadata:
+      labels:
+        app: aml-realtime-gateway
+    spec:
+      affinity:
+        nodeAffinity:
+          # Hard anti-affinity: never land on HFT or spot nodes
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: workload
+                operator: NotIn
+                values: ["high-frequency-trading"]
+              - key: spot-instance
+                operator: NotIn
+                values: ["true"]
+          # Soft preference: stay in low-latency AZs within ap-south-1
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values: ["ap-south-1a", "ap-south-1b"]
+      containers:
+      - name: gateway
+        image: brainupgrade/risk-inference:nginx
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            cpu: "250m"
+            memory: "250Mi"
+          requests:
+            cpu: "250m"
+            memory: "250Mi"

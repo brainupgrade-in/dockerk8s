@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: risk-ai-inference
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: risk-ai-inference
+  template:
+    metadata:
+      labels:
+        app: risk-ai-inference
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: accelerator
+                operator: In
+                values: ["nvidia"]
+              - key: gpu-arch
+                operator: In
+                values: ["a100"]           # GPU model
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values: ["ap-south-1b"]   # keep within one AZ
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: inference
+        image: brainupgrade/nginx # https://brainupgrade.in/deepseek-on-kubernetes-ai-powered-reasoning-at-scale/
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            cpu: "250m"
+            memory: "250Mi"
+          requests:
+            cpu: "250m"
+            memory: "250Mi"

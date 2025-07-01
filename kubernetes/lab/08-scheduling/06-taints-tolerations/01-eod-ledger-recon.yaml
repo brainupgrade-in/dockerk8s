@@ -1,0 +1,36 @@
+# (one-time cluster setup) taint all dedicated batch nodes:
+# kubectl label nodes -l topology.kubernetes.io/zone=ap-south-1c workload=batch
+# kubectl taint nodes -l workload=batch batch=true:NoSchedule
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: eod-ledger-reconciliation
+spec:
+  schedule: "30 22 * * 1-5"          # 22:30 Mon–Fri
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: eod-ledger-recon
+        spec:
+          nodeSelector:
+            workload: batch
+            topology.kubernetes.io/zone: ap-south-1c
+          tolerations:
+          - key: "batch"
+            operator: "Equal"
+            value: "true"
+            effect: "NoSchedule"
+          restartPolicy: OnFailure
+          containers:
+          - name: reconciler
+            image: brainupgrade/ledger-recon:nginx
+            resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
