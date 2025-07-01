@@ -5,7 +5,7 @@ metadata:
     app: facebook
   name: facebook
 spec:
-  replicas: 9
+  replicas: 7
   selector:
     matchLabels:
       app: facebook

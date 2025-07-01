@@ -21,6 +21,8 @@ JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.ty
 kubectl patch ingress rajesh-app.brainupgrade.in  --type=json \
  -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/name","value":"hello"}]'
 
+ k patch ingress $(kubectl get ingress -oname | cut -d'/' -f2) --type='json' -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/name","value":"app"}]'
+
 # Patch svc port
 kubectl patch svc test --type='json' -p='[{"op": "add", "path": "/spec/ports", "value": [{"name": "dind","port":2375,"protocol":"TCP","targetPort":2375 },{"name": "docker","port":80,"protocol":"TCP","targetPort":80 },{"name": "main","port":8080,"protocol":"TCP","targetPort":8080 }] }]'
 
@@ -29,6 +31,9 @@ unexpected status code https://registry-1.docker.io/v2/brainupgrade/docker/manif
 
 ## Solution
 - Create kubernetes secret containing docker registry credentials
-kubectl create secret docker-registry regcred --docker-username=  --docker-password=  --docker.email=
+kubectl create secret docker-registry regcred --docker-username=  --docker-password=  --docker-email=
 - Assign this secret to sa
 kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+
+# Recreate svc with another name 
+k get svc app -oyaml | sed  's/app/app2/g'  | k apply -f -
