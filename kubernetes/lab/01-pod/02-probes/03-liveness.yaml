@@ -6,6 +6,13 @@ spec:
   containers:
   - name: liveness
     image: brainupgrade/tshoot
+    resources:
+      requests:
+        memory: "50Mi"
+        cpu: "10m"
+      limits:
+        memory: "50Mi"
+        cpu: "10m"
     command:
     - /bin/sh
     args:
