@@ -1,0 +1,35 @@
+# (cluster setup—run once, not part of the Deployment)
+# kubectl label nodes -l topology.kubernetes.io/zone=ap-south-1c latency=ultra
+# kubectl taint nodes -l latency=ultra low-latency=reserved:NoSchedule
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: realtime-pricing-engine
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: pricing-engine
+  template:
+    metadata:
+      labels:
+        app: pricing-engine
+    spec:
+      nodeSelector:
+        latency: ultra                     # target only ultra-low-latency nodes
+      tolerations:
+      - key: "low-latency"                 # tolerate the reservation taint
+        operator: "Equal"
+        value: "reserved"
+        effect: "NoSchedule"
+      containers:
+      - name: engine
+        image: brainupgrade/pricing-engine:nginx
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "10m"
+          limits:
+            memory: "50Mi"
+            cpu: "10m"
