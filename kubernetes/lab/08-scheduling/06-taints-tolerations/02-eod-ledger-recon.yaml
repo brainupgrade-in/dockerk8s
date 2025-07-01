@@ -1,6 +1,6 @@
 # (one-time cluster setup) taint all dedicated batch nodes:
 # kubectl label nodes -l topology.kubernetes.io/zone=ap-south-1c workload=batch
-# kubectl taint nodes -l workload=batch batch=true:NoSchedule
+# kubectl taint nodes -l workload=batch batch=yes:NoSchedule
 
 apiVersion: batch/v1
 kind: CronJob
@@ -21,7 +21,7 @@ spec:
           tolerations:
           - key: "batch"
             operator: "Equal"
-            value: "true"
+            value: "yes"
             effect: "NoSchedule"
           restartPolicy: OnFailure
           containers:
