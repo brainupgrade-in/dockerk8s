@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-gateway
+  labels:
+    app: order-gateway
+spec:
+  replicas: 4                   # evenly spread across zones & nodes
+  selector:
+    matchLabels:
+      app: order-gateway
+  template:
+    metadata:
+      labels:
+        app: order-gateway
+    spec:
+      topologySpreadConstraints:
+        # 1️⃣  Keep replica counts balanced across AZs within ap-south-1
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: order-gateway
+        # 2️⃣  Ensure no two replicas share the same node (best effort)
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: order-gateway
+      containers:
+        - name: gateway
+          image: brainupgrade/order-gateway:nginx
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
