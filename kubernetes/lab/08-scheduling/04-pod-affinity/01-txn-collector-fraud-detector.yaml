@@ -17,12 +17,12 @@ spec:
       - name: collector
         image: brainupgrade/nginx
         resources:
-          requests:
-            memory: "64Mi"
-            cpu: "250m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+              requests:
+                memory: "50Mi"
+                cpu: "10m"
+              limits:
+                memory: "50Mi"
+                cpu: "10m"
         ports:
         - containerPort: 80
 ---
@@ -53,11 +53,12 @@ spec:
       - name: detector
         image: brainupgrade/nginx
         resources:
-          requests:
-            memory: "64Mi"
-            cpu: "250m"
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+              requests:
+                memory: "50Mi"
+                cpu: "10m"
+              limits:
+                memory: "50Mi"
+                cpu: "10m"
+
         ports:
         - containerPort: 80
