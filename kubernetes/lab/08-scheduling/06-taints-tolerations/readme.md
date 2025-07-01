@@ -1,3 +1,4 @@
 # Use case - Taints - tolerations
-Isolates nightly batch workload, prevents resource contention, guarantees predictable performance.
-Ref: 01-eod-ledger-recon.yaml
+Pods tolerate reserved low-latency taint, target ultra-latency nodes only, guaranteeing exclusive CPU cache locality, microsecond pricing calculations and orderbook updates.
+
+Ref: 01-real-time-pricing-engine.yaml
