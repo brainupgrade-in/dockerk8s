@@ -1,82 +1,144 @@
-# Logs - Loki
+# Observability setup for spring boot app with OTEL instrumentation
+## Loki - logs database
+```bash
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/01-k8s-loki.yaml
-
-# Distributed Tracing - Tempo
+```
+## Tempo - Distributed log tracing using trace_id
+```bash
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/02-k8s-tempo.yaml
+```
 
-# Log shipping agent - promtail
+### Promtail setup
+```bash
 wget https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/03b-k8s-promtail.yaml
 
+sed -i 's/default/<user>/g' 03b-k8s-promtail.yaml
 sed -i 's/\${POD_NAMESPACE}/<user>/g' 03b-k8s-promtail.yaml
 
 kubectl apply -f 03b-k8s-promtail.yaml
-## Admin step
-wget https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/03a-k8s-promtail-rbac.sh
-./03a-k8s-promtail-rbac.sh <user|namespace>
+```
 
 # Prometheus 
-## RBAC (Admin step)
-wget https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/04-k8s-prometheus-rbac.sh
+## Installation
+```
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/prometheus.yaml
+```
+## Prometheus Config - To auto discover kubernetes services with annotation
+Ensure that RBAC for prometheus is setup
+```bash
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/prometheus/k8s-discovery/01b-k8s-prometheus-configmap-svc-annotation.yaml
 
-./04-k8s-prometheus-rbac.sh <user|namespace>
-
-## Prometheus installation
-wget https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/03-k8s-prometheus.sh
-
-chmod +x ./03-k8s-prometheus.sh
-./03-k8s-prometheus.sh <userid>
-
-## Set SA 
-kubectl set sa sts/prometheus prometheus
-
+```
+Update __NAMESPACE__ to <user> in prometheus config
+```bash
+kubectl edit cm prometheus-config
+```
 
 # Grafana
 ## Installation
-wget https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/02-k8s-grafana.sh
-chmod +x ./02-k8s-grafana.sh
- ./02-k8s-grafana.sh <userid> <password> <namespace>
+```
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/grafana.yaml
+```
+## Setup credentials
+kubectl set env deploy hello GF_SECURITY_ADMIN_USER=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')
+kubectl set env deploy hello GF_SECURITY_ADMIN_PASSWORD=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')-pwd
 
-## Loki DB
-Add loki datasource and configure it as below:
-    Name: TraceId Regex: (?:trace_id)=(\w+) 
-    
-    
-    Query: # ${__value.raw}
-## Tempo UI Config
-### Trace to Log 
-Datasource: Loki
-Span start: -5m
-Span End: 5m
-Tags: pod
-Filter by trace ID: true    
-### Trace to matrics
-Data Source: Prometheus
-Span start: -5m
-Span end: 5m
-Tags:  service.name as pod  http.route as uri
-
-Link Label: Request Rate  Query: sum by(uri)(rate(http_server_requests_seconds_count{$__tags}[1m]))
-
-Link Label: Error Rate  Query: sum by (client, server)(rate(traces_service_graph_request_failed_total{$__tags}{$__rate_interval))
+# Deploy spring boot app
+```bash
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/05-k8s-obs-springboot-prom-otel.yaml
+```
 
 # Dashboard
 17175 - Spring boot
 
-# Deploy spring boot app
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/05-k8s-obs-springboot-prom-otel.yaml
-
 # Load Test
-    kubectl create deploy loadtest --image brainupgrade/load-test
-    kubectl exec -it deploy/loadtest -- bash
-## Window 1 -tmux 
+```bash
+
+tmux
+kubectl create deploy loadtest --image brainupgrade/load-test
+kubectl exec -it deploy/loadtest -- bash
+
+```
+Split the window in two halves (ctrl+b ")
+
+## First tmux window pane
+```bash
+
 curl -fsslO https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/test-load.sh
 
 chmod +x test-load.sh
 
 ./test-load.sh obs-springboot 10
-## Window 2 - tmux    
+```
+## Second tmux window pane
+```bash
+
+kubectl exec -it deploy/loadtest -- bash
+
 curl -fsslO https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/test.sh
 
 chmod +x test.sh
 
 while true; do ./test.sh obs-springboot ;sleep 5s;done
+```
+
+# Optional 
+## Loki Config
+### Enable Tempo -Derived Fields
+```
+    Name: TraceId Regex: (?:trace_id)=(\w+) 
+    
+    
+    Query: # ${__value.raw}
+```
+OR 
+```
+(?:trace_id)=(\w+).*?(?:traceID)=(\w+)
+```
+Internal Link: Tempo
+
+## Prometheus UI Config
+Exemplars
+
+Internal link Tempo
+URL: ${__value.raw}
+Label: trace_id
+
+## Tempo UI config
+
+### Trace to Logs
+    Datasource: Loki
+    Span start: -5m
+    Span End: 5m
+    Tags: pod
+    Filter by trace ID: true
+
+### Trace to Metrics
+    Data Source: Prometheus
+    Span start: -5m
+    Span end: 5m
+    Tags:  service.name as pod  http.route as uri
+
+    Link Label: Request Rate  Query: sum by(uri)(rate(http_server_requests_seconds_count{$__tags}[1m]))
+
+    Link Label: Error Rate  Query: 
+    rate(http_server_requests_seconds_count{status="500"}[$__rate_interval])
+
+
+## Dashboard Variables - 17175
+```
+Application: app label_values(service)
+
+Instance: app_name label_values(application)
+
+Log Query: LogRef: log_keyword
+```
+
+### Dashboard Panel - Log type rate - Query
+
+sum by(type) (rate({app=~"$app.*"} | pattern `<date> <time> <_>=<trace_id> <_>=<span_id> <_>=<trace_flags> <type> <_> --- <msg>` | type != "" |= "$log_keyword" [1m]))
+
+### Dashboard Panel - Logs of all spring boot panels - Query
+
+{app=~"$app.*"} | pattern `<date> <time> <_>=<trace_id> <_>=<span_id> <_>=<trace_flags> <type> <_> --- <msg>` | line_format "{{.app}}\t{{.type}}\ttrace_id={{.trace_id}}\t{{.msg}}" |= "$log_keyword"
+

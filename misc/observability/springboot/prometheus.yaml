@@ -1,16 +1,13 @@
-#!/bin/bash
-
-
-user=$1
-password=$2
-namespace=$3
-
-cat <<EOF | kubectl apply -f -
+# This file is used to deploy Prometheus for monitoring a Spring Boot application.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+---  
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-config
-  namespace: ${namespace}  
   labels:
     app: prometheus
 data:
@@ -21,16 +18,11 @@ data:
       - job_name: 'prometheus'
         static_configs:
           - targets: ['localhost:9090']
-      - job_name: 'obs-springboot'
-        metrics_path: '/actuator/prometheus'
-        static_configs:
-          - targets: ['obs-springboot:80']          
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: prometheus
-  namespace: ${namespace}  
   labels:
     app: prometheus
 spec:
@@ -44,6 +36,8 @@ spec:
       labels:
         app: prometheus
     spec:
+      serviceAccountName: prometheus
+      serviceAccount: prometheus
       securityContext:
         fsGroup: 65534
       initContainers:
@@ -98,9 +92,12 @@ metadata:
   labels:
     app: prometheus
   name: prometheus
-  namespace: ${namespace}  
 spec:
   ports:
+  - name: web
+    port: 80
+    protocol: TCP
+    targetPort: 9090
   - name: prometheus
     port: 9090
     protocol: TCP
@@ -112,32 +109,3 @@ spec:
   selector:
     app: prometheus
   type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ${user}-prom.brainupgrade.in
-  namespace: ${namespace}
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /\$1
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-spec:
-  ingressClassName: nginx
-  tls:
-  - hosts:
-    - ${user}-prom.brainupgrade.in
-    secretName: ${user}-prom.brainupgrade.in  
-  rules:
-  - host: ${user}-prom.brainupgrade.in
-    http:
-      paths:
-      - backend:
-          service:
-            name: prometheus
-            port:
-              number: 9090
-        path: /?(.*)
-        pathType: ImplementationSpecific
-EOF
