@@ -12,8 +12,8 @@ kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs
 ```bash
 wget https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/03b-k8s-promtail.yaml
 
-sed -i 's/default/<user>/g' 03b-k8s-promtail.yaml
-sed -i 's/\${POD_NAMESPACE}/<user>/g' 03b-k8s-promtail.yaml
+NAMESPACE=$(kubectl get sa default -o jsonpath='{.metadata.namespace}')
+sed -i "s/default/$NAMESPACE/g" 03b-k8s-promtail.yaml
 
 kubectl apply -f 03b-k8s-promtail.yaml
 ```
@@ -21,28 +21,34 @@ kubectl apply -f 03b-k8s-promtail.yaml
 # Prometheus 
 ## Installation
 ```
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/prometheus.yaml
+https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/prometheus.yaml
 ```
 ## Prometheus Config - To auto discover kubernetes services with annotation
-Ensure that RBAC for prometheus is setup
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/prometheus/k8s-discovery/01b-k8s-prometheus-configmap-svc-annotation.yaml
+wget https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/prometheus/k8s-discovery/01b-k8s-prometheus-configmap-svc-annotation.yaml
 
-```
-Update __NAMESPACE__ to <user> in prometheus config
-```bash
-kubectl edit cm prometheus-config
+sed -i "s/__NAMESPACE__/$NAMESPACE/g" 01b-k8s-prometheus-configmap-svc-annotation.yaml
+kubectl apply -f 01b-k8s-prometheus-configmap-svc-annotation.yaml
 ```
 
 # Grafana
 ## Installation
 ```
-kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/grafana.yaml
+kubectl create secret generic grafana --from-literal=GF_SECURITY_ADMIN_USER=$(kubectl get sa default -ojson|jq -r '.metadata.namespace') --from-literal=GF_SECURITY_ADMIN_PASSWORD=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')-pwd
+
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/grafana.yaml
 ```
 ## Setup credentials
-kubectl set env deploy hello GF_SECURITY_ADMIN_USER=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')
-kubectl set env deploy hello GF_SECURITY_ADMIN_PASSWORD=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')-pwd
+```
+kubectl set env sts grafana GF_SECURITY_ADMIN_USER=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')
+kubectl set env sts grafana GF_SECURITY_ADMIN_PASSWORD=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')-pwd
+```
+## Update ingress
+```
+kubectl patch ingress $INGRESS --type=json -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/name","value":"grafana"}]'
 
+kubectl patch ingress $INGRESS --type=json -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/port/number","value":3000}]'
+```
 # Deploy spring boot app
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/obs-graf/refs/heads/main/apps/obs-springboot-prom-otel-tempo-loki/05-k8s-obs-springboot-prom-otel.yaml
