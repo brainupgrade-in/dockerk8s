@@ -1,0 +1,77 @@
+# ------------------------------------------------------------------------------
+# Multi-container Pod (Adapter Pattern)
+#   • Container 1: risk-score  – calculates & stores risk scores (HTTP 8080)
+#   • Container 2: fix-json-adapter – converts FIX→JSON and calls risk-score
+# ------------------------------------------------------------------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trade-risk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: trade-risk
+  template:
+    metadata:
+      labels:
+        app: trade-risk
+    spec:
+      containers:
+        # ─── Main business container ──────────────────────────────────────────
+        - name: risk-score
+          image: brainupgrade/risk-score:latest
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "64Mi"
+              cpu: "50m"
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: LISTEN_PORT
+              value: "8080"
+
+        # ─── adapter container ────────────────────────────────────────
+        - name: fix-json-adapter
+          image: brainupgrade/fix-json-adapter:latest
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "64Mi"
+              cpu: "50m"
+          ports:
+            - name: fix
+              containerPort: 5000
+          env:
+            - name: FIX_LISTEN_PORT
+              value: "5000"
+            # Same-pod communication → localhost
+            - name: JSON_ENDPOINT
+              value: "http://localhost:8080/score"
+
+---
+# Single Service exposing both ports (FIX 5000, HTTP 8080)
+apiVersion: v1
+kind: Service
+metadata:
+  name: trade-risk
+spec:
+  selector:
+    app: trade-risk
+  type: ClusterIP
+  ports:
+    - name: fix
+      port: 5000
+      targetPort: 5000
+      protocol: TCP
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
