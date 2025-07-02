@@ -21,7 +21,7 @@ kubectl apply -f 03b-k8s-promtail.yaml
 # Prometheus 
 ## Installation
 ```
-https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/prometheus.yaml
+kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/prometheus.yaml
 ```
 ## Prometheus Config - To auto discover kubernetes services with annotation
 ```bash
