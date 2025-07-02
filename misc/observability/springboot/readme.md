@@ -38,11 +38,6 @@ kubectl create secret generic grafana --from-literal=GF_SECURITY_ADMIN_USER=$(ku
 
 kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/misc/observability/springboot/grafana.yaml
 ```
-## Setup credentials
-```
-kubectl set env sts grafana GF_SECURITY_ADMIN_USER=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')
-kubectl set env sts grafana GF_SECURITY_ADMIN_PASSWORD=$(kubectl get sa default -ojson|jq -r '.metadata.namespace')-pwd
-```
 ## Update ingress
 ```
 kubectl patch ingress $INGRESS --type=json -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/name","value":"grafana"}]'
