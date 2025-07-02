@@ -72,12 +72,26 @@ class FIXHandler(socketserver.StreamRequestHandler):
             for raw_msg in split_fix_stream(self.buffer):
                 self.process_message(raw_msg)
 
+    # --- inside process_message() ---
     def process_message(self, raw_msg: bytes) -> None:
         try:
+            # 1. parse FIX → dict
             fix_dict = fix_to_dict(raw_msg)
-            response = requests.post(POST_URL, json=fix_dict, timeout=5)
-            response.raise_for_status()
-            self.log(f"Forwarded FIX msg (MsgType={fix_dict.get('35')}) ➜ {POST_URL} [{response.status_code}]")
+
+            # 2. make a human-readable copy: SOH (0x01) → "|"
+            fix_readable = raw_msg.replace(SOH, b'|').decode(errors="ignore")
+
+            # 3. build payload with BOTH pieces
+            payload = {
+                "fix_raw": fix_readable,   # <-- key risk-score expects
+                "json_data": fix_dict
+            }
+
+            # 4. POST it
+            r = requests.post(POST_URL, json=payload, timeout=5)
+            r.raise_for_status()
+            self.log(f"Forwarded FIX ({fix_dict.get('35')}) → {POST_URL}")
+
         except Exception as e:
             self.log(f"ERROR processing message: {e}")
 

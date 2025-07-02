@@ -25,5 +25,5 @@ EXPOSE 5000
 
 ENTRYPOINT ["python", "fix-json-app.py"]
 
-# docker build -f Dockerfile.fixjson -t brainupgrade/fix-json-adapter .
+# docker build -f fix-json.dockerfile -t brainupgrade/fix-json-adapter .
 # docker run -d --name fix-json-adapter -p 5000:5000 --link risk-score:risk-score -e JSON_ENDPOINT="http://risk-score:8080/score" brainupgrade/fix-json-adapter

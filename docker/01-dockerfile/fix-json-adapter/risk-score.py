@@ -1,72 +1,58 @@
 #!/usr/bin/env python3
 """
-risk-core.py
-────────────
-A minimal in-memory risk-scoring service.
-
-• Accepts POST /score  — JSON body produced by fix-json-adapter.
-  ‣ Computes a deterministic risk_score from the payload.
-  ‣ Stores (payload, risk_score) in memory.
-
-• Serves  GET  /score  — Returns list of all stored risk scores.
-
-Environment
------------
-LISTEN_PORT   TCP port to bind on (default: 8080)
+risk-score.py
+– Stores ⧉ FIX text, parsed JSON, and computed risk_score
+– POST /score : ingest & persist
+– GET  /score : list all records exactly as requested
 """
 
-import hashlib
-import json
-import os
-import threading
-from typing import List, Dict, Any
-
+import hashlib, json, os, threading
+from typing import Dict, Any, List
 from flask import Flask, request, jsonify, abort
 
-LISTEN_PORT = int(os.getenv("LISTEN_PORT", "8080"))
+PORT = int(os.getenv("LISTEN_PORT", "8080"))
+app  = Flask(__name__)
 
-app = Flask(__name__)
-
-# ─────────────────────────── In-memory store (thread-safe) ──────────────────────────
 _records: List[Dict[str, Any]] = []
 _lock = threading.Lock()
 
 
-def calc_risk_score(payload: Dict[str, Any]) -> int:
-    """
-    Very simple deterministic scoring: SHA-256 hash mod 100.
-    Replace with real model/logic as needed.
-    """
-    blob = json.dumps(payload, sort_keys=True).encode()
+def calc_risk_score(data: Dict[str, Any]) -> int:
+    blob = json.dumps(data, sort_keys=True).encode()
     return int(hashlib.sha256(blob).hexdigest(), 16) % 100
 
 
-# ─────────────────────────────────── API ─────────────────────────────────────────────
 @app.route("/score", methods=["POST"])
-def ingest_score():
-    payload = request.get_json(silent=True)
-    if payload is None:
-        abort(400, description="Invalid or missing JSON body")
+def ingest():
+    body = request.get_json(silent=True)
+    if body is None:
+        abort(400, "Invalid JSON")
 
-    score = calc_risk_score(payload)
-    record = {"risk_score": score, "payload": payload}
+    fix_raw   = body.get("fix_raw", "")
+    json_data = body.get("json_data", body)          # fallback for older adapter
+    score     = calc_risk_score(json_data)
+
+    entry = {
+        "fix_message": fix_raw,
+        "json_message": json_data,
+        "risk_score": score,
+    }
 
     with _lock:
-        _records.append(record)
-
-    return jsonify(record), 200
+        _records.append(entry)
+    return jsonify(entry), 200
 
 
 @app.route("/score", methods=["GET"])
 def list_scores():
     with _lock:
-        return jsonify([{"risk_score": r["risk_score"]} for r in _records]), 200
+        return jsonify(_records), 200
 
 
-# ─────────────────────────────────── Main ────────────────────────────────────────────
 if __name__ == "__main__":
-    print(f"Risk-scoring service listening on 0.0.0.0:{LISTEN_PORT}")
-    app.run(host="0.0.0.0", port=LISTEN_PORT, threaded=True)
+    print(f"Risk-score service on 0.0.0.0:{PORT}")
+    app.run(host="0.0.0.0", port=PORT, threaded=True)
+
 # This service is designed to be simple and stateless, suitable for demonstration purposes.
 # In production, consider using a proper database for persistence and more complex risk scoring logic.
 # Also, ensure proper error handling, logging, and security measures are in place.
