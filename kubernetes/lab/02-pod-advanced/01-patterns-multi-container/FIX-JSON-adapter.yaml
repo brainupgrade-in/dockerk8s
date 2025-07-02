@@ -75,3 +75,8 @@ spec:
       port: 8080
       targetPort: 8080
       protocol: TCP
+
+# wget https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/refs/heads/main/docker/01-dockerfile/fix-json-adapter/fix-msg-sender.sh
+# chmod +x fix-msg-sender.sh
+# ./fix-msg-sender.sh trade-risk 5000
+# curl trade-risk:8080/score 
