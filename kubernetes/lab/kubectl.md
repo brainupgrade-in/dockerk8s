@@ -37,3 +37,10 @@ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred
 
 # Recreate svc with another name 
 k get svc app -oyaml | sed  's/app/app2/g'  | k apply -f -
+
+# Produce a period-delimited tree of all keys returned for nodes
+# Helpful when locating a key within a complex nested JSON structure
+kubectl get nodes -o json | jq -c 'paths|join(".")'
+
+# Produce a period-delimited tree of all keys returned for pods, etc
+kubectl get pods -o json | jq -c 'paths|join(".")'

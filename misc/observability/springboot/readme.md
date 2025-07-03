@@ -40,6 +40,8 @@ kubectl apply -f https://raw.githubusercontent.com/brainupgrade-in/dockerk8s/ref
 ```
 ## Update ingress
 ```
+INGRESS=$(kubectl get ingress  -ojson|jq -r '.items[].metadata.name')
+
 kubectl patch ingress $INGRESS --type=json -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/name","value":"grafana"}]'
 
 kubectl patch ingress $INGRESS --type=json -p='[{"op":"replace","path":"/spec/rules/0/http/paths/0/backend/service/port/number","value":3000}]'
