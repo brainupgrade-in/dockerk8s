@@ -15,6 +15,7 @@ spec:
           app: apiservices
     ports:
     - protocol: TCP
-      port: 8080
+      port: 80
 
 # https://docs.tigera.io/calico/latest/getting-started/kubernetes/managed-public-cloud/eks
+# https://docs.aws.amazon.com/eks/latest/userguide/cni-network-policy-configure.html
