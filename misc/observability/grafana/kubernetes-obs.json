@@ -2344,168 +2344,21 @@
             "align": "auto",
             "cellOptions": {
               "type": "auto"
-            },
-            "inspect": false
+            }
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Sandbox"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 200
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Status"
-            },
-            "properties": [
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "value",
-                    "value": "1",
-                    "display": {
-                      "text": "UP \u2713",
-                      "color": "green"
-                    }
-                  },
-                  {
-                    "type": "value",
-                    "value": "0",
-                    "display": {
-                      "text": "DOWN \u2717",
-                      "color": "red"
-                    }
-                  }
-                ]
-              },
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "type": "color-background"
-                }
-              },
-              {
-                "id": "custom.width",
-                "value": 120
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total Downtime (min)"
-            },
-            "properties": [
-              {
-                "id": "decimals",
-                "value": 1
-              },
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "type": "color-background"
-                }
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": null
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 5
-                    },
-                    {
-                      "color": "orange",
-                      "value": 30
-                    },
-                    {
-                      "color": "red",
-                      "value": 60
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "custom.width",
-                "value": 200
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Down Events"
-            },
-            "properties": [
-              {
-                "id": "decimals",
-                "value": 0
-              },
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "type": "color-background"
-                }
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": null
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 3
-                    },
-                    {
-                      "color": "orange",
-                      "value": 10
-                    },
-                    {
-                      "color": "red",
-                      "value": 20
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "custom.width",
-                "value": 150
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 12,
+        "h": 10,
         "w": 24,
         "x": 0,
         "y": 89
@@ -2513,21 +2366,9 @@
       "id": 78,
       "options": {
         "showHeader": true,
-        "cellHeight": "sm",
         "footer": {
-          "show": true,
-          "reducer": [
-            "sum"
-          ],
-          "countRows": false,
-          "fields": ""
-        },
-        "sortBy": [
-          {
-            "displayName": "Total Downtime (min)",
-            "desc": true
-          }
-        ]
+          "show": false
+        }
       },
       "pluginVersion": "10.3.3",
       "targets": [
@@ -2537,12 +2378,9 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "exemplar": false,
           "expr": "kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}",
           "format": "table",
           "instant": true,
-          "legendFormat": "",
-          "range": false,
           "refId": "A"
         },
         {
@@ -2551,35 +2389,17 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "exemplar": false,
           "expr": "sum_over_time((1 - kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"})[$__range:1m])",
           "format": "table",
           "instant": true,
-          "legendFormat": "",
-          "range": false,
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "changes(kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}[$__range]) / 2",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "",
-          "range": false,
-          "refId": "C"
         }
       ],
       "title": "Sandbox Downtime Analysis",
       "type": "table",
       "transformations": [
         {
-          "id": "merge",
-          "options": {}
+          "id": "merge"
         },
         {
           "id": "organize",
@@ -2592,14 +2412,12 @@
             },
             "renameByName": {
               "statefulset": "Sandbox",
-              "Value #A": "Status",
-              "Value #B": "Total Downtime (min)",
-              "Value #C": "Down Events"
+              "Value #A": "Status (1=UP, 0=DOWN)",
+              "Value #B": "Downtime (minutes)"
             }
           }
         }
-      ],
-      "description": "Shows sandbox downtime metrics: current status (UP/DOWN), total downtime in minutes, and number of down events. Sorted by total downtime to identify problematic sandboxes."
+      ]
     }
   ],
   "refresh": "1m",
@@ -2769,6 +2587,6 @@
   "timezone": "",
   "title": "Cloud Labs",
   "uid": "k8s_views_ns",
-  "version": 10,
+  "version": 11,
   "weekStart": ""
 }
