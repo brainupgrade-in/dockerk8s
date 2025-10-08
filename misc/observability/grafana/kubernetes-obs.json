@@ -2334,103 +2334,6 @@
       "type": "timeseries"
     },
     {
-      "collapsed": false,
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 89
-      },
-      "id": 78,
-      "panels": [],
-      "title": "Sandbox Downtime Tracking",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 300
-              },
-              {
-                "color": "orange",
-                "value": 1800
-              },
-              {
-                "color": "red",
-                "value": 3600
-              }
-            ]
-          },
-          "unit": "s",
-          "unitScale": true
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 90
-      },
-      "id": 79,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "values": false,
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": ""
-        },
-        "showPercentChange": false,
-        "text": {},
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.3.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "sum_over_time(\n  ((kube_statefulset_replicas{namespace=\"mtvlabk8s\", cluster=\"$cluster\"} - kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}) > 0)[$__range:1m]\n) * 60",
-          "legendFormat": "{{statefulset}}",
-          "range": true,
-          "refId": "A",
-          "instant": true
-        }
-      ],
-      "title": "Total Sandbox Downtime (Since Cluster Start)",
-      "type": "stat",
-      "description": "Total accumulated downtime in seconds for each sandbox over the selected time range (since cluster start). Green = <5min, Yellow = <30min, Orange = <1hr, Red = >1hr"
-    },
-    {
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
@@ -2453,29 +2356,69 @@
                 "value": null
               },
               {
-                "color": "yellow",
-                "value": 5
-              },
-              {
-                "color": "orange",
-                "value": 30
-              },
-              {
                 "color": "red",
-                "value": 60
+                "value": 80
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          },
-          "unitScale": true
+          "unit": "short"
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "Downtime (minutes)"
+              "options": "Sandbox"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "value": "1",
+                    "display": {
+                      "text": "UP \u2713",
+                      "color": "green"
+                    }
+                  },
+                  {
+                    "type": "value",
+                    "value": "0",
+                    "display": {
+                      "text": "DOWN \u2717",
+                      "color": "red"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total Downtime (min)"
             },
             "properties": [
               {
@@ -2487,66 +2430,163 @@
                 "value": {
                   "type": "color-background"
                 }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 5
+                    },
+                    {
+                      "color": "orange",
+                      "value": 30
+                    },
+                    {
+                      "color": "red",
+                      "value": 60
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 150
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Current Status"
+              "options": "Down Count"
             },
             "properties": [
-              {
-                "id": "mappings",
-                "value": [
-                  {
-                    "type": "value",
-                    "value": "0",
-                    "display": {
-                      "text": "UP",
-                      "color": "green"
-                    }
-                  },
-                  {
-                    "type": "value",
-                    "value": "1",
-                    "display": {
-                      "text": "DOWN",
-                      "color": "red"
-                    }
-                  }
-                ]
-              },
               {
                 "id": "custom.cellOptions",
                 "value": {
                   "type": "color-background"
                 }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 3
+                    },
+                    {
+                      "color": "orange",
+                      "value": 10
+                    },
+                    {
+                      "color": "red",
+                      "value": 20
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Uptime %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "gauge",
+                  "mode": "gradient"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 90
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 95
+                    },
+                    {
+                      "color": "green",
+                      "value": 99
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 100
+              },
+              {
+                "id": "custom.width",
+                "value": 150
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 90
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 89
       },
-      "id": 80,
+      "id": 78,
       "options": {
         "showHeader": true,
         "cellHeight": "sm",
         "footer": {
           "show": true,
           "reducer": [
-            "sum"
+            "sum",
+            "mean"
           ],
           "countRows": false,
           "fields": ""
         },
         "frameIndex": 0,
-        "showTypeIcons": false
+        "showTypeIcons": false,
+        "sortBy": [
+          {
+            "displayName": "Total Downtime (min)",
+            "desc": true
+          }
+        ]
       },
       "pluginVersion": "10.3.3",
       "targets": [
@@ -2556,12 +2596,13 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum_over_time(\n  ((kube_statefulset_replicas{namespace=\"mtvlabk8s\", cluster=\"$cluster\"} - kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}) > 0)[$__range:1m]\n)",
+          "exemplar": false,
+          "expr": "kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "Downtime"
+          "refId": "CurrentStatus"
         },
         {
           "datasource": {
@@ -2569,16 +2610,30 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(kube_statefulset_replicas{namespace=\"mtvlabk8s\", cluster=\"$cluster\"} - kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}) > 0",
+          "exemplar": false,
+          "expr": "sum_over_time((kube_statefulset_replicas{namespace=\"mtvlabk8s\", cluster=\"$cluster\"} - kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"} > 0)[$__range:1m])",
           "format": "table",
-          "hide": false,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "CurrentStatus"
+          "refId": "TotalDowntime"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "changes(kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}[$__range]) / 2",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "DownCount"
         }
       ],
-      "title": "Sandbox Downtime Details",
+      "title": "Sandbox Downtime Analysis",
       "type": "table",
       "transformations": [
         {
@@ -2593,22 +2648,57 @@
               "job": true,
               "namespace": true,
               "__name__": true,
-              "cluster": true
+              "cluster": true,
+              "pod": true
             },
             "indexByName": {
               "statefulset": 0,
-              "Value #Downtime": 1,
-              "Value #CurrentStatus": 2
+              "Value #CurrentStatus": 1,
+              "Value #TotalDowntime": 2,
+              "Value #DownCount": 3
             },
             "renameByName": {
               "statefulset": "Sandbox",
-              "Value #Downtime": "Downtime (minutes)",
-              "Value #CurrentStatus": "Current Status"
+              "Value #CurrentStatus": "Status",
+              "Value #TotalDowntime": "Total Downtime (min)",
+              "Value #DownCount": "Down Count"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Uptime %",
+            "binary": {
+              "left": "Total Downtime (min)",
+              "operator": "/",
+              "right": "60"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Uptime %",
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "last"
+            },
+            "replaceFields": true,
+            "binary": {
+              "left": "Uptime %",
+              "operator": "*",
+              "right": "100"
             }
           }
         }
       ],
-      "description": "Total downtime for each sandbox over the selected time range (since cluster start) with current status. Shows cumulative minutes when ready replicas < desired replicas."
+      "description": "Comprehensive sandbox downtime tracking showing current status, total downtime, incident count, and uptime percentage. Sorted by total downtime to identify problematic sandboxes."
     }
   ],
   "refresh": "1m",
@@ -2778,6 +2868,6 @@
   "timezone": "",
   "title": "Cloud Labs",
   "uid": "k8s_views_ns",
-  "version": 6,
+  "version": 8,
   "weekStart": ""
 }
