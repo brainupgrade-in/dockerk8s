@@ -2354,14 +2354,9 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
-          },
-          "unit": "short"
+          }
         },
         "overrides": [
           {
@@ -2418,13 +2413,9 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Downtime (min)"
+              "options": "Total Downtime (min)"
             },
             "properties": [
-              {
-                "id": "unit",
-                "value": "m"
-              },
               {
                 "id": "decimals",
                 "value": 1
@@ -2461,7 +2452,7 @@
               },
               {
                 "id": "custom.width",
-                "value": 180
+                "value": 200
               }
             ]
           },
@@ -2508,10 +2499,6 @@
               {
                 "id": "custom.width",
                 "value": 150
-              },
-              {
-                "id": "custom.displayMode",
-                "value": "color-background"
               }
             ]
           }
@@ -2530,14 +2517,11 @@
         "footer": {
           "show": true,
           "reducer": [
-            "sum",
-            "mean"
+            "sum"
           ],
           "countRows": false,
           "fields": ""
         },
-        "frameIndex": 0,
-        "showTypeIcons": false,
         "sortBy": [
           {
             "displayName": "Total Downtime (min)",
@@ -2557,9 +2541,9 @@
           "expr": "kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}",
           "format": "table",
           "instant": true,
-          "legendFormat": "__auto",
+          "legendFormat": "",
           "range": false,
-          "refId": "CurrentStatus"
+          "refId": "A"
         },
         {
           "datasource": {
@@ -2568,12 +2552,12 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum_over_time((kube_statefulset_replicas{namespace=\"mtvlabk8s\", cluster=\"$cluster\"} - kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"} > 0)[$__range:1m])",
+          "expr": "sum_over_time((1 - kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"})[$__range:1m])",
           "format": "table",
           "instant": true,
-          "legendFormat": "__auto",
+          "legendFormat": "",
           "range": false,
-          "refId": "TotalDowntime"
+          "refId": "B"
         },
         {
           "datasource": {
@@ -2585,9 +2569,9 @@
           "expr": "changes(kube_statefulset_status_replicas_ready{namespace=\"mtvlabk8s\", cluster=\"$cluster\"}[$__range]) / 2",
           "format": "table",
           "instant": true,
-          "legendFormat": "__auto",
+          "legendFormat": "",
           "range": false,
-          "refId": "DownCount"
+          "refId": "C"
         }
       ],
       "title": "Sandbox Downtime Analysis",
@@ -2604,26 +2588,18 @@
               "Time": true,
               "job": true,
               "namespace": true,
-              "__name__": true,
-              "cluster": true,
-              "pod": true
-            },
-            "indexByName": {
-              "statefulset": 0,
-              "Value #CurrentStatus": 1,
-              "Value #TotalDowntime": 2,
-              "Value #DownCount": 3
+              "cluster": true
             },
             "renameByName": {
               "statefulset": "Sandbox",
-              "Value #CurrentStatus": "Status",
-              "Value #TotalDowntime": "Downtime (min)",
-              "Value #DownCount": "Down Events"
+              "Value #A": "Status",
+              "Value #B": "Total Downtime (min)",
+              "Value #C": "Down Events"
             }
           }
         }
       ],
-      "description": "Comprehensive sandbox downtime tracking. Status shows current state (UP/DOWN), Downtime shows cumulative minutes down, Down Events shows number of times sandbox went down. Sorted by downtime to identify problem sandboxes."
+      "description": "Shows sandbox downtime metrics: current status (UP/DOWN), total downtime in minutes, and number of down events. Sorted by total downtime to identify problematic sandboxes."
     }
   ],
   "refresh": "1m",
@@ -2793,6 +2769,6 @@
   "timezone": "",
   "title": "Cloud Labs",
   "uid": "k8s_views_ns",
-  "version": 9,
+  "version": 10,
   "weekStart": ""
 }
