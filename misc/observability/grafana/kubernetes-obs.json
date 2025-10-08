@@ -2372,7 +2372,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 180
+                "value": 200
               }
             ]
           },
@@ -2411,19 +2411,23 @@
               },
               {
                 "id": "custom.width",
-                "value": 100
+                "value": 120
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Total Downtime (min)"
+              "options": "Downtime (min)"
             },
             "properties": [
               {
                 "id": "unit",
                 "value": "m"
+              },
+              {
+                "id": "decimals",
+                "value": 1
               },
               {
                 "id": "custom.cellOptions",
@@ -2457,16 +2461,20 @@
               },
               {
                 "id": "custom.width",
-                "value": 150
+                "value": 180
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Down Count"
+              "options": "Down Events"
             },
             "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              },
               {
                 "id": "custom.cellOptions",
                 "value": {
@@ -2499,62 +2507,11 @@
               },
               {
                 "id": "custom.width",
-                "value": 120
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Uptime %"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "percent"
-              },
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "type": "gauge",
-                  "mode": "gradient"
-                }
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "red",
-                      "value": null
-                    },
-                    {
-                      "color": "orange",
-                      "value": 90
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 95
-                    },
-                    {
-                      "color": "green",
-                      "value": 99
-                    }
-                  ]
-                }
-              },
-              {
-                "id": "min",
-                "value": 0
-              },
-              {
-                "id": "max",
-                "value": 100
-              },
-              {
-                "id": "custom.width",
                 "value": 150
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
               }
             ]
           }
@@ -2660,45 +2617,13 @@
             "renameByName": {
               "statefulset": "Sandbox",
               "Value #CurrentStatus": "Status",
-              "Value #TotalDowntime": "Total Downtime (min)",
-              "Value #DownCount": "Down Count"
-            }
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "Uptime %",
-            "binary": {
-              "left": "Total Downtime (min)",
-              "operator": "/",
-              "right": "60"
-            },
-            "mode": "binary",
-            "reduce": {
-              "reducer": "sum"
-            },
-            "replaceFields": false
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "Uptime %",
-            "mode": "reduceRow",
-            "reduce": {
-              "reducer": "last"
-            },
-            "replaceFields": true,
-            "binary": {
-              "left": "Uptime %",
-              "operator": "*",
-              "right": "100"
+              "Value #TotalDowntime": "Downtime (min)",
+              "Value #DownCount": "Down Events"
             }
           }
         }
       ],
-      "description": "Comprehensive sandbox downtime tracking showing current status, total downtime, incident count, and uptime percentage. Sorted by total downtime to identify problematic sandboxes."
+      "description": "Comprehensive sandbox downtime tracking. Status shows current state (UP/DOWN), Downtime shows cumulative minutes down, Down Events shows number of times sandbox went down. Sorted by downtime to identify problem sandboxes."
     }
   ],
   "refresh": "1m",
@@ -2868,6 +2793,6 @@
   "timezone": "",
   "title": "Cloud Labs",
   "uid": "k8s_views_ns",
-  "version": 8,
+  "version": 9,
   "weekStart": ""
 }
