@@ -167,8 +167,41 @@ fi
 
 print_info "Generating deployment manifest..."
 
-# Create the deployment manifest
+# Create the deployment manifest with RBAC
 MANIFEST=$(cat <<EOF
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: azdo-agent-sa
+  namespace: ${NAMESPACE}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: azdo-agent-role
+  namespace: ${NAMESPACE}
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets"]
+  verbs: ["get", "list", "patch", "delete", "create"]
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps"]
+  verbs: ["get", "list", "patch", "delete", "create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: azdo-agent-rolebinding
+  namespace: ${NAMESPACE}
+subjects:
+- kind: ServiceAccount
+  name: azdo-agent-sa
+  namespace: ${NAMESPACE}
+roleRef:
+  kind: Role
+  name: azdo-agent-role
+  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -189,6 +222,7 @@ spec:
         app: azdo-agent
         user: ${USERNAME}
     spec:
+      serviceAccountName: azdo-agent-sa
       initContainers:
       - name: install-trivy
         image: alpine:latest
