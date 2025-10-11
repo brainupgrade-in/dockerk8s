@@ -197,8 +197,13 @@ spec:
             fi
 
             print_header "2. Downloading and extracting Azure Pipelines agent..."
-            cd /home/codespace
-            curl -LsS \$AZP_AGENT_PACKAGE_LATEST_URL | tar -xz
+            cd /azp/_work
+
+            if [ ! -f config.sh ]; then
+              curl -LsS \$AZP_AGENT_PACKAGE_LATEST_URL | tar -xz
+            else
+              print_header "Agent already downloaded, skipping download..."
+            fi
 
             print_header "3. Configuring Azure Pipelines agent..."
             ./config.sh --unattended \
@@ -217,7 +222,7 @@ spec:
             trap 'cleanup; exit 143' TERM
 
             chmod +x ./run.sh
-            ./run.sh --once & wait \$!
+            ./run.sh & wait \$!
         env:
         - name: AZP_URL
           value: "${AZP_URL}"
