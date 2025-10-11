@@ -105,7 +105,7 @@ echo "  Docker Host:  $DOCKER_HOST"
 echo ""
 
 # Confirm deployment
-read -p "Deploy agent with these settings? (y/n) " -n 1 -r
+read -p "Deploy agent with these settings? (y/n) " -n 1 -r </dev/tty
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     print_warning "Deployment cancelled by user"
