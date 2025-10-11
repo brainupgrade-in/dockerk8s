@@ -104,6 +104,34 @@ echo "  Agent Name:   $AGENT_NAME"
 echo "  Docker Host:  $DOCKER_HOST"
 echo ""
 
+# Check if agent pool exists
+print_info "Verifying agent pool exists..."
+POOL_CHECK=$(curl -s -u ":${PAT_TOKEN}" \
+  "${AZP_URL}/_apis/distributedtask/pools?api-version=7.1-preview.1" \
+  | grep -i "\"name\":\"${POOL_NAME}\"" || true)
+
+if [ -z "$POOL_CHECK" ]; then
+    print_error "Agent pool '${POOL_NAME}' does not exist in organization '${ORG}'"
+    echo ""
+    echo "Please create the pool first using one of these methods:"
+    echo ""
+    echo "Option 1 - Web UI:"
+    echo "  1. Go to https://dev.azure.com/${ORG}/_settings/agentpools"
+    echo "  2. Click 'Add pool'"
+    echo "  3. Select 'Self-hosted' and name it '${POOL_NAME}'"
+    echo ""
+    echo "Option 2 - REST API:"
+    echo "  curl -X POST -u \":${PAT_TOKEN}\" \\"
+    echo "    -H \"Content-Type: application/json\" \\"
+    echo "    -d '{\"name\": \"${POOL_NAME}\", \"autoProvision\": true}' \\"
+    echo "    \"${AZP_URL}/_apis/distributedtask/pools?api-version=7.1-preview.1\""
+    echo ""
+    exit 1
+fi
+
+print_success "Agent pool '${POOL_NAME}' found!"
+echo ""
+
 # Confirm deployment
 read -p "Deploy agent with these settings? (y/n) " -n 1 -r </dev/tty
 echo ""
