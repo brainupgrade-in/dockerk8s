@@ -111,26 +111,51 @@ POOL_CHECK=$(curl -s -u ":${PAT_TOKEN}" \
   | grep -i "\"name\":\"${POOL_NAME}\"" || true)
 
 if [ -z "$POOL_CHECK" ]; then
-    print_error "Agent pool '${POOL_NAME}' does not exist in organization '${ORG}'"
+    print_warning "Agent pool '${POOL_NAME}' does not exist in organization '${ORG}'"
     echo ""
-    echo "Please create the pool first using one of these methods:"
+    read -p "Would you like to create the pool now? (y/n) " -n 1 -r </dev/tty
     echo ""
-    echo "Option 1 - Web UI:"
-    echo "  1. Go to https://dev.azure.com/${ORG}/_settings/agentpools"
-    echo "  2. Click 'Add pool'"
-    echo "  3. Select 'Self-hosted' and name it '${POOL_NAME}'"
-    echo ""
-    echo "Option 2 - REST API:"
-    echo "  curl -X POST -u \":${PAT_TOKEN}\" \\"
-    echo "    -H \"Content-Type: application/json\" \\"
-    echo "    -d '{\"name\": \"${POOL_NAME}\", \"autoProvision\": true}' \\"
-    echo "    \"${AZP_URL}/_apis/distributedtask/pools?api-version=7.1-preview.1\""
-    echo ""
-    exit 1
-fi
 
-print_success "Agent pool '${POOL_NAME}' found!"
-echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Creating agent pool '${POOL_NAME}'..."
+
+        CREATE_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" \
+          -X POST \
+          -u ":${PAT_TOKEN}" \
+          -H "Content-Type: application/json" \
+          -d "{
+            \"name\": \"${POOL_NAME}\",
+            \"autoProvision\": true,
+            \"autoUpdate\": true,
+            \"autoSize\": true
+          }" \
+          "${AZP_URL}/_apis/distributedtask/pools?api-version=7.1-preview.1")
+
+        HTTP_STATUS=$(echo "$CREATE_RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
+
+        if [ "$HTTP_STATUS" = "200" ] || [ "$HTTP_STATUS" = "201" ]; then
+            print_success "Agent pool '${POOL_NAME}' created successfully!"
+            echo ""
+        else
+            print_error "Failed to create agent pool. HTTP Status: ${HTTP_STATUS}"
+            echo ""
+            echo "Response:"
+            echo "$CREATE_RESPONSE" | sed '/HTTP_STATUS/d'
+            echo ""
+            echo "Please create the pool manually at:"
+            echo "  https://dev.azure.com/${ORG}/_settings/agentpools"
+            exit 1
+        fi
+    else
+        print_warning "Pool creation cancelled. Please create the pool manually and try again."
+        echo ""
+        echo "Create pool at: https://dev.azure.com/${ORG}/_settings/agentpools"
+        exit 0
+    fi
+else
+    print_success "Agent pool '${POOL_NAME}' found!"
+    echo ""
+fi
 
 # Confirm deployment
 read -p "Deploy agent with these settings? (y/n) " -n 1 -r </dev/tty
