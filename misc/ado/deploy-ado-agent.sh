@@ -9,7 +9,7 @@
 #   ./deploy-ado-agent.sh <ORG> <PAT_TOKEN> <POOL_NAME>
 #
 # Example:
-#   ./deploy-ado-agent.sh brainupgrade-in YOUR_PAT_TOKEN K8s-Pool
+#   ./deploy-ado-agent.sh brainupgrade-in YOUR_PAT_TOKEN selfhosted
 #
 # The script will:
 # 1. Auto-detect your username from the current namespace
@@ -66,10 +66,10 @@ if [ $# -lt 3 ]; then
     echo "Arguments:"
     echo "  ORG         - Azure DevOps organization name (e.g., brainupgrade-in)"
     echo "  PAT_TOKEN   - Personal Access Token with Agent Pools (read, manage) scope"
-    echo "  POOL_NAME   - Agent pool name (e.g., K8s-Pool)"
+    echo "  POOL_NAME   - Agent pool name (e.g., selfhosted)"
     echo ""
     echo "Example:"
-    echo "  $0 brainupgrade-in abcd1234...xyz K8s-Pool"
+    echo "  $0 brainupgrade-in abcd1234...xyz selfhosted"
     echo ""
     exit 1
 fi
