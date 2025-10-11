@@ -95,7 +95,7 @@ print_info "Current namespace: $NAMESPACE"
 USERNAME="$NAMESPACE"
 AGENT_NAME="k8s-agent-${USERNAME}-01"
 AZP_URL="https://dev.azure.com/${ORG}"
-DOCKER_HOST="tcp://${USERNAME}:2375"
+DOCKER_HOST="tcp://${USERNAME}.mtvlabeks:2375"
 
 print_info "Configuration:"
 echo "  Organization: $ORG"
