@@ -189,6 +189,21 @@ spec:
         app: azdo-agent
         user: ${USERNAME}
     spec:
+      initContainers:
+      - name: install-trivy
+        image: alpine:latest
+        command:
+        - sh
+        - -c
+        - |
+          apk add --no-cache curl
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /tools
+          chmod +x /tools/trivy
+          echo "Trivy installed successfully"
+          /tools/trivy --version
+        volumeMounts:
+        - name: tools
+          mountPath: /tools
       containers:
       - name: azdo-agent
         image: mcr.microsoft.com/devcontainers/universal:linux
@@ -291,6 +306,8 @@ spec:
           value: "/azp/_work"
         - name: TZ
           value: "Asia/Kolkata"
+        - name: PATH
+          value: "/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
         resources:
           requests:
             memory: "512Mi"
@@ -299,9 +316,13 @@ spec:
             memory: "2Gi"
             cpu: "1000m"
         volumeMounts:
+        - name: tools
+          mountPath: /tools
         - name: agent-work
           mountPath: /azp/_work
       volumes:
+      - name: tools
+        emptyDir: {}
       - name: agent-work
         emptyDir: {}
       restartPolicy: Always
