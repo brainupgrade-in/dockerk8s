@@ -138,7 +138,86 @@ spec:
     spec:
       containers:
       - name: azdo-agent
-        image: mcr.microsoft.com/azure-pipelines/vsts-agent:ubuntu-22.04
+        image: mcr.microsoft.com/devcontainers/universal:linux
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            set -e
+            if [ -z "\$AZP_URL" ]; then
+              echo "error: missing AZP_URL environment variable"
+              exit 1
+            fi
+
+            if [ -z "\$AZP_TOKEN" ]; then
+              echo "error: missing AZP_TOKEN environment variable"
+              exit 1
+            fi
+
+            if [ -z "\$AZP_POOL" ]; then
+              echo "Using default pool"
+              AZP_POOL=Default
+            fi
+
+            if [ -n "\$AZP_WORK" ]; then
+              mkdir -p "\$AZP_WORK"
+            fi
+
+            export AGENT_ALLOW_RUNASROOT="1"
+
+            cleanup() {
+              if [ -e config.sh ]; then
+                print_header "Cleanup. Removing Azure Pipelines agent..."
+                ./config.sh remove --unattended --auth PAT --token "\$AZP_TOKEN"
+              fi
+            }
+
+            print_header() {
+              lightcyan='\033[1;36m'
+              nocolor='\033[0m'
+              echo "\${lightcyan}\$1\${nocolor}"
+            }
+
+            trap 'cleanup; exit 0' EXIT
+            trap 'cleanup; exit 130' INT
+            trap 'cleanup; exit 143' TERM
+
+            print_header "1. Determining matching Azure Pipelines agent..."
+
+            AZP_AGENT_PACKAGES=\$(curl -LsS \
+                -u user:\$AZP_TOKEN \
+                -H 'Accept:application/json;' \
+                "\$AZP_URL/_apis/distributedtask/packages/agent?platform=linux-x64&top=1")
+
+            AZP_AGENT_PACKAGE_LATEST_URL=\$(echo "\$AZP_AGENT_PACKAGES" | jq -r '.value[0].downloadUrl')
+
+            if [ -z "\$AZP_AGENT_PACKAGE_LATEST_URL" ] || [ "\$AZP_AGENT_PACKAGE_LATEST_URL" == "null" ]; then
+              echo "error: could not determine a matching Azure Pipelines agent"
+              echo "check that account '\$AZP_URL' is correct and the token is valid for that account"
+              exit 1
+            fi
+
+            print_header "2. Downloading and extracting Azure Pipelines agent..."
+            cd /home/codespace
+            curl -LsS \$AZP_AGENT_PACKAGE_LATEST_URL | tar -xz
+
+            print_header "3. Configuring Azure Pipelines agent..."
+            ./config.sh --unattended \
+              --agent "\${AZP_AGENT_NAME:-\$(hostname)}" \
+              --url "\$AZP_URL" \
+              --auth PAT \
+              --token "\$AZP_TOKEN" \
+              --pool "\${AZP_POOL:-Default}" \
+              --work "\${AZP_WORK:-_work}" \
+              --replace \
+              --acceptTeeEula
+
+            print_header "4. Running Azure Pipelines agent..."
+            trap 'cleanup; exit 0' EXIT
+            trap 'cleanup; exit 130' INT
+            trap 'cleanup; exit 143' TERM
+
+            chmod +x ./run.sh
+            ./run.sh --once & wait \$!
         env:
         - name: AZP_URL
           value: "${AZP_URL}"
