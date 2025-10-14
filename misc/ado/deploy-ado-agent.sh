@@ -223,28 +223,16 @@ spec:
         user: ${USERNAME}
     spec:
       serviceAccountName: azdo-agent-sa
-      initContainers:
-      - name: install-trivy
-        image: alpine:latest
-        command:
-        - sh
-        - -c
-        - |
-          apk add --no-cache curl
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /tools
-          chmod +x /tools/trivy
-          echo "Trivy installed successfully"
-          /tools/trivy --version
-        volumeMounts:
-        - name: tools
-          mountPath: /tools
       containers:
       - name: azdo-agent
-        image: mcr.microsoft.com/devcontainers/universal:linux
+        image: brainupgrade/build-agent-azd:v7
         command: ["/bin/bash", "-c"]
         args:
           - |
             set -e
+            apt-get update -qq && apt-get install -y jq > /dev/null 2>&1
+            echo "jq installed successfully"
+
             if [ -z "\$AZP_URL" ]; then
               echo "error: missing AZP_URL environment variable"
               exit 1
@@ -340,23 +328,19 @@ spec:
           value: "/azp/_work"
         - name: TZ
           value: "Asia/Kolkata"
-        - name: PATH
-          value: "/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
         resources:
           requests:
             memory: "512Mi"
             cpu: "250m"
+            ephemeral-storage: "5Gi"
           limits:
             memory: "2Gi"
             cpu: "1000m"
+            ephemeral-storage: "10Gi"
         volumeMounts:
-        - name: tools
-          mountPath: /tools
         - name: agent-work
           mountPath: /azp/_work
       volumes:
-      - name: tools
-        emptyDir: {}
       - name: agent-work
         emptyDir: {}
       restartPolicy: Always
